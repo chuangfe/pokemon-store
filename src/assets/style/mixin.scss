@@ -1,0 +1,15 @@
+@import "./variable.scss";
+
+// $font-size 字體大小.
+// $line-height 行高.
+@mixin font-style(
+  $font-size: 1rem,
+  $font-weight: 400,
+  $line-height: $font-size * 1.5,
+  $color: $black
+) {
+  font-size: $font-size;
+  font-weight: $font-weight;
+  line-height: $line-height;
+  color: $color;
+}
