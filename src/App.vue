@@ -26,7 +26,7 @@
           <div class="image-container">
             <img src="../public/images/gold-00.png" alt="gold" />
           </div>
-          <p class="text">精選商品</p>
+          <p class="text">所有商品</p>
         </div>
 
         <div class="item">
@@ -54,7 +54,7 @@
           <div class="image-container">
             <img src="../public/images/gift-box.png" alt="gift-box" />
           </div>
-          <p class="text">精選組盒包</p>
+          <p class="text">商城</p>
         </div>
       </div>
     </div>
@@ -62,9 +62,11 @@
     <div class="new-products"></div>
 
     <div class="merchandises-container">
-      <p class="title">最新上架</p>
+      <p class="title">商品瀏覽</p>
       <Merchandises />
     </div>
+
+    <Footer />
 
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
@@ -78,6 +80,7 @@
 import Header from "./components/Header.vue";
 import Carousel from "./components/Carousel.vue";
 import Merchandises from "./components/Merchandises.vue";
+import Footer from "./components/Footer.vue";
 
 export default {
   data() {
@@ -107,7 +110,7 @@ export default {
     };
   },
 
-  components: { Header, Carousel, Merchandises },
+  components: { Header, Carousel, Merchandises, Footer },
 };
 </script>
 
@@ -141,7 +144,6 @@ export default {
 
 #app {
   overflow-x: hidden;
-  padding-bottom: 200px;
 }
 
 // 圖片輪播.
@@ -229,10 +231,8 @@ export default {
 
 // 商品輪播
 .merchandises-container {
-  padding: 0.375rem;
-
   .title {
-    padding: 0 0 1rem 0.625rem;
+    padding: 0.625rem;
     @include font-style($font-size: 1.25rem, $font-weight: 900, $color: $green);
   }
 }

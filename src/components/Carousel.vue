@@ -97,6 +97,7 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/style/variable.scss";
+@import "../assets/style/mixin.scss";
 
 .carousel {
   width: 100%;
@@ -140,8 +141,10 @@ export default {
     }
 
     i {
-      font-size: 2rem;
-      color: $gray;
+      @include font-style(
+        $font-size: 2rem,
+        $color: rgba($color: $black, $alpha: 0.3)
+      );
     }
   }
 
@@ -158,8 +161,10 @@ export default {
     }
 
     i {
-      font-size: 0.75rem;
-      color: $gray;
+      @include font-style(
+        $font-size: 0.75rem,
+        $color: rgba($color: $black, $alpha: 0.3)
+      );
     }
   }
 }
