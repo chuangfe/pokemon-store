@@ -1,10 +1,17 @@
 <template>
-  <div class="item">
+  <!-- <div class="item">
     <div class="image-container">
       <img :src="src" :alt="alt" />
     </div>
     <p class="text">{{ name }}</p>
-  </div>
+  </div> -->
+
+  <router-link :to="link" tag="a" class="item">
+    <div class="image-container">
+      <img :src="src" :alt="alt" />
+    </div>
+    <p class="text">{{ name }}</p>
+  </router-link>
 </template>
 
 <script>
@@ -36,7 +43,12 @@ export default {
     },
 
     // 跳轉的網址.
-    // link: {},
+    link: {
+      // 型別限制.
+      type: String,
+      // 限制必需要傳值進來.
+      required: true,
+    },
   },
 };
 </script>
@@ -48,7 +60,7 @@ export default {
 .item {
   padding: 0.625rem 0;
   border: 1px solid $black-alpha;
-  border-radius: 4px;
+  border-radius: 8px;
   box-sizing: border-box;
 
   display: flex;

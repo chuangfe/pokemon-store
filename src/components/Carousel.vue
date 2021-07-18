@@ -102,26 +102,31 @@ export default {
 @import "../assets/style/mixin.scss";
 
 .carousel {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0px;
-  top: 0px;
+  height: 17.5rem;
+  position: relative;
   z-index: 0;
+
+  // transition-group 轉出來的 element.
+  .container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
 
   .carousel-item {
     width: 100%;
     height: 100%;
     position: absolute;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
   }
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-  }
-
+  // 刪除預設樣式.
   button {
     background-color: transparent;
     border: none;

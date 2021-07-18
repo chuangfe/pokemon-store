@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
+// 商品資料.
 const data = {
   // 精靈球.
   ball: {
@@ -180,9 +181,55 @@ const data = {
   },
 };
 
+const calcData = getAllCommodity(data);
+
+// 將資料多補一個 all 種類.
+function getAllCommodity(data) {
+  let merchandises = [];
+
+  for (let key in data) {
+    merchandises = merchandises.concat(data[key].merchandises);
+  }
+
+  data.all = {
+    name: "全部商品",
+    imageSrc: "./images/gold-00.png",
+    alt: "gold",
+    merchandises,
+  };
+
+  return data;
+}
+
+// 紀錄商品種類.
+const categories = Object.keys(calcData);
+
 export default new Vuex.Store({
   state: {
-    data,
+    data: calcData,
+    categories,
+    slides: [
+      {
+        src: "./images/slide-00.jpg",
+        alt: "slide-00",
+      },
+      {
+        src: "./images/slide-01.jpg",
+        alt: "slide-01",
+      },
+      {
+        src: "./images/slide-02.jpg",
+        alt: "slide-02",
+      },
+      {
+        src: "./images/slide-03.jpg",
+        alt: "slide-03",
+      },
+      {
+        src: "./images/slide-04.jpg",
+        alt: "slide-04",
+      },
+    ],
   },
   // 相當於 vm 的 computed.
   getters: {

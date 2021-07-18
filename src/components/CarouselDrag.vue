@@ -70,7 +70,7 @@ export default {
 
   computed: {
     items() {
-      return this.$store.getters.all.merchandises;
+      return this.$store.state.data.all.merchandises;
     },
   },
 
@@ -179,6 +179,7 @@ export default {
 
   .list {
     padding-top: 0.5rem;
+
     ul {
       display: flex;
       justify-content: space-around;

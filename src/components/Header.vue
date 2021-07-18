@@ -1,7 +1,7 @@
 <template>
   <header class="header" :class="{ menu: isMenu }">
     <div class="between-container">
-      <router-link to="javascript:;">
+      <router-link to="/home">
         <img
           src="../../public/images/pokemon-store.png"
           alt="Pokemon Store"
@@ -11,23 +11,21 @@
     </div>
 
     <div class="between-container">
-      <router-link to="javascript:;">
-        <button
-          type="button"
-          id="menu-button"
-          class="button"
-          @click="isMenu = !isMenu"
-          @blur="isMenu = false"
-        >
-          <i
-            class="bi"
-            :class="{
-              'bi-menu-button-wide': !isMenu,
-              'bi-menu-button-wide-fill': isMenu,
-            }"
-          ></i>
-        </button>
-      </router-link>
+      <button
+        type="button"
+        id="menu-button"
+        class="button"
+        @click="isMenu = !isMenu"
+        @blur="isMenu = false"
+      >
+        <i
+          class="bi"
+          :class="{
+            'bi-menu-button-wide': !isMenu,
+            'bi-menu-button-wide-fill': isMenu,
+          }"
+        ></i>
+      </button>
     </div>
 
     <label for="menu-button" class="list">
