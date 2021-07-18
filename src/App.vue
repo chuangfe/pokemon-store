@@ -7,7 +7,7 @@
       <Carousel :items="slides" />
     </div>
 
-    <h1 class="main-title">＂冒險者！歡迎來到神奇寶貝購物中心＂</h1>
+    <h1 class="main-title">＂冒險者！歡迎來到寶可夢購物中心＂</h1>
 
     <div class="news">
       <p>
@@ -20,50 +20,30 @@
     <!-- 商品分類連結 -->
     <div class="categories">
       <p class="title">商品分類</p>
-
       <div class="items">
-        <div class="item">
-          <div class="image-container">
-            <img src="../public/images/gold-00.png" alt="gold" />
-          </div>
-          <p class="text">所有商品</p>
+        <!-- 控制 rwd 的目標 -->
+        <div class="item-container">
+          <Category
+            :src="$store.getters.all.imageSrc"
+            :alt="$store.getters.all.alt"
+            :name="$store.getters.all.name"
+          />
         </div>
 
-        <div class="item">
-          <div class="image-container">
-            <img src="../public/images/poke-ball-00.png" alt="poke-ball" />
-          </div>
-          <p class="text">精靈球</p>
-        </div>
-
-        <div class="item">
-          <div class="image-container">
-            <img src="../public/images/potion.png" alt="potion" />
-          </div>
-          <p class="text">藥品補給</p>
-        </div>
-
-        <div class="item">
-          <div class="image-container">
-            <img src="../public/images/backpack.png" alt="backpack" />
-          </div>
-          <p class="text">野外求生道具</p>
-        </div>
-
-        <div class="item">
-          <div class="image-container">
-            <img src="../public/images/gift-box.png" alt="gift-box" />
-          </div>
-          <p class="text">商城</p>
+        <!-- 控制 rwd 的目標 -->
+        <div
+          class="item-container"
+          v-for="(value, key) of $store.state.data"
+          :key="key"
+        >
+          <Category :src="value.imageSrc" :alt="value.alt" :name="value.name" />
         </div>
       </div>
     </div>
 
-    <div class="new-products"></div>
-
     <div class="merchandises-container">
       <p class="title">商品瀏覽</p>
-      <Merchandises />
+      <CarouselDrag />
     </div>
 
     <Footer />
@@ -78,8 +58,12 @@
 
 <script>
 import Header from "./components/Header.vue";
+// 輪播圖.
 import Carousel from "./components/Carousel.vue";
-import Merchandises from "./components/Merchandises.vue";
+// 商品分類.
+import Category from "./components/Category.vue";
+// 商品流覽
+import CarouselDrag from "./components/CarouselDrag.vue";
 import Footer from "./components/Footer.vue";
 
 export default {
@@ -110,7 +94,7 @@ export default {
     };
   },
 
-  components: { Header, Carousel, Merchandises, Footer },
+  components: { Header, Carousel, Category, CarouselDrag, Footer },
 };
 </script>
 
@@ -146,7 +130,7 @@ export default {
   overflow-x: hidden;
 }
 
-// 圖片輪播.
+// 輪播容器, 可以做 rdw.
 .carousel-container {
   padding-top: 74.666666%;
   position: relative;
@@ -159,78 +143,59 @@ export default {
 }
 
 .news {
-  margin: 0 auto;
+  margin: 0 0.625rem;
   padding: 0.625rem;
-  width: 94%;
+  // width: 94%;
   @include font-style($font-size: 1rem, $font-weight: 900, $color: #666);
   letter-spacing: 1px;
-  box-shadow: 1px 3px 5px $gray;
+  box-shadow: 1px 3px 5px $black-alpha;
 
   p {
     margin: 0px;
-  }
 
-  .emergency {
-    padding: 2px 4px;
-    border-radius: 4px;
+    .emergency {
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
   }
 }
 
 // 商品分類.
 .categories {
+  // 標題.
   .title {
     padding: 1rem 1rem 0 1rem;
     @include font-style($font-size: 1.25rem, $font-weight: 900, $color: $green);
   }
 
+  // 外層容器
   .items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .item {
-    margin: 6px;
-    padding: 10px;
-    border: 1px solid $gray;
-    border-radius: 4px;
-    box-sizing: border-box;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 20%;
-
+    padding: 0.375rem;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 
-    &:last-child {
-      flex-basis: 100%;
+    // 控制 rwd 的目標.
+    .item-container {
+      padding: 0 0.625rem 0.625rem 0;
+      box-sizing: border-box;
+      flex: 1 1 25%;
+
+      &:last-child,
+      &:nth-last-of-type(2) {
+        padding-right: 0px;
+      }
+
+      &:last-child {
+        padding-bottom: 0px;
+      }
     }
-  }
-
-  .image-container {
-    margin: 0 auto;
-    width: 50px;
-    height: 50px;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-  }
-
-  .text {
-    margin-top: 4px;
-    width: 100%;
-    text-align: center;
-    @include font-style($font-size: 0.75rem);
-    overflow-wrap: break-word;
   }
 }
 
 // 商品輪播
 .merchandises-container {
+  // 標題.
   .title {
     padding: 0.625rem;
     @include font-style($font-size: 1.25rem, $font-weight: 900, $color: $green);

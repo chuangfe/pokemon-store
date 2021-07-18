@@ -7,6 +7,8 @@ const data = {
   // 精靈球.
   ball: {
     name: "精靈球",
+    imageSrc: "./images/poke-ball-00.png",
+    alt: "poke-ball",
     merchandises: [
       {
         // 商品分類.
@@ -18,6 +20,8 @@ const data = {
           "是精靈寶可夢世界中隨處可見的一種道具。精靈球的作用是捕捉或者攜帶寶可夢，不同種類的精靈球擁有不同的特殊效果。",
         // 商品圖片.
         imageSrc: "./images/poke-ball-00.png",
+        // 圖片屬性.
+        alt: "poke-ball",
         // 商品庫存.
         remaining: 10,
         // 商品售價.
@@ -31,6 +35,7 @@ const data = {
         text:
           "是精靈寶可夢世界中隨處可見的一種道具。精靈球的作用是捕捉或者攜帶寶可夢，不同種類的精靈球擁有不同的特殊效果。",
         imageSrc: "./images/poke-ball-01.png",
+        alt: "poke-ball",
         remaining: 0,
         price: 200 * 3,
         specialOffer: false,
@@ -41,6 +46,7 @@ const data = {
         text:
           "是精靈寶可夢世界中隨處可見的一種道具。精靈球的作用是捕捉或者攜帶寶可夢，不同種類的精靈球擁有不同的特殊效果。",
         imageSrc: "./images/poke-ball-02.png",
+        alt: "poke-ball",
         remaining: 2,
         price: 200 * 5,
         specialOffer: 0.9,
@@ -50,12 +56,15 @@ const data = {
   // 藥品.
   drug: {
     name: "藥品",
+    imageSrc: "./images/potion.png",
+    alt: "potion",
     merchandises: [
       {
         category: "藥品",
         name: "傷藥",
         text: "噴霧式傷藥。能讓寶可夢回復２０ＨＰ。",
         imageSrc: "./images/potion.png",
+        alt: "potion",
         remaining: 12,
         price: 50,
         specialOffer: false,
@@ -65,6 +74,7 @@ const data = {
         name: "復活石",
         text: "能讓陷入瀕死的寶可夢重獲生機，並回復所有ＨＰ。",
         imageSrc: "./images/max-revive.png",
+        alt: "max-revive",
         remaining: 0,
         price: 200,
         specialOffer: false,
@@ -74,12 +84,15 @@ const data = {
   // 道具.
   props: {
     name: "道具",
+    imageSrc: "./images/backpack.png",
+    alt: "backpack",
     merchandises: [
       {
         category: "道具",
         name: "背包",
         text: "每 200 元寶可夢幣(約新台幣 60 元)可讓道具背包上限增加 50 個。",
         imageSrc: "./images/backpack.png",
+        alt: "backpack",
         remaining: 12,
         price: 200,
         specialOffer: 0.7,
@@ -90,6 +103,7 @@ const data = {
         text:
           "使用幸運蛋後的 30 分鐘內，每當遇到寶可夢或進化都有雙倍經驗值，可以加快訓練師等級升等速度。",
         imageSrc: "./images/lucky-egg.png",
+        alt: "lucky-egg",
         remaining: 12,
         price: 300,
         specialOffer: false,
@@ -99,12 +113,15 @@ const data = {
   // 商城.
   mall: {
     name: "商城",
+    imageSrc: "./images/gift-box.png",
+    alt: "gift-box",
     merchandises: [
       {
         category: "商城",
         name: "皮卡丘紀念幣",
         text: "寶可夢通用貨幣。",
         imageSrc: "./images/gold-00.png",
+        alt: "gold",
         remaining: 12,
         price: 200,
         specialOffer: 0.5,
@@ -114,6 +131,7 @@ const data = {
         name: "皮卡丘幣X100",
         text: "寶可夢通用貨幣。",
         imageSrc: "./images/gold-01.png",
+        alt: "gold",
         remaining: 12,
         price: 200 * 100,
         specialOffer: 0.5,
@@ -123,6 +141,7 @@ const data = {
         name: "皮卡丘幣X500",
         text: "寶可夢通用貨幣。",
         imageSrc: "./images/gold-02.png",
+        alt: "gold",
         remaining: 12,
         price: 200 * 500,
         specialOffer: 0.5,
@@ -132,6 +151,7 @@ const data = {
         name: "皮卡丘幣X10000",
         text: "寶可夢通用貨幣。",
         imageSrc: "./images/gold-03.png",
+        alt: "gold",
         remaining: 12,
         price: 200 * 10000,
         specialOffer: 0.5,
@@ -141,6 +161,7 @@ const data = {
         name: "相機",
         text: "當你遇到寶可夢時，可以透過 Camera 相機幫它拍照。",
         imageSrc: "./images/camera.png",
+        alt: "camera",
         remaining: 1,
         price: 12000,
         specialOffer: 0.8,
@@ -150,6 +171,7 @@ const data = {
         name: "綜合禮物",
         text: "不知道裡面有什麼。",
         imageSrc: "./images/gift-box.png",
+        alt: "gift-box",
         remaining: 1,
         price: 999,
         specialOffer: 0.199,
@@ -162,7 +184,27 @@ export default new Vuex.Store({
   state: {
     data,
   },
+  // 相當於 vm 的 computed.
+  getters: {
+    all(state) {
+      let merchandises = [];
+
+      for (let key in state.data) {
+        merchandises = merchandises.concat(state.data[key].merchandises);
+      }
+
+      return {
+        name: "全部商品",
+        imageSrc: "./images/gold-00.png",
+        alt: "gold",
+        merchandises,
+      };
+    },
+  },
+  // 只能在這裡設定修改 state 的 methods, 這裡是同步模式.
   mutations: {},
+  // 邏輯運算, API 異步模式, 在必要的地方調用 mutations 修改 state.
   actions: {},
+  // vuex 的模組化.
   modules: {},
 });

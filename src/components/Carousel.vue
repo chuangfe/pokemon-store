@@ -39,6 +39,8 @@
 </template>
 
 <script>
+// 輪播圖.
+
 export default {
   name: "Carousel",
 
@@ -141,10 +143,7 @@ export default {
     }
 
     i {
-      @include font-style(
-        $font-size: 2rem,
-        $color: rgba($color: $black, $alpha: 0.3)
-      );
+      @include font-style($font-size: 2rem, $color: $black-alpha);
     }
   }
 
@@ -161,10 +160,7 @@ export default {
     }
 
     i {
-      @include font-style(
-        $font-size: 0.75rem,
-        $color: rgba($color: $black, $alpha: 0.3)
-      );
+      @include font-style($font-size: 0.75rem, $color: $black-alpha);
     }
   }
 }

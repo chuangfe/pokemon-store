@@ -19,8 +19,13 @@
           @click="isMenu = !isMenu"
           @blur="isMenu = false"
         >
-          <i class="bi bi-menu-button-wide" v-show="!isMenu"></i>
-          <i class="bi bi-menu-button-wide-fill" v-show="isMenu"></i>
+          <i
+            class="bi"
+            :class="{
+              'bi-menu-button-wide': !isMenu,
+              'bi-menu-button-wide-fill': isMenu,
+            }"
+          ></i>
         </button>
       </router-link>
     </div>

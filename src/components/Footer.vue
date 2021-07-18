@@ -21,7 +21,7 @@
       </p>
 
       <p>
-        練習作品｜
+        原創作品｜
         <a href="https://www.pokemon.com/us/" target="_blank">
           圖片來源：https://www.pokemon.com/us/
         </a>
@@ -42,15 +42,12 @@ export default {
 
 .footer {
   padding-bottom: 1rem;
-  @include font-style(
-    $font-size: 1rem,
-    $color: rgba($color: $black, $alpha: 0.4)
-  );
+  @include font-style($font-size: 1rem, $color: $gray);
 
   .shop {
     padding: 1rem 0 0.625rem 0;
     width: 100%;
-    border-bottom: 1px solid rgba($color: $black, $alpha: 0.4);
+    border-bottom: 1px solid $black-alpha;
 
     img {
       width: 100%;
@@ -58,7 +55,7 @@ export default {
   }
 
   .logo-container {
-    padding: 1rem 0 0 1rem;
+    padding: 1rem 0 0.625rem 1rem;
     height: 2.5rem;
 
     img {
@@ -68,8 +65,12 @@ export default {
   }
 
   p {
-    padding-left: 1rem;
+    padding: 0 0 0.375rem 1rem;
     letter-spacing: 1px;
+
+    a {
+      @include font-style($font-size: 1rem, $font-weight: 900);
+    }
   }
 }
 </style>

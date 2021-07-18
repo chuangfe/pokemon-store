@@ -1,0 +1,218 @@
+<template>
+  <div class="item">
+    <!-- 圖片 -->
+    <div class="image-container">
+      <img :src="src" :alt="alt" />
+    </div>
+
+    <!-- 類別. -->
+    <div class="category emergency">
+      {{ category }}
+    </div>
+
+    <!-- 商品名稱 -->
+    <p class="name">{{ name }}</p>
+
+    <!-- 商品敘述 -->
+    <p class="text">
+      {{ text }}
+    </p>
+
+    <!-- 價格 -->
+    <div class="price" :class="{ 'special-offer': specialOffer }">
+      <p class="special" v-if="specialOffer">
+        NT${{ getSpecialOffer(price, specialOffer) }}元
+      </p>
+      <p class="original">NT${{ price }}元</p>
+    </div>
+
+    <!-- 按鈕 -->
+    <div class="link-container">
+      <a href="javascript:;">詳細介紹</a>
+      <a href="javascript:;">加入購物車</a>
+    </div>
+
+    <!-- 售完 -->
+    <div class="sold-out" v-if="remaining < 1">
+      <p>缺貨</p>
+    </div>
+  </div>
+</template>
+
+<script>
+// 單項商品展示.
+
+export default {
+  name: "Merchandise",
+
+  props: {
+    // 圖片網址.
+    src: {
+      type: String,
+      required: true,
+    },
+    // 圖片屬性.
+    alt: {
+      type: String,
+      required: true,
+    },
+    // 商品分類.
+    category: {
+      type: String,
+      required: true,
+    },
+    // 商品名稱.
+    name: {
+      type: String,
+      required: true,
+    },
+    // 商品說明.
+    text: {
+      type: String,
+      required: true,
+    },
+    // 商品價格
+    price: {
+      type: Number,
+      required: true,
+    },
+    // 商品折扣, false or Number.
+    specialOffer: {
+      type: [Boolean, Number],
+      required: true,
+    },
+    // 商品剩餘數量
+    remaining: {
+      type: Number,
+      required: true,
+    },
+    // 跳轉至商品頁面.
+    // link:{},
+  },
+
+  methods: {
+    // 計算折扣後的價格.
+    getSpecialOffer(price, specialOffer) {
+      return Math.ceil(price * specialOffer);
+    },
+
+    // 加入購物車.
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+@import "../assets/style/variable.scss";
+@import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
+
+.item {
+  padding: 1rem;
+  border: 1px solid rgba($black, 0.3);
+  position: relative;
+
+  .image-container {
+    height: 10rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  // 商品類別.
+  .category {
+    padding: 4px;
+    @include font-style($font-size: 1rem, $font-weight: 900);
+    border-radius: 6px;
+    position: absolute;
+    right: 0.625rem;
+    top: 0.625rem;
+  }
+
+  // 商品名稱.
+  .name {
+    @include font-style($font-size: 1.2rem, $font-weight: 900);
+  }
+
+  // 商品說明.
+  .text {
+    padding: 0.625rem 0;
+    @include font-style($font-size: 1rem, $color: $gray);
+    // color: #666;
+    border-bottom: 1px solid $black-alpha;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  // 價格.
+  .price {
+    padding: 0.625rem 0;
+    @include font-style($font-size: 1.2rem, $font-weight: 900);
+    letter-spacing: 1px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    .special {
+      color: $green;
+    }
+
+    .line-through {
+      @include font-style($font-size: 1rem, $font-weight: 400);
+      text-decoration-line: line-through;
+    }
+
+    &.special-offer {
+      .original {
+        @include font-style($font-size: 1rem, $font-weight: 400);
+        text-decoration-line: line-through;
+      }
+    }
+  }
+
+  // 按鈕
+  .link-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    a {
+      padding: 0.3125rem 0;
+      display: block;
+      border: 1px solid $black-alpha;
+      @include font-style($font-size: 1.2rem, $font-weight: 700);
+      text-align: center;
+      flex-basis: 50%;
+
+      &:first-child {
+        margin-right: 0.625rem;
+      }
+    }
+  }
+
+  .sold-out {
+    width: 100%;
+    height: 100%;
+    background-color: $black-alpha;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      @include font-style($font-size: 2rem, $font-weight: 900, $color: $white);
+      letter-spacing: 1rem;
+      text-align: center;
+    }
+  }
+}
+</style>
