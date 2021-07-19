@@ -126,12 +126,6 @@ export default {
     }
   }
 
-  // 刪除預設樣式.
-  button {
-    background-color: transparent;
-    border: none;
-  }
-
   .button-container {
     width: 100%;
     transform: translateY(-1rem);
@@ -142,8 +136,12 @@ export default {
       position: absolute;
       top: 50%;
 
+      &.prev {
+        left: 0.625rem;
+      }
+
       &.next {
-        right: 0px;
+        right: 0.625rem;
       }
     }
 
@@ -162,6 +160,14 @@ export default {
       display: flex;
       flex-wrap: nowrap;
       justify-content: center;
+    }
+
+    li {
+      margin-right: 0.625rem;
+
+      &:last-child {
+        margin-right: 0px;
+      }
     }
 
     i {

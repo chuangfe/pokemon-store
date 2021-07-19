@@ -17,11 +17,7 @@
       <p class="title">商品分類</p>
       <div class="items">
         <!-- 控制 rwd 的目標 -->
-        <div
-          class="item-container"
-          v-for="(value, key) of $store.state.data"
-          :key="key"
-        >
+        <div class="item-container" v-for="(value, key) of calcData" :key="key">
           <Category
             :src="value.imageSrc"
             :alt="value.alt"
@@ -47,10 +43,10 @@ import CarouselDrag from "../components/CarouselDrag.vue";
 export default {
   name: "Home",
 
-  data() {
-    return {
-      link: "/categories/all",
-    };
+  computed: {
+    calcData() {
+      return this.$store.getters.calcData;
+    },
   },
 
   methods: {

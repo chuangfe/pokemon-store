@@ -28,7 +28,7 @@ const routes = [
     name: "Categories",
     component: Categories,
     beforeEnter(to, from, next) {
-      if (Vuex.state.categories.indexOf(to.params.class) !== -1) {
+      if (Vuex.getters.categories.indexOf(to.params.class) !== -1) {
         next();
       } else {
         next("/home");

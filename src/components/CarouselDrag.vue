@@ -25,14 +25,16 @@
 
     <div class="list">
       <ul>
-        <li v-for="(item, i) of items" :key="i" @click="listClickHandler(i)">
-          <i
-            class="bi"
-            :class="{
-              'bi-circle': active !== i,
-              'bi-circle-fill': active === i,
-            }"
-          ></i>
+        <li v-for="(item, i) of items" :key="i">
+          <button @click="listClickHandler(i)">
+            <i
+              class="bi"
+              :class="{
+                'bi-circle': active !== i,
+                'bi-circle-fill': active === i,
+              }"
+            ></i>
+          </button>
         </li>
       </ul>
     </div>
@@ -70,7 +72,7 @@ export default {
 
   computed: {
     items() {
-      return this.$store.state.data.all.merchandises;
+      return this.$store.getters.calcData.all.merchandises;
     },
   },
 
@@ -182,12 +184,16 @@ export default {
 
     ul {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
       align-items: center;
-    }
 
-    i {
-      @include font-style($font-size: 0.75rem, $color: $black-alpha);
+      li {
+        margin-right: 0.5rem;
+
+        i {
+          @include font-style($font-size: 0.75rem, $color: $black-alpha);
+        }
+      }
     }
   }
 }

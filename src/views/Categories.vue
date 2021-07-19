@@ -2,15 +2,13 @@
   <div class="categories">
     <Carousel :items="$store.state.slides" />
 
+    <Breadcrumb />
+
     <!-- 商品種類. -->
     <div class="categories-container">
       <div class="items">
         <!-- 控制 rwd 的目標 -->
-        <div
-          class="item-container"
-          v-for="(value, key) of $store.state.data"
-          :key="key"
-        >
+        <div class="item-container" v-for="(value, key) of calcData" :key="key">
           <Category
             :src="value.imageSrc"
             :alt="value.alt"
@@ -21,10 +19,12 @@
       </div>
     </div>
 
+    <!-- 商品瀏覽 -->
     <div class="merchandises-container">
       <p class="title">{{ title }}</p>
+
       <!-- rwd 目標 -->
-      <div class="item-container" v-for="(item, i) of items" :key="i">
+      <div class="item-container" v-for="(item, i) of showItems" :key="i">
         <!-- 商品. -->
         <Merchandise
           :src="item.imageSrc"
@@ -38,6 +38,16 @@
         />
       </div>
     </div>
+
+    <!-- 分頁. -->
+    <div class="pagination-container" v-show="getPages">
+      <Pagination
+        :index="index"
+        :length="length"
+        :pages="getPages"
+        @setIndex="setIndexHandler"
+      />
+    </div>
   </div>
 </template>
 
@@ -46,39 +56,94 @@
 
 // 輪播圖.
 import Carousel from "../components/Carousel.vue";
+// 連結.
+import Breadcrumb from "../components/Breadcrumb.vue";
 // 商品種類.
 import Category from "../components/Category.vue";
 // 單項商品.
 import Merchandise from "../components/Merchandise.vue";
+// 分頁.
+import Pagination from "../components/Pagination.vue";
 
 export default {
   name: "Categories",
 
+  data() {
+    return {
+      // 當前分頁的索引.
+      index: 0,
+      // 每頁幾項商品.
+      length: 5,
+    };
+  },
+
   computed: {
-    title() {
-      return this.$store.state.data[this.$route.params.class].name;
+    // 屬性太長了.
+    calcData() {
+      return this.$store.getters.calcData;
     },
+
+    // 當前商品的類型.
+    title() {
+      return this.calcData[this.$route.params.class].name;
+    },
+
+    // 當前類型的所有商品.
     items() {
-      return this.$store.state.data[this.$route.params.class].merchandises;
+      return this.calcData[this.$route.params.class].merchandises;
+    },
+
+    // 切割分頁後的 items.
+    showItems() {
+      // 這是索引.
+      const start = this.index * this.length;
+      // 不包含 end element.
+      const end = start + this.length;
+
+      return this.items.length < this.length
+        ? this.items
+        : this.items.slice(start, end);
+    },
+
+    // 計算頁數.
+    getPages() {
+      return this.items.length > this.length
+        ? Math.ceil(this.items.length / this.length)
+        : 0;
     },
   },
 
   methods: {
+    // 獲取 link.
     getLink(category) {
       return "/categories/" + category;
     },
+
+    // 給分頁使用的事件.
+    setIndexHandler(i) {
+      this.index = i;
+      this.index =
+        this.index < 0
+          ? 0
+          : this.index > this.getPage
+          ? this.getPage
+          : this.index;
+    },
   },
 
-  // 這個頁面修改 router 參數時觸發.
+  // 這個頁面修改 route 參數時觸發.
   beforeRouteUpdate(to, from, next) {
-    if (this.$store.state.categories.indexOf(to.params.class) !== -1) {
+    // 不知道要把 index 重置寫在哪.
+    this.index = 0;
+
+    if (this.$store.getters.categories.indexOf(to.params.class) !== -1) {
       next();
     } else {
       next("/home");
     }
   },
 
-  components: { Carousel, Category, Merchandise },
+  components: { Carousel, Breadcrumb, Category, Merchandise, Pagination },
 };
 </script>
 
@@ -88,6 +153,7 @@ export default {
 @import "../assets/style/class.scss";
 
 .categories {
+  // 商品種類.
   .categories-container {
     padding: 0.375rem;
 
@@ -103,6 +169,7 @@ export default {
     }
   }
 
+  // 展示商品.
   .merchandises-container {
     padding: 0 0.375rem;
 
@@ -122,6 +189,11 @@ export default {
         padding-bottom: 0px;
       }
     }
+  }
+
+  // 分頁.
+  .pagination-container {
+    padding: 0.625rem 0 0 0.3125rem;
   }
 }
 </style>

@@ -21,7 +21,7 @@
       </p>
 
       <p>
-        原創作品｜
+        練習作品｜
         <a href="https://www.pokemon.com/us/" target="_blank">
           圖片來源：https://www.pokemon.com/us/
         </a>

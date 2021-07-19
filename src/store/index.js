@@ -181,33 +181,9 @@ const data = {
   },
 };
 
-const calcData = getAllCommodity(data);
-
-// 將資料多補一個 all 種類.
-function getAllCommodity(data) {
-  let merchandises = [];
-
-  for (let key in data) {
-    merchandises = merchandises.concat(data[key].merchandises);
-  }
-
-  data.all = {
-    name: "全部商品",
-    imageSrc: "./images/gold-00.png",
-    alt: "gold",
-    merchandises,
-  };
-
-  return data;
-}
-
-// 紀錄商品種類.
-const categories = Object.keys(calcData);
-
 export default new Vuex.Store({
   state: {
-    data: calcData,
-    categories,
+    data: data,
     slides: [
       {
         src: "./images/slide-00.jpg",
@@ -233,19 +209,28 @@ export default new Vuex.Store({
   },
   // 相當於 vm 的 computed.
   getters: {
-    all(state) {
-      let merchandises = [];
+    // 補充 all 選項的所有商品.
+    calcData(state) {
+      const calcData = Object.assign({}, state.data);
 
-      for (let key in state.data) {
-        merchandises = merchandises.concat(state.data[key].merchandises);
-      }
-
-      return {
+      calcData.all = {
         name: "全部商品",
         imageSrc: "./images/gold-00.png",
         alt: "gold",
-        merchandises,
+        merchandises: [],
       };
+
+      for (let key in state.data) {
+        calcData.all.merchandises = calcData.all.merchandises.concat(
+          state.data[key].merchandises
+        );
+      }
+
+      return calcData;
+    },
+    // calcData 的所有種類.
+    categories(state, getters) {
+      return Object.keys(getters.calcData);
     },
   },
   // 只能在這裡設定修改 state 的 methods, 這裡是同步模式.

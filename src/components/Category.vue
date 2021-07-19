@@ -1,11 +1,4 @@
 <template>
-  <!-- <div class="item">
-    <div class="image-container">
-      <img :src="src" :alt="alt" />
-    </div>
-    <p class="text">{{ name }}</p>
-  </div> -->
-
   <router-link :to="link" tag="a" class="item">
     <div class="image-container">
       <img :src="src" :alt="alt" />
