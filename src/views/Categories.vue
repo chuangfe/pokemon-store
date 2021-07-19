@@ -1,7 +1,9 @@
 <template>
   <div class="categories">
+    <!-- 輪播圖 -->
     <Carousel :items="$store.state.slides" />
 
+    <!-- 路徑 -->
     <Breadcrumb />
 
     <!-- 商品種類. -->
@@ -64,6 +66,8 @@ import Category from "../components/Category.vue";
 import Merchandise from "../components/Merchandise.vue";
 // 分頁.
 import Pagination from "../components/Pagination.vue";
+// 檢查 route 參數.
+import checkRoute from "../modules/checkRoute";
 
 export default {
   name: "Categories",
@@ -85,12 +89,12 @@ export default {
 
     // 當前商品的類型.
     title() {
-      return this.calcData[this.$route.params.class].name;
+      return this.calcData[this.$route.params.category].name;
     },
 
     // 當前類型的所有商品.
     items() {
-      return this.calcData[this.$route.params.class].merchandises;
+      return this.calcData[this.$route.params.category].merchandises;
     },
 
     // 切割分頁後的 items.
@@ -136,11 +140,11 @@ export default {
     // 不知道要把 index 重置寫在哪.
     this.index = 0;
 
-    if (this.$store.getters.categories.indexOf(to.params.class) !== -1) {
-      next();
-    } else {
-      next("/home");
-    }
+    // 檢查 route category 參數是否正確.
+    checkRoute.category({
+      category: to.params.category,
+      next,
+    });
   },
 
   components: { Carousel, Breadcrumb, Category, Merchandise, Pagination },

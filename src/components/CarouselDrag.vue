@@ -23,6 +23,7 @@
       </div>
     </div>
 
+    <!-- 按鈕列 -->
     <div class="list">
       <ul>
         <li v-for="(item, i) of items" :key="i">

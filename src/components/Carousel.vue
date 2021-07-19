@@ -101,6 +101,7 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
+// 可以設置 RWD.
 .carousel {
   height: 17.5rem;
   position: relative;

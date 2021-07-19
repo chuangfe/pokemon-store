@@ -68,6 +68,10 @@ export default {
     padding: 0 0 0.375rem 1rem;
     letter-spacing: 1px;
 
+    &:last-child {
+      padding-bottom: 0px;
+    }
+
     a {
       @include font-style($font-size: 1rem, $font-weight: 900);
     }

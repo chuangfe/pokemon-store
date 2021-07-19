@@ -15,7 +15,7 @@ export default {
 
   computed: {
     getPath() {
-      return this.$store.getters.calcData[this.$route.params.class].name;
+      return this.$store.getters.calcData[this.$route.params.category].name;
     },
   },
 };

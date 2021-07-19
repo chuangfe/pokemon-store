@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Categories from "../views/Categories.vue";
 import Vuex from "../store/index";
+import checkRoute from "../modules/checkRoute";
 
 Vue.use(VueRouter);
 
@@ -24,15 +25,15 @@ const routes = [
   {
     // [a-z] 代表全部的英文字母小寫.
     // + 代表 1 個至多個英文字母.
-    path: "/categories/:class([a-z]+)",
+    path: "/categories/:category([a-z]+)",
     name: "Categories",
     component: Categories,
     beforeEnter(to, from, next) {
-      if (Vuex.getters.categories.indexOf(to.params.class) !== -1) {
-        next();
-      } else {
-        next("/home");
-      }
+      // 檢查 route category 參數是否正確.
+      checkRoute.category({
+        category: to.params.category,
+        next,
+      });
     },
   },
   {

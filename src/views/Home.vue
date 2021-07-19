@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <!-- 輪播圖 -->
     <Carousel :items="$store.state.slides" />
 
     <h1 class="main-title">＂冒險者！歡迎來到寶可夢購物中心＂</h1>
@@ -28,8 +29,10 @@
       </div>
     </div>
 
+    <!-- 商品瀏覽 -->
     <div class="merchandises-container">
       <p class="title">商品瀏覽</p>
+      <!-- 可拖放輪播圖 -->
       <CarouselDrag />
     </div>
   </div>
