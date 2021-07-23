@@ -4,7 +4,13 @@
     <Carousel :items="$store.state.slides" />
 
     <!-- 路徑 -->
-    <Breadcrumb />
+    <div class="breadcrumb-container">
+      <Breadcrumb
+        :homeLink="'/home'"
+        :categoryLink="getCategoryLink(categoryTitle)"
+        :categoryName="categoryObject.name"
+      />
+    </div>
 
     <!-- 商品種類. -->
     <div class="categories-container">
@@ -15,7 +21,7 @@
             :src="value.imageSrc"
             :alt="value.alt"
             :name="value.name"
-            :link="getLink(key)"
+            :categoryLink="getCategoryLink(key)"
           />
         </div>
       </div>
@@ -23,30 +29,37 @@
 
     <!-- 商品瀏覽 -->
     <div class="merchandises-container">
-      <p class="title">{{ title }}</p>
+      <p class="title">{{ categoryObject.name }}</p>
 
       <!-- rwd 目標 -->
-      <div class="item-container" v-for="(item, i) of showItems" :key="i">
+      <div
+        class="item-container"
+        v-for="(item, i) of showMerchandises"
+        :key="i"
+      >
         <!-- 商品. -->
         <Merchandise
           :src="item.imageSrc"
           :alt="item.alt"
-          :category="item.category"
+          :categoryName="item.categoryName"
           :name="item.name"
           :text="item.text"
           :specialOffer="item.specialOffer"
           :price="item.price"
           :remaining="item.remaining"
+          :merchandiseLink="
+            getMerchandiseLink({ category: item.category, id: item.id })
+          "
         />
       </div>
     </div>
 
     <!-- 分頁. -->
-    <div class="pagination-container" v-show="getPages">
+    <div class="pagination-container" v-show="pages">
       <Pagination
         :index="index"
         :length="length"
-        :pages="getPages"
+        :pages="pages"
         @setIndex="setIndexHandler"
       />
     </div>
@@ -82,45 +95,55 @@ export default {
   },
 
   computed: {
-    // 屬性太長了.
+    // data, 縮短屬性.
     calcData() {
       return this.$store.getters.calcData;
     },
 
-    // 當前商品的類型.
-    title() {
-      return this.calcData[this.$route.params.category].name;
+    // 商品分類的名稱, 縮短屬性.
+    categoryTitle() {
+      return this.$route.params.category;
     },
 
-    // 當前類型的所有商品.
-    items() {
-      return this.calcData[this.$route.params.category].merchandises;
+    // 商品分類的物件.
+    categoryObject() {
+      return this.calcData[this.categoryTitle];
     },
 
-    // 切割分頁後的 items.
-    showItems() {
+    // 當前分類的所有商品.
+    merchandises() {
+      return this.categoryObject.merchandises;
+    },
+
+    // 切割分頁的所有商品.
+    showMerchandises() {
       // 這是索引.
       const start = this.index * this.length;
       // 不包含 end element.
       const end = start + this.length;
 
-      return this.items.length < this.length
-        ? this.items
-        : this.items.slice(start, end);
+      return this.merchandises.length < this.length
+        ? this.merchandises
+        : this.merchandises.slice(start, end);
     },
 
     // 計算頁數.
-    getPages() {
-      return this.items.length > this.length
-        ? Math.ceil(this.items.length / this.length)
+    pages() {
+      return this.merchandises.length > this.length
+        ? Math.ceil(this.merchandises.length / this.length)
         : 0;
     },
   },
 
   methods: {
-    // 獲取 link.
-    getLink(category) {
+    // 獲取分類的 link.
+    getCategoryLink(category) {
       return "/categories/" + category;
+    },
+
+    // 商品頁面 link.
+    getMerchandiseLink({ category, id }) {
+      return "/merchandise/" + category + "/" + id;
     },
 
     // 給分頁使用的事件.
@@ -141,10 +164,7 @@ export default {
     this.index = 0;
 
     // 檢查 route category 參數是否正確.
-    checkRoute.category({
-      category: to.params.category,
-      next,
-    });
+    checkRoute.category(to.params.category) ? next() : next("/home");
   },
 
   components: { Carousel, Breadcrumb, Category, Merchandise, Pagination },
@@ -157,6 +177,11 @@ export default {
 @import "../assets/style/class.scss";
 
 .categories {
+  // 路徑 path.
+  .breadcrumb-container {
+    padding: 0.375rem 0 0.375rem 0.625rem;
+  }
+
   // 商品種類.
   .categories-container {
     padding: 0.375rem;
@@ -197,7 +222,7 @@ export default {
 
   // 分頁.
   .pagination-container {
-    padding: 0.625rem 0 0 0.3125rem;
+    padding: 0.625rem 0 0 0.375rem;
   }
 }
 </style>

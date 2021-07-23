@@ -23,7 +23,7 @@
             :src="value.imageSrc"
             :alt="value.alt"
             :name="value.name"
-            :link="getLink(key)"
+            :categoryLink="getCategoryLink(key)"
           />
         </div>
       </div>
@@ -53,7 +53,7 @@ export default {
   },
 
   methods: {
-    getLink(category) {
+    getCategoryLink(category) {
       return "/categories/" + category;
     },
   },
@@ -100,7 +100,7 @@ export default {
   .categories-container {
     // 標題.
     .title {
-      padding: 1rem 1rem 0 1rem;
+      padding: 1rem 0 0 0.625rem;
       @include font-style(
         $font-size: 1.25rem,
         $font-weight: 900,
@@ -119,7 +119,9 @@ export default {
       .item-container {
         padding: 0 0.625rem 0.625rem 0;
         box-sizing: border-box;
-        flex: 1 1 25%;
+        // flex: 1 1 25%;
+        flex-grow: 1;
+        flex-shrink: 1;
 
         &:last-child,
         &:nth-last-of-type(2) {
@@ -137,7 +139,7 @@ export default {
   .merchandises-container {
     // 標題.
     .title {
-      padding: 0.625rem;
+      padding: 0.625rem 0 0.625rem 0.625rem;
       @include font-style(
         $font-size: 1.25rem,
         $font-weight: 900,

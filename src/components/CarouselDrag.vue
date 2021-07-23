@@ -13,12 +13,15 @@
         <Merchandise
           :src="item.imageSrc"
           :alt="item.alt"
-          :category="item.category"
+          :categoryName="item.categoryName"
           :name="item.name"
           :text="item.text"
           :specialOffer="item.specialOffer"
           :price="item.price"
           :remaining="item.remaining"
+          :merchandiseLink="
+            getMerchandiseLink({ category: item.category, id: item.id })
+          "
         />
       </div>
     </div>
@@ -78,8 +81,9 @@ export default {
   },
 
   methods: {
-    getSpecialOffer(price, specialOffer) {
-      return Math.ceil(price * specialOffer);
+    // 商品頁面 link.
+    getMerchandiseLink({ category, id }) {
+      return "/merchandise/" + category + "/" + id;
     },
     itemsTouchstartHandler(e) {
       if (!this.isMobile) return false;

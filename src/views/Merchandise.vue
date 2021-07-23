@@ -1,0 +1,201 @@
+<template>
+  <div class="merchandise">
+    <!-- path 路徑. -->
+    <div class="breadcrumb-container">
+      <Breadcrumb
+        :homeLink="homeLink"
+        :categoryLink="categoryLink"
+        :categoryName="category.name"
+        :commodityName="commodity.name"
+      />
+    </div>
+
+    <section class="container introduce">
+      <div class="image-container">
+        <img :src="commodity.imageSrc" :alt="commodity.alt" />
+      </div>
+
+      <div class="content-container">
+        <p class="title">商品介紹</p>
+        <p class="text">{{ commodity.text }}</p>
+      </div>
+
+      <div class="content-container">
+        <p class="title">運費資訊</p>
+        <p class="text">無</p>
+      </div>
+    </section>
+
+    <section
+      class="container expense"
+      :class="{ 'special-offer': commodity.specialOffer }"
+    >
+      <p class="title">{{ commodity.name }}</p>
+
+      <p class="price original">原價 NT${{ commodity.price }}</p>
+
+      <p class="price special" v-if="commodity.specialOffer">
+        特價 NT$
+        {{ getCalcPrice }}
+      </p>
+
+      <!-- 選擇購買數量. -->
+      <select class="quantity" v-model="quantity">
+        <option :value="0">請選擇數量</option>
+        <option v-for="(num, i) in commodity.remaining" :key="i" :value="num">
+          選購 {{ num }} 項
+        </option>
+      </select>
+
+      <button class="buy">
+        小計 $
+        <span>{{ quantity * getCalcPrice }}</span>
+        元 / 加入購物車
+      </button>
+    </section>
+  </div>
+</template>
+
+<script>
+// 商品詳細頁面.
+
+// path 路徑.
+import Breadcrumb from "../components/Breadcrumb.vue";
+// 計算價格的函式.
+import getCalcPrice from "../modules/getCalcPrice";
+
+export default {
+  name: "Merchandise",
+
+  data() {
+    return {
+      quantity: 0,
+    };
+  },
+
+  computed: {
+    // 首頁 link.
+    homeLink() {
+      return "/home";
+    },
+    // 商品分類頁面 link.
+    categoryLink() {
+      return "/categories/" + this.$route.params.category;
+    },
+    // 商品分類物件.
+    category() {
+      return this.$store.getters.calcData[this.$route.params.category];
+    },
+    // 商品物件.
+    commodity() {
+      return this.category.merchandises.find((item) => {
+        return item.id === this.$route.params.id;
+      });
+    },
+    // 商品價格.
+    getCalcPrice() {
+      return getCalcPrice({
+        price: this.commodity.price,
+        specialOffer: this.commodity.specialOffer,
+      });
+    },
+  },
+
+  methods: {},
+
+  components: { Breadcrumb },
+};
+</script>
+
+<style lang="scss" scoped>
+@import "../assets/style/variable.scss";
+@import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
+
+.merchandise {
+  .breadcrumb-container {
+    padding: 0 0 0.625rem 0.625rem;
+  }
+
+  // 兩個有邊框的容器.
+  .container {
+    margin: 0 0.375rem;
+    padding: 1.25rem;
+    border: 1px solid $black-alpha;
+  }
+
+  // 商品圖片與說明文字.
+  .introduce {
+    margin-bottom: 0.625rem;
+
+    .image-container {
+      padding-bottom: 0.625rem;
+      height: 12rem;
+
+      img {
+        margin: 0 auto;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .content-container {
+      &:last-child {
+        margin-top: 0.625rem;
+      }
+
+      .title {
+        padding: 0.625rem 0;
+        @include font-style($font-size: 1.2rem, $font-weight: 900);
+        border-bottom: 1px solid $black-alpha;
+      }
+
+      .text {
+        padding-top: 0.625rem;
+      }
+    }
+  }
+
+  // 商品運費相關.
+  .expense {
+    .title {
+      margin-bottom: 0.625rem;
+      padding-bottom: 0.625rem;
+      @include font-style($font-size: 1.5rem, $font-weight: 900);
+      border-bottom: 1px solid $black-alpha;
+    }
+
+    .price {
+      @include font-style($font-size: 1.2rem);
+    }
+
+    .special {
+      color: $green;
+    }
+
+    &.special-offer {
+      .original {
+        @include font-style($font-size: 1rem);
+        text-decoration-line: line-through;
+      }
+    }
+
+    .quantity {
+      margin-top: 0.625rem;
+      padding: 0.625rem;
+      width: 100%;
+      @include font-style($font-size: 1rem);
+    }
+  }
+
+  // 購買按鈕.
+  .buy {
+    margin-top: 0.625rem;
+    padding: 0.625rem 0;
+    width: 100%;
+    @include font-style($font-size: 1rem, $font-weight: 900, $color: $white);
+    text-align: center;
+    background-color: rgba($red, 0.5);
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="link" tag="a" class="item">
+  <router-link :to="categoryLink" tag="a" class="item">
     <div class="image-container">
       <img :src="src" :alt="alt" />
     </div>
@@ -36,7 +36,7 @@ export default {
     },
 
     // 跳轉的網址.
-    link: {
+    categoryLink: {
       // 型別限制.
       type: String,
       // 限制必需要傳值進來.

@@ -7,7 +7,7 @@
 
     <!-- 類別. -->
     <div class="category emergency">
-      {{ category }}
+      {{ categoryName }}
     </div>
 
     <!-- 商品名稱 -->
@@ -21,14 +21,15 @@
     <!-- 價格 -->
     <div class="price" :class="{ 'special-offer': specialOffer }">
       <p class="special" v-if="specialOffer">
-        NT${{ getSpecialOffer(price, specialOffer) }}元
+        NT${{ getCalcPrice({ price, specialOffer }) }}元
       </p>
       <p class="original">NT${{ price }}元</p>
     </div>
 
     <!-- 按鈕 -->
     <div class="link-container">
-      <a href="javascript:;">詳細介紹</a>
+      <!-- <a href="javascript:;">詳細介紹</a> -->
+      <router-link :to="merchandiseLink">詳細介紹</router-link>
       <a href="javascript:;">加入購物車</a>
     </div>
 
@@ -41,6 +42,9 @@
 
 <script>
 // 單項商品展示.
+
+// 計算商品價格的函式.
+import getCalcPrice from "../modules/getCalcPrice";
 
 export default {
   name: "Merchandise",
@@ -57,7 +61,7 @@ export default {
       required: true,
     },
     // 商品分類.
-    category: {
+    categoryName: {
       type: String,
       required: true,
     },
@@ -87,14 +91,12 @@ export default {
       required: true,
     },
     // 跳轉至商品頁面.
-    // link:{},
+    merchandiseLink: { type: String, required: true },
   },
 
   methods: {
     // 計算折扣後的價格.
-    getSpecialOffer(price, specialOffer) {
-      return Math.ceil(price * specialOffer);
-    },
+    getCalcPrice,
 
     // 加入購物車.
   },
