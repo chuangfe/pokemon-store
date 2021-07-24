@@ -356,7 +356,7 @@ export default new Vuex.Store({
     },
 
     // 新增訂單.
-    [CREATE_ORDER](state, { name, email, phone, address }) {
+    [CREATE_ORDER](state, { email, name, phone, address, text }) {
       state.orderData = {
         name,
         email,

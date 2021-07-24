@@ -45,22 +45,82 @@
         <p class="title">訂單資訊</p>
       </div>
 
-      <label for="email">Email</label>
-      <input type="email" name="email" placeholder="請輸入 Email" id="email" />
+      <ValidationObserver v-slot="{ handleSubmit, invalid }">
+        <form @submit.prevent="handleSubmit(submitHandler)">
+          <!-- Email 驗證. -->
+          <!-- mode="lazy", 驗證的反應模式, 該屬性要寫在第一個. -->
+          <!-- required 必需有值. -->
+          <!-- email email 格式. -->
+          <ValidationProvider
+            mode="lazy"
+            name="email"
+            rules="required|email"
+            v-slot="{ errors }"
+          >
+            <label for="email">
+              <p>
+                Email<span class="message">{{ errors[0] }}</span>
+              </p>
+            </label>
+            <input v-model="fromData.email" type="text" id="email" />
+          </ValidationProvider>
 
-      <label for="name">姓名</label>
-      <input type="text" name="name" placeholder="請輸入姓名" id="name" />
+          <!-- 姓名. -->
+          <ValidationProvider
+            mode="lazy"
+            name="name"
+            rules="required|notNumber"
+            v-slot="{ errors }"
+          >
+            <label for="name">
+              <p>
+                姓名<span class="message">{{ errors[0] }}</span>
+              </p>
+            </label>
+            <input v-model="fromData.name" type="text" id="name" />
+          </ValidationProvider>
 
-      <label for="phone">電話</label>
-      <input type="number" name="phone" placeholder="請輸入電話" id="phone" />
+          <!-- 手機. -->
+          <ValidationProvider
+            mode="lazy"
+            name="phone"
+            rules="required|length:10|phone"
+            v-slot="{ errors }"
+          >
+            <label for="phone">
+              <p>
+                手機號碼<span class="message">{{ errors[0] }}</span>
+              </p>
+            </label>
+            <input v-model="fromData.phone" type="number" id="phone" />
+          </ValidationProvider>
 
-      <label for="address">地址</label>
-      <input type="text" name="address" placeholder="請輸入地址" id="address" />
+          <!-- 地址. -->
+          <ValidationProvider
+            mode="lazy"
+            name="address"
+            rules="required|address"
+            v-slot="{ errors }"
+          >
+            <label for="address">
+              <p>
+                送件地址<span class="message">{{ errors[0] }}</span>
+              </p>
+            </label>
+            <input v-model="fromData.address" type="text" id="address" />
+          </ValidationProvider>
 
-      <label for="explain">補充說明</label>
-      <textarea name="explain" rows="4" id="explain"></textarea>
+          <label for="explain">補充說明</label>
+          <textarea
+            name="explain"
+            rows="4"
+            id="explain"
+            v-model="fromData.text"
+          ></textarea>
 
-      <button>確認訂單</button>
+          <button type="submit" :disabled="invalid">確認訂單</button>
+        </form>
+      </ValidationObserver>
     </div>
   </div>
 </template>
@@ -68,6 +128,18 @@
 <script>
 export default {
   name: "ShoppingCart",
+
+  data() {
+    return {
+      fromData: {
+        email: undefined,
+        name: undefined,
+        phone: undefined,
+        address: undefined,
+        text: undefined,
+      },
+    };
+  },
 
   computed: {
     shoppingCart() {
@@ -83,6 +155,10 @@ export default {
 
     remove(id) {
       this.$store.commit("REMOVE_SHOPPING_CART", id);
+    },
+
+    submitHandler() {
+      alert("驗證成功");
     },
   },
 };
@@ -115,8 +191,9 @@ export default {
       }
 
       .title {
-        padding-left: 0.625rem;
+        padding-left: 1rem;
         @include font-style($font-size: 2rem, $font-weight: 900);
+        letter-spacing: 0.625rem;
       }
     }
   }
@@ -172,6 +249,11 @@ export default {
       box-sizing: border-box;
     }
 
+    .message {
+      padding-left: 1rem;
+      color: $red;
+    }
+
     input {
       margin: 0.375rem 0 1rem 0;
       padding: 0.375rem;
@@ -194,12 +276,14 @@ export default {
       padding: 0.625rem 0;
       width: 100%;
       @include font-style($font-size: 1.2rem);
+      color: $white;
       border: 1px solid $black-alpha;
+      background-color: $green;
       box-sizing: border-box;
 
-      &:focus {
-        background-color: $green;
-        color: $white;
+      &[disabled] {
+        color: $black;
+        background-color: $black-alpha;
       }
     }
   }

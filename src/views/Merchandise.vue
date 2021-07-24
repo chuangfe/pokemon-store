@@ -41,7 +41,11 @@
       </p>
 
       <!-- 選擇購買數量. -->
-      <select class="count" v-model="count">
+      <select
+        class="count"
+        v-model="count"
+        v-if="merchandiseData.remaining !== 0"
+      >
         <option :value="0">請選擇數量</option>
         <option
           v-for="(num, i) in merchandiseData.remaining"
@@ -52,10 +56,15 @@
         </option>
       </select>
 
-      <button class="buy">
-        小計 $
-        <span>{{ total }}</span>
-        元 / 加入購物車
+      <button
+        class="buy"
+        :disabled="merchandiseData.remaining === 0"
+        @click="clickHandler"
+      >
+        <span v-if="merchandiseData.remaining !== 0">
+          小計 $ {{ total }} 元 / 加入購物車
+        </span>
+        <span v-else>售完</span>
       </button>
     </section>
   </div>
@@ -109,7 +118,11 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    clickHandler() {
+      console.log(1);
+    },
+  },
 
   components: { Breadcrumb },
 };
@@ -204,6 +217,11 @@ export default {
     @include font-style($font-size: 1rem, $font-weight: 900, $color: $white);
     text-align: center;
     background-color: rgba($red, 0.5);
+
+    &[disabled] {
+      background-color: $black-alpha;
+      color: $black;
+    }
   }
 }
 </style>

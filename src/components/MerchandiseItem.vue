@@ -28,7 +28,10 @@
     <div class="link-container">
       <!-- <a href="javascript:;">詳細介紹</a> -->
       <router-link :to="merchandiseLink">詳細介紹</router-link>
-      <a href="javascript:;">加入購物車</a>
+      <!-- <a href="javascript:;">加入購物車</a> -->
+      <button :disabled="remaining < 1" @click="clickHandler">
+        加入購物車
+      </button>
     </div>
 
     <!-- 售完 -->
@@ -117,6 +120,9 @@ export default {
 
   methods: {
     // 加入購物車.
+    clickHandler() {
+      console.log(1);
+    },
   },
 };
 </script>
@@ -202,7 +208,8 @@ export default {
     flex-wrap: nowrap;
     justify-content: space-between;
 
-    a {
+    a,
+    button {
       padding: 0.3125rem 0;
       display: block;
       border: 1px solid $black-alpha;
