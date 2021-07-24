@@ -326,22 +326,24 @@ export default new Vuex.Store({
   mutations: {
     // 新增商品至購物車, price 在外面傳入時, 就決定好是原價還是特價.
     [ADD_SHOPPING_CART](state, { id, name, price, count }) {
-      const index = state.shoppingCart.findIndex((item) => {
+      const item = state.shoppingCart.find((item) => {
         return item.id === id;
       });
 
-      if (index === -1) {
-        state.shoppingCart.push({
+      // 如果 shoppingCart 裡面已經有, 要新增的商品時.
+      if (item) {
+        item.count += count;
+        item.total = item.price * item.count;
+        return item;
+      } else {
+        // 如果沒有就新增.
+        return state.shoppingCart.push({
           id,
           name,
           price,
           count,
           total: price * count,
         });
-      } else {
-        let item = state.shoppingCart[index];
-        item.count += count;
-        item.total = item.price * item.count;
       }
     },
     // 刪除購物車的商品.
@@ -350,7 +352,7 @@ export default new Vuex.Store({
         return item.id === id;
       });
 
-      state.shoppingCart.splice(index, 1);
+      return state.shoppingCart.splice(index, 1);
     },
 
     // 新增訂單.
@@ -362,6 +364,8 @@ export default new Vuex.Store({
         address,
         merchandises: state.shoppingCart,
       };
+
+      return state.orderData;
     },
   },
   // 邏輯運算, API 異步模式, 在必要的地方調用 mutations 修改 state.
