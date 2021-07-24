@@ -4,20 +4,21 @@
     <div class="breadcrumb-container">
       <Breadcrumb
         :homeLink="homeLink"
-        :categoryLink="categoryLink"
+        :category="$route.params.category"
         :categoryName="category.name"
-        :commodityName="commodity.name"
+        :categoryLink="categoryLink"
+        :merchandiseName="merchandiseData.name"
       />
     </div>
 
     <section class="container introduce">
       <div class="image-container">
-        <img :src="commodity.imageSrc" :alt="commodity.alt" />
+        <img :src="merchandiseData.imageSrc" :alt="merchandiseData.alt" />
       </div>
 
       <div class="content-container">
         <p class="title">商品介紹</p>
-        <p class="text">{{ commodity.text }}</p>
+        <p class="text">{{ merchandiseData.text }}</p>
       </div>
 
       <div class="content-container">
@@ -28,28 +29,32 @@
 
     <section
       class="container expense"
-      :class="{ 'special-offer': commodity.specialOffer }"
+      :class="{ 'special-offer': merchandiseData.specialOffer }"
     >
-      <p class="title">{{ commodity.name }}</p>
+      <p class="title">{{ merchandiseData.name }}</p>
 
-      <p class="price original">原價 NT${{ commodity.price }}</p>
+      <p class="price original">原價 NT${{ merchandiseData.originalPrice }}</p>
 
-      <p class="price special" v-if="commodity.specialOffer">
+      <p class="price special" v-if="merchandiseData.specialOffer">
         特價 NT$
-        {{ getCalcPrice }}
+        {{ merchandiseData.specialPrice }}
       </p>
 
       <!-- 選擇購買數量. -->
-      <select class="quantity" v-model="quantity">
+      <select class="count" v-model="count">
         <option :value="0">請選擇數量</option>
-        <option v-for="(num, i) in commodity.remaining" :key="i" :value="num">
+        <option
+          v-for="(num, i) in merchandiseData.remaining"
+          :key="i"
+          :value="num"
+        >
           選購 {{ num }} 項
         </option>
       </select>
 
       <button class="buy">
         小計 $
-        <span>{{ quantity * getCalcPrice }}</span>
+        <span>{{ total }}</span>
         元 / 加入購物車
       </button>
     </section>
@@ -61,15 +66,13 @@
 
 // path 路徑.
 import Breadcrumb from "../components/Breadcrumb.vue";
-// 計算價格的函式.
-import getCalcPrice from "../modules/getCalcPrice";
 
 export default {
   name: "Merchandise",
 
   data() {
     return {
-      quantity: 0,
+      count: 0,
     };
   },
 
@@ -78,26 +81,31 @@ export default {
     homeLink() {
       return "/home";
     },
+
     // 商品分類頁面 link.
     categoryLink() {
       return "/categories/" + this.$route.params.category;
     },
+
     // 商品分類物件.
     category() {
       return this.$store.getters.calcData[this.$route.params.category];
     },
+
     // 商品物件.
-    commodity() {
+    merchandiseData() {
       return this.category.merchandises.find((item) => {
         return item.id === this.$route.params.id;
       });
     },
-    // 商品價格.
-    getCalcPrice() {
-      return getCalcPrice({
-        price: this.commodity.price,
-        specialOffer: this.commodity.specialOffer,
-      });
+
+    // 商品總額.
+    total() {
+      const price = this.merchandiseData.specialOffer
+        ? this.merchandiseData.specialPrice
+        : this.merchandiseData.originalPrice;
+
+      return price * this.count;
     },
   },
 
@@ -166,7 +174,7 @@ export default {
     }
 
     .price {
-      @include font-style($font-size: 1.2rem);
+      @include font-style($font-size: 1.2rem, $font-weight: 900);
     }
 
     .special {
@@ -180,7 +188,7 @@ export default {
       }
     }
 
-    .quantity {
+    .count {
       margin-top: 0.625rem;
       padding: 0.625rem;
       width: 100%;

@@ -10,15 +10,18 @@
       <!-- item-container 使用 v-for, 並針對 RWD 修改寬度. -->
       <div class="item-container" v-for="(item, i) of items" :key="i">
         <!-- 商品. -->
-        <Merchandise
-          :src="item.imageSrc"
-          :alt="item.alt"
+        <MerchandiseItem
+          :id="item.id"
+          :category="item.category"
           :categoryName="item.categoryName"
           :name="item.name"
           :text="item.text"
-          :specialOffer="item.specialOffer"
-          :price="item.price"
+          :imageSrc="item.imageSrc"
+          :alt="item.alt"
           :remaining="item.remaining"
+          :originalPrice="item.originalPrice"
+          :specialPrice="item.specialPrice"
+          :specialOffer="item.specialOffer"
           :merchandiseLink="
             getMerchandiseLink({ category: item.category, id: item.id })
           "
@@ -49,12 +52,12 @@
 // 可拖放輪播圖.
 
 // 商品.
-import Merchandise from "./Merchandise.vue";
+import MerchandiseItem from "./MerchandiseItem.vue";
 
 let items;
 
 export default {
-  name: "Merchandises",
+  name: "CarouselDrag",
   data() {
     return {
       // 當前索引.
@@ -144,7 +147,7 @@ export default {
     },
   },
 
-  components: { Merchandise },
+  components: { MerchandiseItem },
 
   mounted() {
     items = this.$el.querySelector(".items");

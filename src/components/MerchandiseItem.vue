@@ -1,8 +1,8 @@
 <template>
-  <div class="item">
+  <div class="merchandise-item">
     <!-- 圖片 -->
     <div class="image-container">
-      <img :src="src" :alt="alt" />
+      <img :src="imageSrc" :alt="alt" />
     </div>
 
     <!-- 類別. -->
@@ -20,10 +20,8 @@
 
     <!-- 價格 -->
     <div class="price" :class="{ 'special-offer': specialOffer }">
-      <p class="special" v-if="specialOffer">
-        NT${{ getCalcPrice({ price, specialOffer }) }}元
-      </p>
-      <p class="original">NT${{ price }}元</p>
+      <p class="special" v-if="specialOffer">NT${{ specialPrice }}元</p>
+      <p class="original">NT${{ originalPrice }}元</p>
     </div>
 
     <!-- 按鈕 -->
@@ -43,61 +41,81 @@
 <script>
 // 單項商品展示.
 
-// 計算商品價格的函式.
-import getCalcPrice from "../modules/getCalcPrice";
-
 export default {
   name: "Merchandise",
 
   props: {
-    // 圖片網址.
-    src: {
+    // 商品 id.
+    id: {
       type: String,
       required: true,
     },
-    // 圖片屬性.
-    alt: {
+
+    // 商品分類英文.
+    category: {
       type: String,
       required: true,
     },
-    // 商品分類.
+
+    // 商品分類中文.
     categoryName: {
       type: String,
       required: true,
     },
-    // 商品名稱.
+
+    // 商品名稱中文.
     name: {
       type: String,
       required: true,
     },
-    // 商品說明.
+
+    // 商品說明中文.
     text: {
       type: String,
       required: true,
     },
-    // 商品價格
-    price: {
-      type: Number,
+
+    // 商品圖片網址.
+    imageSrc: {
+      type: String,
       required: true,
     },
-    // 商品折扣, false or Number.
-    specialOffer: {
-      type: [Boolean, Number],
+
+    // 商品圖片文字.
+    alt: {
+      type: String,
       required: true,
     },
-    // 商品剩餘數量
+
+    // 商品剩餘數量.
     remaining: {
       type: Number,
       required: true,
     },
+
+    // 商品原價.
+    originalPrice: {
+      type: Number,
+      required: true,
+    },
+
+    // 商品特價.
+    specialPrice: {
+      type: [Boolean, Number],
+      required: true,
+    },
+
+    // 商品的折扣.
+    specialOffer: {
+      type: [Boolean, Number],
+      required: true,
+    },
+
     // 跳轉至商品頁面.
     merchandiseLink: { type: String, required: true },
   },
 
   methods: {
-    // 計算折扣後的價格.
-    getCalcPrice,
-
     // 加入購物車.
   },
 };
@@ -108,7 +126,7 @@ export default {
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
 
-.item {
+.merchandise-item {
   padding: 1rem;
   border: 1px solid rgba($black, 0.3);
   position: relative;

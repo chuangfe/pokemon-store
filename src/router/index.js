@@ -5,6 +5,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Categories from "../views/Categories.vue";
 import Merchandise from "../views/Merchandise.vue";
+import ShoppingCart from "../views/ShoppingCart.vue";
 
 // 功能函式.
 import checkRoute from "../modules/checkRoute";
@@ -53,6 +54,11 @@ const routes = [
         ? next()
         : next("/categories/" + to.params.category);
     },
+  },
+  {
+    path: "/shoppingcart",
+    name: "ShoppingCart",
+    component: ShoppingCart,
   },
   {
     path: "*",

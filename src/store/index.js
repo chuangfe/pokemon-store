@@ -28,8 +28,10 @@ const data = {
         // 商品庫存.
         remaining: 10,
         // 商品售價.
-        price: 200,
+        originalPrice: 200,
         // 商品特價.
+        specialPrice: false,
+        // 商品特價的折扣.
         specialOffer: false,
       },
       {
@@ -42,7 +44,8 @@ const data = {
         imageSrc: "./images/poke-ball-01.png",
         alt: "poke-ball-01",
         remaining: 0,
-        price: 200 * 3,
+        originalPrice: 600,
+        specialPrice: false,
         specialOffer: false,
       },
       {
@@ -55,7 +58,8 @@ const data = {
         imageSrc: "./images/poke-ball-02.png",
         alt: "poke-ball-02",
         remaining: 20,
-        price: 200 * 5,
+        originalPrice: 1000,
+        specialPrice: 900,
         specialOffer: 0.9,
       },
     ],
@@ -75,7 +79,8 @@ const data = {
         imageSrc: "./images/potion.png",
         alt: "potion",
         remaining: 12,
-        price: 50,
+        originalPrice: 50,
+        specialPrice: false,
         specialOffer: false,
       },
       {
@@ -87,7 +92,8 @@ const data = {
         imageSrc: "./images/max-revive.png",
         alt: "max-revive",
         remaining: 0,
-        price: 200,
+        originalPrice: 200,
+        specialPrice: false,
         specialOffer: false,
       },
     ],
@@ -107,7 +113,8 @@ const data = {
         imageSrc: "./images/backpack.png",
         alt: "backpack",
         remaining: 12,
-        price: 200,
+        originalPrice: 200,
+        specialPrice: 140,
         specialOffer: 0.7,
       },
       {
@@ -120,7 +127,8 @@ const data = {
         imageSrc: "./images/lucky-egg.png",
         alt: "lucky-egg",
         remaining: 12,
-        price: 300,
+        originalPrice: 300,
+        specialPrice: false,
         specialOffer: false,
       },
     ],
@@ -140,7 +148,8 @@ const data = {
         imageSrc: "./images/gold-00.png",
         alt: "gold-00",
         remaining: 12,
-        price: 200,
+        originalPrice: 100,
+        specialPrice: 50,
         specialOffer: 0.5,
       },
       {
@@ -152,7 +161,8 @@ const data = {
         imageSrc: "./images/gold-01.png",
         alt: "gold-01",
         remaining: 12,
-        price: 200 * 100,
+        originalPrice: 10000,
+        specialPrice: 5000,
         specialOffer: 0.5,
       },
       {
@@ -164,19 +174,21 @@ const data = {
         imageSrc: "./images/gold-02.png",
         alt: "gold-02",
         remaining: 12,
-        price: 200 * 500,
+        originalPrice: 50000,
+        specialPrice: 25000,
         specialOffer: 0.5,
       },
       {
         id: "gold-03",
         category: "mall",
         categoryName: "商城",
-        name: "皮卡丘幣X10000",
+        name: "皮卡丘幣X1000",
         text: "寶可夢通用貨幣。",
         imageSrc: "./images/gold-03.png",
         alt: "gold-03",
         remaining: 12,
-        price: 200 * 10000,
+        originalPrice: 100000,
+        specialPrice: 50000,
         specialOffer: 0.5,
       },
       {
@@ -188,7 +200,8 @@ const data = {
         imageSrc: "./images/camera.png",
         alt: "camera",
         remaining: 1,
-        price: 12000,
+        originalPrice: 12000,
+        specialPrice: 9600,
         specialOffer: 0.8,
       },
       {
@@ -200,16 +213,27 @@ const data = {
         imageSrc: "./images/gift-box.png",
         alt: "gift-box",
         remaining: 1,
-        price: 999,
-        specialOffer: 0.199,
+        originalPrice: 999,
+        specialPrice: 99,
+        specialOffer: 0.1,
       },
     ],
   },
 };
 
+// 新增商品至購物車.
+const ADD_SHOPPING_CART = "ADD_SHOPPING_CART",
+  // 刪除購物車的商品.
+  REMOVE_SHOPPING_CART = "REMOVE_SHOPPING_CART",
+  // 新增訂單.
+  CREATE_ORDER = "CREATE_ORDER";
+
 export default new Vuex.Store({
   state: {
+    // 原始資料.
     data: data,
+
+    // 輪播圖片.
     slides: [
       {
         src: "./images/slide-00.jpg",
@@ -232,6 +256,45 @@ export default new Vuex.Store({
         alt: "slide-04",
       },
     ],
+
+    // 購物車的商品, 物件可能需要 id, 數量, ...
+    shoppingCart: [
+      {
+        // 商品 id.
+        id: "poke-ball-00",
+        // 商品名稱.
+        name: "精靈球",
+        // 商品價格.
+        price: 200,
+        // 購買的數量.
+        count: 10,
+        // 總額.
+        total: 2000,
+      },
+      {
+        id: "backpack",
+        name: "背包",
+        price: 200,
+        count: 8,
+        total: 1600,
+      },
+      {
+        id: "potion",
+        name: "傷藥",
+        price: 50,
+        count: 2,
+        total: 100,
+      },
+    ],
+
+    // 訂單資料.
+    orderData: {
+      name: undefined,
+      email: undefined,
+      phone: undefined,
+      address: undefined,
+      merchandises: [],
+    },
   },
   // 相當於 vm 的 computed.
   getters: {
@@ -260,7 +323,47 @@ export default new Vuex.Store({
     },
   },
   // 只能在這裡設定修改 state 的 methods, 這裡是同步模式.
-  mutations: {},
+  mutations: {
+    // 新增商品至購物車, price 在外面傳入時, 就決定好是原價還是特價.
+    [ADD_SHOPPING_CART](state, { id, name, price, count }) {
+      const index = state.shoppingCart.findIndex((item) => {
+        return item.id === id;
+      });
+
+      if (index === -1) {
+        state.shoppingCart.push({
+          id,
+          name,
+          price,
+          count,
+          total: price * count,
+        });
+      } else {
+        let item = state.shoppingCart[index];
+        item.count += count;
+        item.total = item.price * item.count;
+      }
+    },
+    // 刪除購物車的商品.
+    [REMOVE_SHOPPING_CART](state, id) {
+      const index = state.shoppingCart.findIndex((item) => {
+        return item.id === id;
+      });
+
+      state.shoppingCart.splice(index, 1);
+    },
+
+    // 新增訂單.
+    [CREATE_ORDER](state, { name, email, phone, address }) {
+      state.orderData = {
+        name,
+        email,
+        phone,
+        address,
+        merchandises: state.shoppingCart,
+      };
+    },
+  },
   // 邏輯運算, API 異步模式, 在必要的地方調用 mutations 修改 state.
   actions: {},
   // vuex 的模組化.

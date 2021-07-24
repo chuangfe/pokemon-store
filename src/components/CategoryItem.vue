@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="categoryLink" tag="a" class="item">
+  <router-link :to="categoryLink" tag="a" class="category-item">
     <div class="image-container">
       <img :src="src" :alt="alt" />
     </div>
@@ -11,7 +11,7 @@
 // 單項商品類別.
 
 export default {
-  name: "Category",
+  name: "CategoryItem",
 
   props: {
     src: {
@@ -50,7 +50,7 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
-.item {
+.category-item {
   padding: 0.625rem 0;
   border: 1px solid $black-alpha;
   border-radius: 8px;

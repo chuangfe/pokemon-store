@@ -7,8 +7,9 @@
     <div class="breadcrumb-container">
       <Breadcrumb
         :homeLink="'/home'"
-        :categoryLink="getCategoryLink(categoryTitle)"
+        :category="$route.params.category"
         :categoryName="categoryObject.name"
+        :categoryLink="getCategoryLink(categoryTitle)"
       />
     </div>
 
@@ -17,7 +18,7 @@
       <div class="items">
         <!-- 控制 rwd 的目標 -->
         <div class="item-container" v-for="(value, key) of calcData" :key="key">
-          <Category
+          <CategoryItem
             :src="value.imageSrc"
             :alt="value.alt"
             :name="value.name"
@@ -38,15 +39,18 @@
         :key="i"
       >
         <!-- 商品. -->
-        <Merchandise
-          :src="item.imageSrc"
-          :alt="item.alt"
+        <MerchandiseItem
+          :id="item.id"
+          :category="item.category"
           :categoryName="item.categoryName"
           :name="item.name"
           :text="item.text"
-          :specialOffer="item.specialOffer"
-          :price="item.price"
+          :imageSrc="item.imageSrc"
+          :alt="item.alt"
           :remaining="item.remaining"
+          :originalPrice="item.originalPrice"
+          :specialPrice="item.specialPrice"
+          :specialOffer="item.specialOffer"
           :merchandiseLink="
             getMerchandiseLink({ category: item.category, id: item.id })
           "
@@ -74,9 +78,9 @@ import Carousel from "../components/Carousel.vue";
 // 連結.
 import Breadcrumb from "../components/Breadcrumb.vue";
 // 商品種類.
-import Category from "../components/Category.vue";
+import CategoryItem from "../components/CategoryItem.vue";
 // 單項商品.
-import Merchandise from "../components/Merchandise.vue";
+import MerchandiseItem from "../components/MerchandiseItem.vue";
 // 分頁.
 import Pagination from "../components/Pagination.vue";
 // 檢查 route 參數.
@@ -167,7 +171,13 @@ export default {
     checkRoute.category(to.params.category) ? next() : next("/home");
   },
 
-  components: { Carousel, Breadcrumb, Category, Merchandise, Pagination },
+  components: {
+    Carousel,
+    Breadcrumb,
+    CategoryItem,
+    MerchandiseItem,
+    Pagination,
+  },
 };
 </script>
 

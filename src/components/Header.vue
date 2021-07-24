@@ -11,6 +11,11 @@
     </div>
 
     <div class="between-container">
+      <router-link class="shopping-cart" to="/shoppingcart">
+        購物車(<span>{{ $store.state.shoppingCart.length }}</span
+        >)
+      </router-link>
+
       <button
         type="button"
         id="menu-button"
@@ -68,20 +73,23 @@ export default {
   position: relative;
   z-index: 1;
 
-  a {
-    display: block;
-  }
+  .between-container {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
 
-  .logo {
-    width: 180px;
-  }
+    .logo {
+      width: 180px;
+    }
 
-  .button {
-    background-color: #fff;
-    border: none;
+    .shopping-cart {
+      padding-right: 0.625rem;
+    }
 
-    i {
+    .button i {
+      margin-top: 4px;
       font-size: 1.2rem;
+      display: block;
     }
   }
 

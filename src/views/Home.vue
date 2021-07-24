@@ -3,7 +3,9 @@
     <!-- 輪播圖 -->
     <Carousel :items="$store.state.slides" />
 
-    <h1 class="main-title">＂冒險者！歡迎來到寶可夢購物中心＂</h1>
+    <div class="title-container">
+      <h1 class="main-title">＂冒險者！歡迎來到寶可夢購物中心＂</h1>
+    </div>
 
     <div class="news">
       <p>
@@ -19,7 +21,7 @@
       <div class="items">
         <!-- 控制 rwd 的目標 -->
         <div class="item-container" v-for="(value, key) of calcData" :key="key">
-          <Category
+          <CategoryItem
             :src="value.imageSrc"
             :alt="value.alt"
             :name="value.name"
@@ -40,7 +42,7 @@
 
 <script>
 import Carousel from "../components/Carousel.vue";
-import Category from "../components/Category.vue";
+import CategoryItem from "../components/CategoryItem.vue";
 import CarouselDrag from "../components/CarouselDrag.vue";
 
 export default {
@@ -58,7 +60,7 @@ export default {
     },
   },
 
-  components: { Carousel, Category, CarouselDrag },
+  components: { Carousel, CategoryItem, CarouselDrag },
 };
 </script>
 
@@ -68,14 +70,24 @@ export default {
 @import "../assets/style/class.scss";
 
 .home {
-  .main-title {
+  .title-container {
     padding: 1rem 0;
-    @include font-style(
-      $font-size: 1.25rem,
-      $font-weight: 900,
-      $color: #2b447d
-    );
+    font-size: 0px;
     text-align: center;
+    display: flex;
+  }
+
+  .main-title {
+    margin: 0 auto;
+    // 17個字.
+    width: 1.25rem * 17;
+    overflow: hidden;
+    @include font-style($font-size: 1.25rem, $font-weight: 900, $color: $blue);
+    white-space: nowrap;
+    border-right: 1px solid $black;
+    display: inline-block;
+    // 17個字.
+    animation: typing 4s steps(17), caret 1s steps(1) infinite;
   }
 
   .news {
@@ -146,6 +158,19 @@ export default {
         $color: $green
       );
     }
+  }
+}
+
+// 打字效果.
+@keyframes typing {
+  from {
+    width: 0%;
+  }
+}
+
+@keyframes caret {
+  50% {
+    border-color: transparent;
   }
 }
 </style>
