@@ -39,7 +39,7 @@
 </template>
 
 <script>
-// 輪播圖.
+// 普通的輪播圖.
 
 export default {
   name: "Carousel",

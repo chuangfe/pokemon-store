@@ -5,6 +5,10 @@
     <router-view />
 
     <Footer />
+
+    <div class="loading" v-show="$store.state.isLoading">
+      <img src="../public/images/loading.gif" alt="loading" />
+    </div>
   </div>
 </template>
 
@@ -51,5 +55,22 @@ export default {
 
 #app {
   overflow-x: hidden;
+
+  .loading {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba($white, 0.8);
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 50%;
+    }
+  }
 }
 </style>

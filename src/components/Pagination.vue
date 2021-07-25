@@ -30,6 +30,8 @@
 </template>
 
 <script>
+// 分頁按鈕組件.
+
 export default {
   name: "Pagination",
 

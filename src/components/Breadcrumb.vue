@@ -24,6 +24,8 @@
 </template>
 
 <script>
+// 路徑連結組件.
+
 export default {
   name: "Breadcrumb",
 

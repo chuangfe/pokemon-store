@@ -1,5 +1,6 @@
 <template>
   <div class="shopping-cart">
+    <!-- 購物車區域. -->
     <div class="container table-container">
       <div class="title-container">
         <div class="image-container">
@@ -9,40 +10,24 @@
         <p class="title">購物車</p>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <td class="title">商品名稱</td>
-            <td class="count">數量</td>
-            <td class="price">價格</td>
-            <td class="delete">刪除</td>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr v-for="(item, i) of shoppingCart" :key="i">
-            <td>{{ item.name }}</td>
-            <td>{{ item.count }}</td>
-            <td>{{ item.total }}</td>
-            <td>
-              <button @click="remove(item.id)">
-                <i class="bi bi-archive"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-
-        <tfoot></tfoot>
-      </table>
+      <MerchandiseTable
+        :merchandises="shoppingCart"
+        :isRemove="true"
+        @remove="removeHandler"
+        v-if="shoppingCart.length !== 0"
+      />
+      <!-- 沒有商品. -->
+      <Empty :text="'購物車沒有東西喔!'" v-else />
     </div>
 
+    <!-- 訂單購買者資料. -->
     <div class="container order-container">
       <div class="title-container">
         <div class="image-container">
           <img src="../../public/images/gold-00.png" alt="poke-ball-00" />
         </div>
 
-        <p class="title">訂單資訊</p>
+        <p class="title">訂購人</p>
       </div>
 
       <ValidationObserver v-slot="{ handleSubmit, invalid }">
@@ -126,17 +111,24 @@
 </template>
 
 <script>
+// 商品表格.
+import MerchandiseTable from "../components/MerchandiseTable.vue";
+// 空內容.
+import Empty from "../components/Empty.vue";
+// 讀取中.
+import loadHandler from "../modules/loadHandler";
+
 export default {
   name: "ShoppingCart",
 
   data() {
     return {
       fromData: {
-        email: undefined,
-        name: undefined,
-        phone: undefined,
-        address: undefined,
-        text: undefined,
+        email: "aaa@aaa.aa",
+        name: "Tired",
+        phone: "0912345678",
+        address: "不可以輸入英文",
+        text: "沒有備註",
       },
     };
   },
@@ -148,19 +140,44 @@ export default {
   },
 
   methods: {
-    getPrice(origina, special) {
-      const price = special ? special : origina;
-      return;
-    },
-
-    remove(id) {
+    // 購物車刪除商品.
+    removeHandler(id) {
       this.$store.commit("REMOVE_SHOPPING_CART", id);
     },
 
+    // 購買商品.
     submitHandler() {
-      alert("驗證成功");
+      // 購物車內沒有商品.
+      if (!this.shoppingCart.length) {
+        alert("請先購買商品.");
+
+        this.$router.push({
+          path: "/home",
+        });
+      }
+      // 訂單完成.
+      else {
+        alert("訂單完成.");
+
+        this.$store.commit("CREATE_ORDER", {
+          email: this.fromData.email,
+          name: this.fromData.name,
+          phone: this.fromData.phone,
+          address: this.fromData.address,
+          text: this.fromData.text,
+          total: this.getTotal,
+        });
+
+        loadHandler.isLoading();
+
+        this.$router.push({
+          path: "/orders",
+        });
+      }
     },
   },
+
+  components: { MerchandiseTable, Empty },
 };
 </script>
 
@@ -200,44 +217,6 @@ export default {
 
   .table-container {
     padding-bottom: 2rem;
-
-    table {
-      width: 100%;
-      box-sizing: border-box;
-
-      thead {
-        @include font-style($font-size: 1.2rem);
-        background-color: rgba($gray, 0.2);
-      }
-
-      tr {
-        padding: 10px 0;
-        // height: 3rem;
-        border-top: 1px solid $black-alpha;
-        line-height: 3rem;
-
-        &:last-child {
-          border-bottom: 1px solid $black-alpha;
-        }
-      }
-
-      td {
-        padding-left: 1rem;
-        vertical-align: middle;
-      }
-
-      i {
-        @include font-style($font-size: 1rem);
-      }
-
-      .title {
-        width: 30%;
-      }
-
-      .price {
-        width: 30%;
-      }
-    }
   }
 
   .order-container {

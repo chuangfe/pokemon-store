@@ -23,6 +23,7 @@
             :alt="value.alt"
             :name="value.name"
             :categoryLink="getCategoryLink(key)"
+            :isActive="$route.params.category === key"
           />
         </div>
       </div>

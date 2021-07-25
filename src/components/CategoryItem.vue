@@ -1,5 +1,12 @@
 <template>
-  <router-link :to="categoryLink" tag="a" class="category-item">
+  <router-link
+    :to="categoryLink"
+    tag="a"
+    class="category-item"
+    :class="{
+      active: isActive,
+    }"
+  >
     <div class="image-container">
       <img :src="src" :alt="alt" />
     </div>
@@ -8,7 +15,7 @@
 </template>
 
 <script>
-// 單項商品類別.
+// 單項商品組件.
 
 export default {
   name: "CategoryItem",
@@ -42,6 +49,12 @@ export default {
       // 限制必需要傳值進來.
       required: true,
     },
+
+    // 當前在這個頁面.
+    isActive: {
+      type: Boolean,
+      required: true,
+    },
   },
 };
 </script>
@@ -49,6 +62,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
 .category-item {
   padding: 0.625rem 0;
@@ -78,6 +92,19 @@ export default {
     text-align: center;
     @include font-style($font-size: 0.75rem);
     overflow-wrap: break-word;
+  }
+
+  &.active {
+    border-color: transparent;
+    background-color: rgba($green, 0.4);
+
+    .text {
+      @include font-style(
+        $font-size: 0.75rem,
+        $font-weight: 900,
+        $color: $white
+      );
+    }
   }
 }
 </style>

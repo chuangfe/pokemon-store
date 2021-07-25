@@ -35,12 +35,39 @@
 
     <label for="menu-button" class="list">
       <ul>
-        <li>登入 / 註冊</li>
-        <li>回首頁</li>
-        <li>精靈球</li>
-        <li>藥品補給</li>
-        <li>生活道具</li>
-        <li>購物商城</li>
+        <li>
+          <router-link to="javascript:;">登入</router-link>
+        </li>
+
+        <li>
+          <router-link
+            to="/shoppingcart"
+            :class="{ active: $route.path === '/shoppingcart' }"
+            >購物車</router-link
+          >
+        </li>
+
+        <li>
+          <router-link
+            to="/orders"
+            :class="{ active: $route.path === '/orders' }"
+            >訂單</router-link
+          >
+        </li>
+
+        <li>
+          <router-link to="/home" :class="{ active: $route.path === '/home' }"
+            >首頁</router-link
+          >
+        </li>
+
+        <li v-for="(item, key) in $store.getters.calcData" :key="key">
+          <router-link
+            :to="'/categories/' + key"
+            :class="{ active: $route.params.category === key }"
+            >{{ item.name }}</router-link
+          >
+        </li>
       </ul>
     </label>
   </header>
@@ -57,12 +84,11 @@ export default {
       isMenu: false,
     };
   },
-
-  methods: {},
 };
 </script>
 
 <style scoped lang="scss">
+@import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
 .header {
@@ -83,7 +109,7 @@ export default {
     }
 
     .shopping-cart {
-      padding-right: 0.625rem;
+      margin-right: 0.625rem;
     }
 
     .button i {
@@ -94,18 +120,33 @@ export default {
   }
 
   .list {
-    box-shadow: 3px 3px 5px 2px #eee;
-    padding: 0px 10px;
-    background-color: #fff;
-    transform: translateX(100%);
+    width: 100%;
+    box-sizing: border-box;
+    background-color: $white;
+    transform: translateX(-100%);
     transition: transform 0.2s cubic-bezier(0, 0.8, 1, 1) 0s;
     position: absolute;
-    right: 0px;
+    left: 0px;
     top: 100%;
 
     li {
-      @include font-style($font-size: 1.2rem);
-      margin: 10px 0;
+      border-top: 1px solid $black-alpha;
+
+      &:last-child {
+        border-bottom: 1px solid $black-alpha;
+      }
+
+      a {
+        padding: 1rem 0;
+        @include font-style($font-size: 1.2rem);
+        text-align: center;
+        display: block;
+
+        &.active {
+          color: $white;
+          background-color: rgba($green, 0.4);
+        }
+      }
     }
   }
 

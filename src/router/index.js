@@ -1,18 +1,25 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-// 頁面.
+// 首頁.
 import Home from "../views/Home.vue";
+// 商品分類頁面.
 import Categories from "../views/Categories.vue";
+// 商品詳細介紹頁面.
 import Merchandise from "../views/Merchandise.vue";
+// 購物車頁面.
 import ShoppingCart from "../views/ShoppingCart.vue";
+// 訂單確認頁面
+import Orders from "../views/Orders.vue";
 
 // 功能函式.
 import checkRoute from "../modules/checkRoute";
+import loadHandler from "../modules/loadHandler";
 
 Vue.use(VueRouter);
 
 const routes = [
+  // 首頁.
   {
     path: "/home",
     name: "Home",
@@ -27,6 +34,8 @@ const routes = [
   //   component: () =>
   //     import(/* webpackChunkName: "about" */ "../views/About.vue"),
   // },
+
+  // 商品分類頁面.
   {
     // [a-z] 代表全部的英文字母小寫.
     // + 代表 1 個至多個英文字母.
@@ -38,6 +47,8 @@ const routes = [
       checkRoute.category(to.params.category) ? next() : next("/home");
     },
   },
+
+  // 商品詳細介紹頁面.
   {
     path: "/merchandise/:category([a-z]+)/:id([a-zA-Z0-9-_]+)",
     name: "Merchandise",
@@ -55,11 +66,22 @@ const routes = [
         : next("/categories/" + to.params.category);
     },
   },
+
+  // 購物車頁面.
   {
     path: "/shoppingcart",
     name: "ShoppingCart",
     component: ShoppingCart,
   },
+
+  // 訂單確認頁面.
+  {
+    path: "/orders",
+    name: "Orders",
+    component: Orders,
+  },
+
+  // 阻擋其他網址.
   {
     path: "*",
     redirect: "/home",
@@ -67,10 +89,18 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  routes, // 進入該頁面時, 畫面在最上方.
+  routes,
+
+  // 進入該頁面時, 畫面在最上方.
   scrollBehavior() {
     return { x: 0, y: 0 };
   },
+});
+
+router.beforeEach((to, from, next) => {
+  // 讀取中.
+  loadHandler.isLoading();
+  next();
 });
 
 export default router;

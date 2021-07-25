@@ -58,13 +58,12 @@
 
       <button
         class="buy"
+        :class="{ close: count === 0 }"
         :disabled="merchandiseData.remaining === 0"
         @click="clickHandler"
       >
-        <span v-if="merchandiseData.remaining !== 0">
-          小計 $ {{ total }} 元 / 加入購物車
-        </span>
-        <span v-else>售完</span>
+        <span v-if="merchandiseData.remaining === 0">售完</span>
+        <span v-else>總計 $ {{ total }} 元 / 加入購物車</span>
       </button>
     </section>
   </div>
@@ -75,6 +74,10 @@
 
 // path 路徑.
 import Breadcrumb from "../components/Breadcrumb.vue";
+// 判斷路徑.
+import checkRoute from "../modules/checkRoute";
+// loading.
+import loadHandler from "../modules/loadHandler";
 
 export default {
   name: "Merchandise",
@@ -120,11 +123,36 @@ export default {
 
   methods: {
     clickHandler() {
-      console.log(1);
+      if (this.count === 0) return false;
+
+      const item = this.merchandiseData;
+
+      loadHandler.isLoading();
+      this.$store.commit("ADD_SHOPPING_CART", {
+        id: item.id,
+        category: item.category,
+        categoryName: item.categoryName,
+        name: item.name,
+        price: item.specialPrice ? item.specialPrice : item.originalPrice,
+        count: this.count,
+      });
     },
   },
 
   components: { Breadcrumb },
+
+  // 這個頁面修改 route 參數時觸發.
+  beforeRouteUpdate(to, from, next) {
+    // 檢查 route category 參數是否正確.
+    checkRoute.category(to.params.category) ? next() : next("/home");
+    // 檢查 route id 參數是否正確.
+    checkRoute.merchandise({
+      category: to.params.category,
+      id: this.$route.params.id,
+    })
+      ? next()
+      : next("/categories/" + to.params.category);
+  },
 };
 </script>
 
@@ -218,6 +246,7 @@ export default {
     text-align: center;
     background-color: rgba($red, 0.5);
 
+    &.close,
     &[disabled] {
       background-color: $black-alpha;
       color: $black;

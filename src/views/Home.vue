@@ -26,6 +26,7 @@
             :alt="value.alt"
             :name="value.name"
             :categoryLink="getCategoryLink(key)"
+            :isActive="false"
           />
         </div>
       </div>

@@ -42,14 +42,14 @@ extend("notNumber", {
 // 驗證手機號碼.
 extend("length", {
   ...length,
-  message: "手機格式錯誤.",
+  message: "手機位數錯誤.",
 });
 
 extend("phone", {
   validate: (value) => {
     return value.match(/^09/);
   },
-  message: "手機格式錯誤.",
+  message: "手機格式請輸入 09 開頭.",
 });
 
 // 驗證地址.

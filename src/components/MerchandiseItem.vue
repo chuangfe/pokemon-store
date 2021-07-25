@@ -26,23 +26,34 @@
 
     <!-- 按鈕 -->
     <div class="link-container">
-      <!-- <a href="javascript:;">詳細介紹</a> -->
       <router-link :to="merchandiseLink">詳細介紹</router-link>
-      <!-- <a href="javascript:;">加入購物車</a> -->
-      <button :disabled="remaining < 1" @click="clickHandler">
+      <a
+        href="javascript:;"
+        @click="
+          clickHandler({
+            id,
+            category,
+            categoryName,
+            name,
+            price: getCartprice(originalPrice, specialPrice),
+          })
+        "
+      >
         加入購物車
-      </button>
+      </a>
     </div>
 
     <!-- 售完 -->
     <div class="sold-out" v-if="remaining < 1">
-      <p>缺貨</p>
+      <p>售完</p>
     </div>
   </div>
 </template>
 
 <script>
 // 單項商品展示.
+
+import loadHandler from "../modules/loadHandler";
 
 export default {
   name: "Merchandise",
@@ -119,9 +130,27 @@ export default {
   },
 
   methods: {
+    // 判斷商品價格.
+    getCartprice(original, special) {
+      return special ? special : original;
+    },
+
     // 加入購物車.
-    clickHandler() {
-      console.log(1);
+    clickHandler({ id, category, categoryName, name, price, count = 1 }) {
+      // 商品售完.
+      if (this.remaining < 1) return false;
+
+      // 讀取中.
+      loadHandler.isLoading();
+
+      this.$store.commit("ADD_SHOPPING_CART", {
+        id,
+        category,
+        categoryName,
+        name,
+        price,
+        count,
+      });
     },
   },
 };
@@ -208,18 +237,23 @@ export default {
     flex-wrap: nowrap;
     justify-content: space-between;
 
-    a,
-    button {
+    a {
       padding: 0.3125rem 0;
       display: block;
       border: 1px solid $black-alpha;
       @include font-style($font-size: 1.2rem, $font-weight: 700);
       text-align: center;
       flex-basis: 50%;
+      user-select: none;
 
       &:first-child {
         margin-right: 0.625rem;
       }
+    }
+
+    a:active {
+      color: $white !important;
+      background-color: $green !important;
     }
   }
 
