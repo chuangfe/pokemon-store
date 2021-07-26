@@ -33,6 +33,7 @@ export default {};
     align-items: center;
 
     img {
+      max-width: 500px;
       width: 50%;
     }
   }

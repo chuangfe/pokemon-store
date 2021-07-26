@@ -19,7 +19,7 @@
       <button
         type="button"
         id="menu-button"
-        class="button"
+        class="menu"
         @click="isMenu = !isMenu"
         @blur="isMenu = false"
       >
@@ -116,19 +116,21 @@ export default {
       margin-right: 1rem;
     }
 
-    .button i {
+    .menu i {
       margin-top: 4px;
       font-size: 1.2rem;
       display: block;
+      cursor: pointer;
     }
   }
 
   .list {
+    display: block;
     width: 100%;
     box-sizing: border-box;
     background-color: $white;
     transform: translateX(-100%);
-    transition: transform 0.2s cubic-bezier(0, 0.8, 1, 1) 0s;
+    transition: transform 0.2s cubic-bezier(0, 0.8, 1, 1) 0.1s;
     position: absolute;
     left: 0px;
     top: 100%;
@@ -156,6 +158,7 @@ export default {
 
   &.menu {
     .list {
+      transition: transform 0.2s cubic-bezier(0, 0.8, 1, 1) 0s;
       transform: translateX(0%);
     }
   }

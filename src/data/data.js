@@ -8,8 +8,9 @@ export default {
     merchandises: [
       {
         id: "poke-ball-00",
-        // 商品分類.
+        // 商品分類中文.
         category: "ball",
+        // 商品分類英文.
         categoryName: "精靈球",
         // 商品名稱.
         name: "精靈球",

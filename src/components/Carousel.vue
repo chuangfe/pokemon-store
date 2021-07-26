@@ -91,6 +91,7 @@ export default {
     },
 
     listClickHandler(i) {
+      this.direction = i > this.active ? "next" : "prev";
       this.active = i;
     },
   },
@@ -136,6 +137,7 @@ export default {
     button {
       position: absolute;
       top: 50%;
+      cursor: pointer;
 
       &.prev {
         left: 0.625rem;
@@ -161,18 +163,22 @@ export default {
       display: flex;
       flex-wrap: nowrap;
       justify-content: center;
-    }
 
-    li {
-      margin-right: 0.625rem;
+      li {
+        margin-right: 0.625rem;
 
-      &:last-child {
-        margin-right: 0px;
+        &:last-child {
+          margin-right: 0px;
+        }
+
+        button {
+          cursor: pointer;
+
+          i {
+            @include font-style($font-size: 0.75rem, $color: $black-alpha);
+          }
+        }
       }
-    }
-
-    i {
-      @include font-style($font-size: 0.75rem, $color: $black-alpha);
     }
   }
 }
