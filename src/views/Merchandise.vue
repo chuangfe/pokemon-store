@@ -1,5 +1,7 @@
 <template>
   <div class="merchandise">
+    <Header />
+
     <!-- path 路徑. -->
     <div class="breadcrumb-container">
       <Breadcrumb
@@ -66,12 +68,16 @@
         <span v-else>總計 $ {{ total }} 元 / 加入購物車</span>
       </button>
     </section>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 // 商品詳細頁面.
 
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 // path 路徑.
 import Breadcrumb from "../components/Breadcrumb.vue";
 // 判斷路徑.
@@ -139,7 +145,7 @@ export default {
     },
   },
 
-  components: { Breadcrumb },
+  components: { Header, Footer, Breadcrumb },
 
   // 這個頁面修改 route 參數時觸發.
   beforeRouteUpdate(to, from, next) {

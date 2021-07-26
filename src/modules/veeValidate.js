@@ -17,7 +17,7 @@ import { extend } from "vee-validate";
 // between 限制內容的最小和最大字元長度.
 // digits 只能是數字, 可以要求位數.
 // length 根據指令的參數, 強制要求 value 的長度.
-import { required, email, length } from "vee-validate/dist/rules";
+import { required, email, length, alpha_num } from "vee-validate/dist/rules";
 
 // 驗證表單空白.
 extend("required", {
@@ -58,4 +58,10 @@ extend("address", {
     return !value.match(/[a-zA-Z]+/);
   },
   message: "請勿輸入英文.",
+});
+
+// 驗證密碼.
+extend("alpha_num", {
+  ...alpha_num,
+  message: "只能輸入英文與數字.",
 });

@@ -11,6 +11,8 @@ import Merchandise from "../views/Merchandise.vue";
 import ShoppingCart from "../views/ShoppingCart.vue";
 // 訂單確認頁面
 import Orders from "../views/Orders.vue";
+// 登入頁面.
+import SignIn from "../views/SignIn.vue";
 
 // 功能函式.
 import checkRoute from "../modules/checkRoute";
@@ -79,6 +81,13 @@ const routes = [
     path: "/orders",
     name: "Orders",
     component: Orders,
+  },
+
+  // 登入頁面
+  {
+    path: "/signin",
+    name: "SignIn",
+    component: SignIn,
   },
 
   // 阻擋其他網址.

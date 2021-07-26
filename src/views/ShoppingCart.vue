@@ -1,5 +1,7 @@
 <template>
   <div class="shopping-cart">
+    <Header />
+
     <!-- 購物車區域. -->
     <div class="container table-container">
       <div class="title-container">
@@ -107,10 +109,17 @@
         </form>
       </ValidationObserver>
     </div>
+
+    <Footer />
   </div>
 </template>
 
 <script>
+// 購物車頁面.
+
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
+
 // 商品表格.
 import MerchandiseTable from "../components/MerchandiseTable.vue";
 // 空內容.
@@ -177,7 +186,7 @@ export default {
     },
   },
 
-  components: { MerchandiseTable, Empty },
+  components: { Header, Footer, MerchandiseTable, Empty },
 };
 </script>
 

@@ -36,7 +36,11 @@
     <label for="menu-button" class="list">
       <ul>
         <li>
-          <router-link to="javascript:;">登入</router-link>
+          <router-link
+            to="/signin"
+            :class="{ active: $route.path === '/signin' }"
+            >登入</router-link
+          >
         </li>
 
         <li>
@@ -109,7 +113,7 @@ export default {
     }
 
     .shopping-cart {
-      margin-right: 0.625rem;
+      margin-right: 1rem;
     }
 
     .button i {

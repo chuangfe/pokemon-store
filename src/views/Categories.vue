@@ -1,5 +1,7 @@
 <template>
   <div class="categories">
+    <Header />
+
     <!-- 輪播圖 -->
     <Carousel :items="$store.state.slides" />
 
@@ -68,11 +70,16 @@
         @setIndex="setIndexHandler"
       />
     </div>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 // 商品種類瀏覽頁面.
+
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
 
 // 輪播圖.
 import Carousel from "../components/Carousel.vue";
@@ -165,7 +172,7 @@ export default {
 
   // 這個頁面修改 route 參數時觸發.
   beforeRouteUpdate(to, from, next) {
-    // 不知道要把 index 重置寫在哪.
+    // 不知道要把分頁用的 index 重置寫在哪.
     this.index = 0;
 
     // 檢查 route category 參數是否正確.
@@ -173,6 +180,8 @@ export default {
   },
 
   components: {
+    Header,
+    Footer,
     Carousel,
     Breadcrumb,
     CategoryItem,

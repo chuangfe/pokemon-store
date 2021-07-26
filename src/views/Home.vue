@@ -1,5 +1,7 @@
 <template>
   <div class="home">
+    <Header />
+
     <!-- 輪播圖 -->
     <Carousel :items="$store.state.slides" />
 
@@ -38,12 +40,21 @@
       <!-- 可拖放輪播圖 -->
       <CarouselDrag />
     </div>
+
+    <Footer />
   </div>
 </template>
 
 <script>
+// 首頁.
+
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
+// 基本輪播圖.
 import Carousel from "../components/Carousel.vue";
+// 商品分類組件.
 import CategoryItem from "../components/CategoryItem.vue";
+// 可拖放輪播圖.
 import CarouselDrag from "../components/CarouselDrag.vue";
 
 export default {
@@ -61,7 +72,7 @@ export default {
     },
   },
 
-  components: { Carousel, CategoryItem, CarouselDrag },
+  components: { Header, Footer, Carousel, CategoryItem, CarouselDrag },
 };
 </script>
 

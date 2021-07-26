@@ -1,16 +1,12 @@
 <template>
   <div class="confirm">
+    <Header />
+
     <div class="container">
       <div class="title-container">
         <h1 class="title">訂單列表</h1>
-
-        <div class="image-container-home">
-          <img src="../../public/images/home.png" alt="home" />
-        </div>
-
-        <div class="image-container-truck">
-          <img src="../../public/images/truck.png" alt="truck" />
-        </div>
+        <!-- 卡車. -->
+        <Truck />
       </div>
 
       <div class="if-container" v-if="orders.length">
@@ -29,12 +25,19 @@
       </div>
       <Empty :text="'目前沒有訂單!'" v-else />
     </div>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 // 訂單頁面.
 
+import Header from "../components/Header.vue";
+import Footer from "../components/Footer.vue";
+
+// 卡車.
+import Truck from "../components/Truck.vue";
 // 商品表格.
 import MerchandiseTable from "../components/MerchandiseTable.vue";
 // 訂單收件人列表.
@@ -51,7 +54,7 @@ export default {
     },
   },
 
-  components: { MerchandiseTable, RecipientList, Empty },
+  components: { Header, Footer, Truck, MerchandiseTable, RecipientList, Empty },
 };
 </script>
 
@@ -64,7 +67,6 @@ export default {
     padding: 0px 2rem;
 
     .title-container {
-      padding-bottom: 40px;
       position: relative;
       overflow: hidden;
 
@@ -72,27 +74,6 @@ export default {
         padding-bottom: 1rem;
         @include font-style($font-size: 1.5rem, $font-weight: 900);
         text-align: center;
-      }
-
-      .image-container-home {
-        img {
-          margin: 0 auto;
-        }
-      }
-
-      .image-container-truck {
-        width: 80px;
-        transform: translateX(-80%);
-        position: absolute;
-        left: 100%;
-        bottom: 0px;
-        animation: shake 0.6s steps(1) 0s infinite normal running,
-          walk 10s linear 0s infinite normal running;
-
-        img {
-          width: 100%;
-          object-fit: contain;
-        }
       }
     }
 
@@ -110,27 +91,6 @@ export default {
         text-align: center;
       }
     }
-  }
-}
-
-@keyframes shake {
-  50% {
-    bottom: 1px;
-  }
-}
-
-@keyframes walk {
-  0% {
-    left: calc(100% + 80px);
-  }
-  40% {
-    left: 50%;
-  }
-  60% {
-    left: 50%;
-  }
-  100% {
-    left: -80px;
   }
 }
 </style>
