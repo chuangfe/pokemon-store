@@ -33,7 +33,9 @@ const // 檢查商品.
   // 新增商品.
   CREATE_MERCHANDISE_ACTIONS = "CREATE_MERCHANDISE_ACTIONS",
   // 更新商品.
-  UPDATE_MERCHANDISE_ACTIONS = "UPDATE_MERCHANDISE_ACTIONS";
+  UPDATE_MERCHANDISE_ACTIONS = "UPDATE_MERCHANDISE_ACTIONS",
+  // 檢查用戶.
+  CHECK_USER_ACTIONS = "CHECK_USER_ACTIONS";
 
 export default new Vuex.Store({
   state: {
@@ -146,7 +148,7 @@ export default new Vuex.Store({
       return Object.keys(getters.calcData);
     },
   },
-  // 只能在這裡設定修改 state 的 methods, 這裡是同步模式.
+  // 只能在這裡設定修改 state 的 data, 這裡是同步模式.
   mutations: {
     // 新增商品至購物車, price 在外面傳入時, 就決定好是原價還是特價.
     [ADD_SHOPPING_CART](
@@ -252,14 +254,8 @@ export default new Vuex.Store({
 
     // 登入.
     [SIGN_IN](state, { email, password }) {
-      // 判斷是否已經註冊.
-      const user = state.users.find((user) => {
-        return user.email === email;
-      });
-
-      // user 存在, true 登入成功, false 密碼錯誤.
-      // user 不存在, false 尚未註冊.
-      return (state.isSignIn = user ? user.password === password : false);
+      state.user = { email, password };
+      state.isSignIn = true;
     },
 
     // 登出.
@@ -272,7 +268,7 @@ export default new Vuex.Store({
 
     // 新增商品, 只能在 actions 內使用.
     [CREATE_MERCHANDISE_MUTATIONS](state, payload) {
-      return state.data[payload.category].merchandises.push(payload);
+      state.data[payload.category].merchandises.push(payload);
     },
     // 修改商品資料, 只能在 actions 內使用.
     [UPDATE_MERCHANDISE_MUTATIONS](
@@ -286,38 +282,28 @@ export default new Vuex.Store({
         data,
       }
     ) {
-      // 返回修改前的商品資料.
-      return state.data[category].merchandises.splice(index, 1, data)[0];
+      // 修改商品資料.
+      state.data[category].merchandises.splice(index, 1, data);
     },
     // 刪除商品.
-    [REMOVE_MERCHANDISE_MUTATIONS](state, { category, id }) {
+    [REMOVE_MERCHANDISE_MUTATIONS](state, { id, category }) {
       const merchandises = state.data[category].merchandises;
       const index = merchandises.findIndex((item) => {
         return item.id === id;
       });
 
-      return merchandises.splice(index, 1)[0];
+      // 刪除商品.
+      merchandises.splice(index, 1);
     },
   },
 
   // 邏輯運算, API 異步模式, 在必要的地方調用 mutations 修改 state.
   actions: {
-    // 主要是檢查商品有沒有重複的 id 屬性.
-    [CHECK_MERCHANDISE_ACTIONS]({ getters }, { id }) {
-      const merchandises = getters.calcData.merchandises;
-
-      // 若有重覆, 返回重複的商品.
-      // 商品沒有重複, 返回 undefined.
-      return merchandises.find((item) => {
-        return item.id === id;
-      });
-    },
-
     // 新增商品, 商品 id 屬性不能重複.
-    [CREATE_MERCHANDISE_ACTIONS]({ commit, dispatch }, payload) {
+    [CREATE_MERCHANDISE_ACTIONS]({ getters, commit, dispatch }, payload) {
       // 返回重覆的商品物件, 或是 undefined.
-      const repeat = dispatch("CHECK_MERCHANDISE_ACTIONS", {
-        id: payload.id,
+      const repeat = getters.calcData.merchandises.find((item) => {
+        return item.id === payload.id;
       });
 
       // 商品重覆返回的物件有 message 屬性.
@@ -342,6 +328,23 @@ export default new Vuex.Store({
         category: payload.category,
         data: payload,
       });
+    },
+
+    // 用戶檢查
+    [CHECK_USER_ACTIONS]({ state, commit }, { email, password }) {
+      // 判斷 email 是否已經註冊, 找不到會返回 undefined.
+      const user = state.users.find((user) => {
+        return user.email === email;
+      });
+
+      // 判斷 password 是否正確.
+      const check = user ? user.password === password : false;
+
+      // 都正確就登入.
+      if (check) commit("SIGN_IN", { email, password });
+
+      // 返回登入狀態.
+      return state.isSignIn;
     },
   },
 });

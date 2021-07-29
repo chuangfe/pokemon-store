@@ -8,9 +8,9 @@ export default {
     merchandises: [
       {
         id: "poke-ball-00",
-        // 商品分類中文.
-        category: "ball",
         // 商品分類英文.
+        category: "ball",
+        // 商品分類中文.
         categoryName: "精靈球",
         // 商品名稱.
         name: "精靈球",
@@ -26,9 +26,8 @@ export default {
         // 商品售價.
         originalPrice: 200,
         // 商品特價.
-        specialPrice: false,
+        specialPrice: 0,
         // 商品特價的折扣.
-        specialOffer: false,
       },
       {
         id: "poke-ball-01",
@@ -41,8 +40,7 @@ export default {
         alt: "poke-ball-01",
         remaining: 0,
         originalPrice: 600,
-        specialPrice: false,
-        specialOffer: false,
+        specialPrice: 0,
       },
       {
         id: "poke-ball-02",
@@ -56,7 +54,6 @@ export default {
         remaining: 20,
         originalPrice: 1000,
         specialPrice: 900,
-        specialOffer: 0.9,
       },
     ],
   },
@@ -76,8 +73,7 @@ export default {
         alt: "potion",
         remaining: 12,
         originalPrice: 50,
-        specialPrice: false,
-        specialOffer: false,
+        specialPrice: 0,
       },
       {
         id: "max-revive",
@@ -89,8 +85,7 @@ export default {
         alt: "max-revive",
         remaining: 0,
         originalPrice: 200,
-        specialPrice: false,
-        specialOffer: false,
+        specialPrice: 0,
       },
     ],
   },
@@ -111,7 +106,6 @@ export default {
         remaining: 2,
         originalPrice: 200,
         specialPrice: 140,
-        specialOffer: 0.7,
       },
       {
         id: "lucky-egg",
@@ -124,8 +118,7 @@ export default {
         alt: "lucky-egg",
         remaining: 12,
         originalPrice: 300,
-        specialPrice: false,
-        specialOffer: false,
+        specialPrice: 0,
       },
     ],
   },
@@ -146,7 +139,6 @@ export default {
         remaining: 12,
         originalPrice: 100,
         specialPrice: 50,
-        specialOffer: 0.5,
       },
       {
         id: "gold-01",
@@ -159,7 +151,6 @@ export default {
         remaining: 12,
         originalPrice: 10000,
         specialPrice: 5000,
-        specialOffer: 0.5,
       },
       {
         id: "gold-02",
@@ -172,7 +163,6 @@ export default {
         remaining: 12,
         originalPrice: 50000,
         specialPrice: 25000,
-        specialOffer: 0.5,
       },
       {
         id: "gold-03",
@@ -185,7 +175,6 @@ export default {
         remaining: 12,
         originalPrice: 100000,
         specialPrice: 50000,
-        specialOffer: 0.5,
       },
       {
         id: "camera",
@@ -198,7 +187,6 @@ export default {
         remaining: 1,
         originalPrice: 12000,
         specialPrice: 9600,
-        specialOffer: 0.8,
       },
       {
         id: "gift-box",
@@ -211,7 +199,6 @@ export default {
         remaining: 1,
         originalPrice: 999,
         specialPrice: 99,
-        specialOffer: 0.1,
       },
     ],
   },

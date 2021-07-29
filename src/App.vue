@@ -18,6 +18,9 @@ export default {};
 @import "./assets/style/variable.scss";
 
 #app {
+  margin: 0 auto;
+  max-width: 1080px;
+  min-height: 100%;
   overflow-x: hidden;
 
   .loading {

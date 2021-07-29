@@ -13,6 +13,8 @@ import ShoppingCart from "../views/ShoppingCart.vue";
 import Orders from "../views/Orders.vue";
 // 登入頁面.
 import SignIn from "../views/SignIn.vue";
+// 後台頁面.
+import BackSide from "../views/BackSide.vue";
 
 // 功能函式.
 import checkRoute from "../modules/checkRoute";
@@ -88,6 +90,13 @@ const routes = [
     path: "/signin",
     name: "SignIn",
     component: SignIn,
+  },
+
+  // 後台頁面.
+  {
+    path: "/backside",
+    name: "BackSide",
+    component: BackSide,
   },
 
   // 阻擋其他網址.

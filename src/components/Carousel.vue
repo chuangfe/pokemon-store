@@ -12,14 +12,18 @@
     </transition-group>
 
     <div class="button-container" v-if="directionButton">
-      <button class="prev" v-show="active !== 0" @click="clickHandler('prev')">
+      <button
+        class="prev"
+        v-show="active !== 0"
+        @click="clickHandler(this.active - 1)"
+      >
         <i class="bi bi-arrow-left-square"></i>
       </button>
 
       <button
         class="next"
         v-show="active !== items.length - 1"
-        @click="clickHandler('next')"
+        @click="clickHandler(this.active + 1)"
       >
         <i class="bi bi-arrow-right-square"></i>
       </button>
@@ -28,7 +32,7 @@
     <div class="list-container" v-if="listButton">
       <ul>
         <li v-for="(item, i) of items" :key="i">
-          <button @click="listClickHandler(i)">
+          <button @click="clickHandler(i)">
             <i class="bi bi-circle" v-show="active !== i"></i>
             <i class="bi bi-circle-fill" v-show="active === i"></i>
           </button>
@@ -76,23 +80,14 @@ export default {
   },
 
   methods: {
-    clickHandler(direction) {
-      this.direction = direction;
-
+    clickHandler(calcActive) {
+      this.direction = calcActive > this.active ? "next" : "prev";
       this.active =
-        this.direction === "next" ? this.active + 1 : this.active - 1;
-
-      this.active =
-        this.active < 0
+        calcActive < 0
           ? 0
-          : this.active > this.items.length - 1
+          : calcActive > this.items.length - 1
           ? this.items.length - 1
-          : this.active;
-    },
-
-    listClickHandler(i) {
-      this.direction = i > this.active ? "next" : "prev";
-      this.active = i;
+          : calcActive;
     },
   },
 };

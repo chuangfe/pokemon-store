@@ -22,7 +22,7 @@
             <label for="email">
               <p>
                 <span class="title">Email</span>
-                <span class="message">{{ errors[0] }}</span>
+                <span class="message">{{ message || errors[0] }}</span>
               </p>
             </label>
             <input
@@ -30,6 +30,7 @@
               type="text"
               id="email"
               placeholder="abc@gmail.com"
+              @input="message = ''"
             />
           </ValidationProvider>
 
@@ -41,7 +42,7 @@
             <label for="password">
               <p>
                 <span class="title">Password</span>
-                <span class="message">{{ errors[0] }}</span>
+                <span class="message">{{ message || errors[0] }}</span>
               </p>
             </label>
             <input
@@ -62,7 +63,7 @@
 
 <script>
 // 登入頁面.
-
+// 卡車.
 import Truck from "../components/Truck.vue";
 
 export default {
@@ -70,14 +71,32 @@ export default {
 
   data() {
     return {
-      email: "abc@gmail.com",
+      email: "abc@gmail.comcc",
       password: "abc123",
+      message: "",
     };
   },
 
   methods: {
-    submitHandler() {
-      console.log(1);
+    // 沒想到 async await 還能這樣寫.
+    async submitHandler() {
+      const check = await this.$store
+        .dispatch("CHECK_USER_ACTIONS", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((result) => {
+          if (result) {
+            // 跳轉.
+            console.log("OK");
+          } else {
+            this.message = "帳號或密碼錯誤.";
+          }
+
+          return result;
+        });
+
+      console.log(check, "---");
     },
   },
 
@@ -109,7 +128,7 @@ export default {
   }
 
   .form-container {
-    @include font-style($font-size: 1.2rem);
+    @include font-style($font-size: 1rem);
 
     p {
       padding: 0.625rem 0 0.3125rem 0;
