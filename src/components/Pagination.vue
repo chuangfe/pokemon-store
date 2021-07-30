@@ -30,7 +30,7 @@
 </template>
 
 <script>
-// 分頁按鈕組件.
+// 分頁按鈕組件, 商品分類頁面使用.
 
 export default {
   name: "Pagination",

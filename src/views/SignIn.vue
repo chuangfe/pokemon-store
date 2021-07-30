@@ -50,6 +50,7 @@
               type="password"
               id="password"
               placeholder="abc123"
+              autocomplete="on"
             />
           </ValidationProvider>
 
@@ -71,7 +72,7 @@ export default {
 
   data() {
     return {
-      email: "abc@gmail.comcc",
+      email: "abc@gmail.com",
       password: "abc123",
       message: "",
     };
@@ -88,7 +89,13 @@ export default {
         .then((result) => {
           if (result) {
             // 跳轉.
-            console.log("OK");
+            // console.log("OK");
+            this.$store.commit("SIGN_IN", {
+              email: this.email,
+              password: this.password,
+            });
+
+            this.$router.push({ path: "/home" });
           } else {
             this.message = "帳號或密碼錯誤.";
           }
@@ -96,7 +103,7 @@ export default {
           return result;
         });
 
-      console.log(check, "---");
+      console.log("SignIn", check);
     },
   },
 

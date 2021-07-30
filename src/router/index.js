@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+// 引入 vuex 的資料, 作為登入判斷.
+import Store from "../store/index";
 
 // 首頁.
 import Home from "../views/Home.vue";
@@ -15,6 +17,10 @@ import Orders from "../views/Orders.vue";
 import SignIn from "../views/SignIn.vue";
 // 後台頁面.
 import BackSide from "../views/BackSide.vue";
+// 後台商品頁面.
+import BackSideMerchandises from "../components/BackSideMerchandises.vue";
+// 後台訂單頁面
+import BackSideOrders from "../components/BackSideOrders.vue";
 
 // 功能函式.
 import checkRoute from "../modules/checkRoute";
@@ -73,7 +79,7 @@ const routes = [
 
   // 購物車頁面.
   {
-    path: "/shoppingcart",
+    path: "/shopping-cart",
     name: "ShoppingCart",
     component: ShoppingCart,
   },
@@ -87,16 +93,34 @@ const routes = [
 
   // 登入頁面
   {
-    path: "/signin",
+    path: "/sign-in",
     name: "SignIn",
     component: SignIn,
   },
 
   // 後台頁面.
   {
-    path: "/backside",
+    path: "/back-side",
     name: "BackSide",
     component: BackSide,
+    children: [
+      {
+        path: "back-side-merchandises",
+        component: BackSideMerchandises,
+      },
+      {
+        path: "back-side-orders",
+        component: BackSideOrders,
+      },
+      {
+        path: "",
+        // 沒有保留歷史紀錄
+        redirect: "/back-side/back-side-merchandises",
+      },
+    ],
+    beforeEnter(to, from, next) {
+      Store.state.isSignIn ? next() : next("/home");
+    },
   },
 
   // 阻擋其他網址.
@@ -118,6 +142,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // 讀取中.
   loadHandler.isLoading();
+  // 進入頁面.
   next();
 });
 

@@ -21,7 +21,6 @@
           :remaining="item.remaining"
           :originalPrice="item.originalPrice"
           :specialPrice="item.specialPrice"
-          :specialOffer="item.specialOffer"
           :merchandiseLink="
             getMerchandiseLink({ category: item.category, id: item.id })
           "

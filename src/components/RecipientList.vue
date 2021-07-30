@@ -40,7 +40,7 @@
 </template>
 
 <script>
-// 訂單收件人列表.
+// 訂單收件人列表, 訂單頁面使用.
 
 // 讀取.
 import loadHandler from "../modules/loadHandler";

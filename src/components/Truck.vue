@@ -11,6 +11,8 @@
 </template>
 
 <script>
+// 卡車動畫組件, 登入頁面使用.
+
 export default {
   name: "Truck",
 };

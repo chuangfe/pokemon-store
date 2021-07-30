@@ -8,18 +8,25 @@
 
     <div class="content-container">
       <div class="container image-container" v-if="calcData.imageSrc">
-        <img :src="calcData.imageSrc" :alt="calcData.alt" />
+        <img :src="calcData.imageSrc" :alt="calcData.alt" @load="LoadHandler" />
       </div>
 
       <div class="container src-container">
         <label for="src">
           <p class="between-container src">圖片網址</p>
           <p class="between-container">
-            <!-- <span class="text download">圖片下載成功</span>
-            <span class="text error">圖片下載失敗</span> -->
+            <span class="text download" v-show="imageSrcError"
+              >圖片下載成功</span
+            >
+            <span class="text error" v-show="!imageSrcError">圖片下載失敗</span>
           </p>
         </label>
-        <input type="text" id="src" v-model.trim="calcData.imageSrc" />
+        <input
+          type="text"
+          id="src"
+          v-model.trim="calcData.imageSrc"
+          @input="imageSrcError = false"
+        />
       </div>
 
       <div class="container">
@@ -27,13 +34,6 @@
           圖片 Alt
         </label>
         <input type="text" id="alt" v-model.trim="calcData.alt" />
-      </div>
-
-      <div class="container" v-if="reviseId">
-        <label for="merchandise-id">
-          產品 Id
-        </label>
-        <input type="text" id="merchandise-id" v-model.trim="calcData.id" />
       </div>
 
       <div class="container">
@@ -45,20 +45,13 @@
 
       <div class="container">
         <label for="category">
-          商品分類-英文
+          商品分類
         </label>
-        <input type="text" id="category" v-model.trim="calcData.category" />
-      </div>
-
-      <div class="container">
-        <label for="category-name">
-          商品分類-中文
-        </label>
-        <input
-          type="text"
-          id="category-name"
-          v-model.trim="calcData.categoryName"
-        />
+        <select name="category" id="category" v-model="getCategory">
+          <option v-for="(value, key) of data" :key="key" :value="key">{{
+            value.name
+          }}</option>
+        </select>
       </div>
 
       <div class="container">
@@ -107,7 +100,10 @@
       </div>
 
       <div class="container button-container">
-        <button class="close" @click="$emit('setIsEditing', '')">
+        <button
+          class="close"
+          @click="$emit('setEditing', { onOff: false, id: '' })"
+        >
           取消
         </button>
         <button class="save" @click="saveHandler">確認</button>
@@ -117,48 +113,135 @@
 </template>
 
 <script>
-const data = {
-  imageSrc: "",
-  alt: "",
-  id: "",
-  name: "",
-  category: "",
-  categoryName: "",
-  remaining: "",
-  originalPrice: "",
-  specialPrice: "",
-  text: "",
-};
+// 後台商品編輯組件, 後台商品頁面使用.
+
+// 讀取進度物件.
+import loadHandler from "../modules/loadHandler";
+
+function getCalcData() {
+  return {
+    id: this.id,
+    imageSrc: this.imageSrc,
+    alt: this.alt,
+    name: this.name,
+    category: this.category,
+    categoryName: this.categoryName,
+    remaining: this.remaining,
+    originalPrice: this.originalPrice,
+    specialPrice: this.specialPrice,
+    text: this.text,
+  };
+}
 
 export default {
-  name: "BackSideEditing",
+  name: "BackSideMerchandisesEditing",
 
   props: {
     // 當前修改的商品的 Id.
-    outsideId: { type: String },
-    // 當前修改的商品的 data.
-    editingItem: { type: Object },
-    // 是否可以修改商品 id.
-    reviseId: { type: Boolean },
+    id: {
+      type: String,
+    },
+
+    imageSrc: {
+      type: String,
+      default: "",
+    },
+
+    alt: {
+      type: String,
+      default: "",
+    },
+
+    name: {
+      type: String,
+      default: "",
+    },
+
+    category: {
+      type: String,
+      default: "ball",
+    },
+
+    categoryName: {
+      type: String,
+      default: "",
+    },
+
+    remaining: {
+      type: Number,
+      default: 0,
+    },
+
+    originalPrice: {
+      type: Number,
+      default: 0,
+    },
+
+    specialPrice: {
+      type: Number,
+      default: 0,
+    },
+
+    text: {
+      type: String,
+      default: "",
+    },
   },
 
   data() {
-    return { calcData: Object.assign({}, data) };
+    return {
+      calcData: getCalcData.call(this),
+      imageSrcError: false,
+    };
+  },
+
+  computed: {
+    data() {
+      return this.$store.state.data;
+    },
+
+    // 當變數使用.
+    getCategory: {
+      // 綁定給 v-model, 設值時同時調整兩個資料.
+      set(val) {
+        this.calcData.category = val;
+        this.calcData.categoryName = this.data[this.calcData.category].name;
+      },
+      // 取值時的資料.
+      get() {
+        return this.calcData.category;
+      },
+    },
   },
 
   methods: {
-    saveHandler() {
-      console.log(this.calcData);
+    async saveHandler() {
+      // 讀取中.
+      loadHandler.isLoading();
+
+      // 更新商品.
+      const oldItem = await this.$store
+        .dispatch("UPDATE_MERCHANDISE_ACTIONS", this.calcData)
+        .then((result) => {
+          // 讀取結束.
+          loadHandler.isLoaded();
+          // 關閉編輯.
+          this.$emit("setEditing", { onOff: false });
+          return result;
+        });
+
+      console.log("update", oldItem);
+    },
+
+    LoadHandler() {
+      this.imageSrcError = true;
     },
   },
 
   watch: {
-    editingItem() {
-      if (this.editingItem.id) {
-        this.calcData = Object.assign({}, this.editingItem);
-      } else {
-        this.calcData = Object.assign({}, data);
-      }
+    id() {
+      this.calcData = getCalcData.call(this);
+      this.imageSrcError = false;
     },
   },
 };
@@ -185,6 +268,7 @@ export default {
       @include font-style($font-size: 1.2rem);
 
       label {
+        margin-bottom: 0.625rem;
         display: block;
       }
 
@@ -193,6 +277,11 @@ export default {
         width: 100%;
         letter-spacing: 1px;
         box-sizing: border-box;
+      }
+
+      select {
+        padding: 0.3125rem;
+        @include font-style($font-size: 1.2rem);
       }
 
       textarea {
@@ -236,7 +325,7 @@ export default {
       justify-content: flex-end;
 
       button {
-        padding: 0.625rem 1rem;
+        padding: 0.3125rem 1rem;
         border-radius: 10px;
         @include font-style($font-size: 1.2rem, $color: $white);
 

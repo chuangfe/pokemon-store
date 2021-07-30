@@ -32,7 +32,7 @@
 </template>
 
 <script>
-// 商品表格組件.
+// 商品表格組件, 在購物車內只用.
 
 export default {
   name: "MerchandiseTable",

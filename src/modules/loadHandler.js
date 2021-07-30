@@ -6,6 +6,9 @@ let timer = null;
 
 // 應該寫在 api 回調, component mounted, 各種真正讀資料的地方.
 function loaded() {
+  // 刪除排程.
+  clearTimeout(timer);
+  // 讀取結束.
   Store.state.isLoading = false;
 }
 
@@ -22,7 +25,10 @@ export default {
   },
 
   // 讀取完成.
-  // isLoaded() {
-  //   Store.state.isLoading = false;
-  // },
+  isLoaded() {
+    // 刪除排程.
+    clearTimeout(timer);
+    // 讀取結束.
+    Store.state.isLoading = false;
+  },
 };

@@ -15,7 +15,7 @@
       <button
         class="prev"
         v-show="active !== 0"
-        @click="clickHandler(this.active - 1)"
+        @click="clickHandler(active - 1)"
       >
         <i class="bi bi-arrow-left-square"></i>
       </button>
@@ -23,7 +23,7 @@
       <button
         class="next"
         v-show="active !== items.length - 1"
-        @click="clickHandler(this.active + 1)"
+        @click="clickHandler(active + 1)"
       >
         <i class="bi bi-arrow-right-square"></i>
       </button>
@@ -132,7 +132,6 @@ export default {
     button {
       position: absolute;
       top: 50%;
-      cursor: pointer;
 
       &.prev {
         left: 0.625rem;
@@ -167,8 +166,6 @@ export default {
         }
 
         button {
-          cursor: pointer;
-
           i {
             @include font-style($font-size: 0.75rem, $color: $black-alpha);
           }

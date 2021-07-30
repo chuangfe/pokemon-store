@@ -19,8 +19,8 @@
     </p>
 
     <!-- 價格 -->
-    <div class="price" :class="{ 'special-offer': specialOffer }">
-      <p class="special" v-if="specialOffer">NT${{ specialPrice }}元</p>
+    <div class="price" :class="{ 'special-offer': specialPrice }">
+      <p class="special" v-if="specialPrice">NT${{ specialPrice }}元</p>
       <p class="original">NT${{ originalPrice }}元</p>
     </div>
 
@@ -115,12 +115,6 @@ export default {
 
     // 商品特價.
     specialPrice: {
-      type: [Boolean, Number],
-      required: true,
-    },
-
-    // 商品的折扣.
-    specialOffer: {
       type: [Boolean, Number],
       required: true,
     },

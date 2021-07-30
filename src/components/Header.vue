@@ -11,7 +11,7 @@
     </div>
 
     <div class="between-container">
-      <router-link class="shopping-cart" to="/shoppingcart">
+      <router-link class="shopping-cart" to="/shopping-cart">
         購物車(<span>{{ $store.state.shoppingCart.length }}</span
         >)
       </router-link>
@@ -35,18 +35,26 @@
 
     <label for="menu-button" class="list">
       <ul>
-        <li>
+        <li v-if="$store.state.isSignIn">
+          <a href="#/sign-out" @click="singOutHandler">登出</a>
+        </li>
+
+        <li v-else>
           <router-link
-            to="/signin"
-            :class="{ active: $route.path === '/signin' }"
+            to="/sign-in"
+            :class="{ active: $route.path === '/sign-in' }"
             >登入</router-link
           >
         </li>
 
+        <li v-if="$store.state.isSignIn">
+          <router-link to="/back-side">後台</router-link>
+        </li>
+
         <li>
           <router-link
-            to="/shoppingcart"
-            :class="{ active: $route.path === '/shoppingcart' }"
+            to="/shopping-cart"
+            :class="{ active: $route.path === '/shopping-cart' }"
             >購物車</router-link
           >
         </li>
@@ -78,6 +86,8 @@
 </template>
 
 <script>
+import loadHandler from "../modules/loadHandler";
+
 export default {
   name: "Header",
 
@@ -87,6 +97,14 @@ export default {
     return {
       isMenu: false,
     };
+  },
+
+  methods: {
+    singOutHandler() {
+      // 讀取中.
+      loadHandler.isLoading();
+      this.$store.commit("SIGN_OUT");
+    },
   },
 };
 </script>

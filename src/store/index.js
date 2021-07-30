@@ -28,10 +28,10 @@ const // 新增商品至購物車.
   UPDATE_MERCHANDISE_MUTATIONS = "UPDATE_MERCHANDISE_MUTATIONS";
 
 // actions
-const // 檢查商品.
-  CHECK_MERCHANDISE_ACTIONS = "CHECK_MERCHANDISE_ACTIONS",
-  // 新增商品.
+const // 新增商品.
   CREATE_MERCHANDISE_ACTIONS = "CREATE_MERCHANDISE_ACTIONS",
+  // 刪除商品.
+  REMOVE_MERCHANDISE_ACTIONS = "REMOVE_MERCHANDISE_ACTIONS",
   // 更新商品.
   UPDATE_MERCHANDISE_ACTIONS = "UPDATE_MERCHANDISE_ACTIONS",
   // 檢查用戶.
@@ -270,6 +270,7 @@ export default new Vuex.Store({
     [CREATE_MERCHANDISE_MUTATIONS](state, payload) {
       state.data[payload.category].merchandises.push(payload);
     },
+
     // 修改商品資料, 只能在 actions 內使用.
     [UPDATE_MERCHANDISE_MUTATIONS](
       state,
@@ -285,15 +286,11 @@ export default new Vuex.Store({
       // 修改商品資料.
       state.data[category].merchandises.splice(index, 1, data);
     },
-    // 刪除商品.
-    [REMOVE_MERCHANDISE_MUTATIONS](state, { id, category }) {
-      const merchandises = state.data[category].merchandises;
-      const index = merchandises.findIndex((item) => {
-        return item.id === id;
-      });
 
+    // 刪除商品.
+    [REMOVE_MERCHANDISE_MUTATIONS](state, { category, index }) {
       // 刪除商品.
-      merchandises.splice(index, 1);
+      state.data[category].merchandises.splice(index, 1);
     },
   },
 
@@ -314,20 +311,60 @@ export default new Vuex.Store({
           commit("CREATE_MERCHANDISE_MUTATIONS", payload);
     },
 
+    // 刪除商品.
+    [REMOVE_MERCHANDISE_ACTIONS]({ state, getters, commit }, { category, id }) {
+      // 找舊商品的資料, 用 id 在 getters.calcData.all 裡面找舊的商品.
+      const oldItem = getters.calcData.all.merchandises.find((item) => {
+        return item.id === id;
+      });
+
+      // 找舊商品的索引, 用舊的商品的資料針對分類找索引.
+      const index = state.data[oldItem.category].merchandises.findIndex(
+        (item) => {
+          return item.id === id;
+        }
+      );
+
+      // 刪除商品.
+      commit("REMOVE_MERCHANDISE_MUTATIONS", { category, index });
+
+      return oldItem;
+    },
+
     // 更新商品, 依靠 id 找商品, 所以商品 id 不可更新.
-    [UPDATE_MERCHANDISE_ACTIONS]({ state, commit }, payload) {
-      // 在這裡找索引.
-      const index = state.data[payload.category].merchandises.findIndex(
+    [UPDATE_MERCHANDISE_ACTIONS]({ state, getters, commit }, payload) {
+      // 找舊商品的資料, 用 id 在 getters.calcData.all 裡面找舊的商品.
+      const oldItem = getters.calcData.all.merchandises.find((item) => {
+        return item.id === payload.id;
+      });
+      // 找舊商品的索引, 用舊的商品的資料針對分類找索引.
+      const oldIndex = state.data[oldItem.category].merchandises.findIndex(
         (item) => {
           return item.id === payload.id;
         }
       );
 
-      return commit("UPDATE_MERCHANDISE_MUTATIONS", {
-        index,
-        category: payload.category,
-        data: payload,
-      });
+      // 商品的分類沒有改變.
+      if (payload.category === oldItem.category) {
+        commit("UPDATE_MERCHANDISE_MUTATIONS", {
+          oldIndex,
+          category: payload.category,
+          data: payload,
+        });
+      }
+      // 商品分類改變.
+      else {
+        // 將新的商品新增到指定的的分類.
+        commit("CREATE_MERCHANDISE_MUTATIONS", payload);
+        // 刪除舊的商品.
+        commit("REMOVE_MERCHANDISE_MUTATIONS", {
+          category: oldItem.category,
+          index: oldIndex,
+        });
+      }
+
+      // 返回商品的舊資料.
+      return oldItem;
     },
 
     // 用戶檢查
