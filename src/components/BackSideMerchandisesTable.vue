@@ -40,7 +40,6 @@
               @click="
                 removeHandler({
                   id: item.id,
-                  category: item.category,
                 })
               "
             >
@@ -56,9 +55,6 @@
 <script>
 // 後台商品表格組件, 後台商品頁面使用.
 
-// 讀取進度物件.
-import loadHandler from "../modules/loadHandler";
-
 export default {
   name: "BackSideMerchandisesTable",
 
@@ -69,20 +65,10 @@ export default {
   },
 
   methods: {
-    async removeHandler({ id, category }) {
-      // 讀取中.
-      loadHandler.isLoading();
-
-      const oldItem = await this.$store
-        .dispatch("REMOVE_MERCHANDISE_ACTIONS", {
-          id,
-          category,
-        })
-        .then((result) => {
-          // 讀取結束.
-          loadHandler.isLoaded();
-          return result;
-        });
+    async removeHandler({ id }) {
+      const oldItem = await this.$store.dispatch("REMOVE_MERCHANDISE_ACTIONS", {
+        id,
+      });
 
       console.log("remove", oldItem);
     },

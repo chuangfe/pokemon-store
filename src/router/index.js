@@ -23,7 +23,9 @@ import BackSideMerchandises from "../components/BackSideMerchandises.vue";
 import BackSideOrders from "../components/BackSideOrders.vue";
 
 // 功能函式.
+// 檢查 url 參數.
 import checkRoute from "../modules/checkRoute";
+// 假的讀取進度
 import loadHandler from "../modules/loadHandler";
 
 Vue.use(VueRouter);
@@ -140,9 +142,10 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // 讀取中.
+  // 跳轉頁面時的假讀取.
   loadHandler.isLoading();
-  // 進入頁面.
+
+  // 跳轉頁面
   next();
 });
 

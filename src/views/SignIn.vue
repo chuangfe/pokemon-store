@@ -79,31 +79,18 @@ export default {
   },
 
   methods: {
-    // 沒想到 async await 還能這樣寫.
     async submitHandler() {
-      const check = await this.$store
-        .dispatch("CHECK_USER_ACTIONS", {
-          email: this.email,
-          password: this.password,
-        })
-        .then((result) => {
-          if (result) {
-            // 跳轉.
-            // console.log("OK");
-            this.$store.commit("SIGN_IN", {
-              email: this.email,
-              password: this.password,
-            });
+      const check = await this.$store.dispatch("CHECK_USER_ACTIONS", {
+        email: this.email,
+        password: this.password,
+      });
 
-            this.$router.push({ path: "/home" });
-          } else {
-            this.message = "帳號或密碼錯誤.";
-          }
-
-          return result;
-        });
-
-      console.log("SignIn", check);
+      if (check) {
+        this.$router.push({ path: "/back-side/back-side-merchandises" });
+        console.log("SignIn", check);
+      } else {
+        console.log("帳號或密碼錯誤.");
+      }
     },
   },
 

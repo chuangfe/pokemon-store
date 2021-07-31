@@ -124,7 +124,7 @@ import Footer from "../components/Footer.vue";
 import MerchandiseTable from "../components/MerchandiseTable.vue";
 // 空內容.
 import Empty from "../components/Empty.vue";
-// 讀取中.
+// 假的讀取進度.
 import loadHandler from "../modules/loadHandler";
 
 export default {
@@ -151,6 +151,9 @@ export default {
   methods: {
     // 購物車刪除商品.
     removeHandler(id) {
+      // 假的讀取進度.
+      loadHandler.isLoading();
+
       this.$store.commit("REMOVE_SHOPPING_CART", id);
     },
 
@@ -176,8 +179,6 @@ export default {
           text: this.fromData.text,
           total: this.getTotal,
         });
-
-        loadHandler.isLoading();
 
         this.$router.push({
           path: "/orders",

@@ -99,7 +99,7 @@ export default {
     border-right: 1px solid $black;
     display: inline-block;
     // 17個字.
-    animation: typing 4s steps(17), caret 1s steps(1) infinite;
+    animation: typing 4s steps(17) 1s both, caret 1s steps(1) infinite;
   }
 
   .news {

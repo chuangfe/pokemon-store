@@ -115,9 +115,6 @@
 <script>
 // 後台商品編輯組件, 後台商品頁面使用.
 
-// 讀取進度物件.
-import loadHandler from "../modules/loadHandler";
-
 function getCalcData() {
   return {
     id: this.id,
@@ -164,7 +161,7 @@ export default {
 
     categoryName: {
       type: String,
-      default: "",
+      default: "精靈球",
     },
 
     remaining: {
@@ -216,21 +213,35 @@ export default {
 
   methods: {
     async saveHandler() {
-      // 讀取中.
-      loadHandler.isLoading();
+      // 在這理判斷, 是要更新商品, 還是新增商品.
+      // SEARCH_MERCHANDISE_ACTIONS 有返回 new Promise, 所以不用寫 then.
+      const result = await this.$store.dispatch("SEARCH_MERCHANDISE_ACTIONS", {
+        id: this.id,
+      });
 
-      // 更新商品.
-      const oldItem = await this.$store
-        .dispatch("UPDATE_MERCHANDISE_ACTIONS", this.calcData)
-        .then((result) => {
-          // 讀取結束.
-          loadHandler.isLoaded();
-          // 關閉編輯.
-          this.$emit("setEditing", { onOff: false });
-          return result;
-        });
+      // 保存 console.log 需要的變數.
+      let item;
 
-      console.log("update", oldItem);
+      // 更新商品資料.
+      if (result.oldItem) {
+        item = await this.$store.dispatch(
+          "UPDATE_MERCHANDISE_ACTIONS",
+          this.calcData
+        );
+      }
+      // 新增商品.
+      else {
+        item = await this.$store.dispatch(
+          "CREATE_MERCHANDISE_ACTIONS",
+          this.calcData
+        );
+      }
+
+      // 關閉編輯.
+      this.$emit("setEditing", { onOff: false });
+
+      // 返回商品.
+      console.log("update", item);
     },
 
     LoadHandler() {

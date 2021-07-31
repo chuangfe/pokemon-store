@@ -53,6 +53,7 @@
 <script>
 // 單項商品展示.
 
+// 讀取進度.
 import loadHandler from "../modules/loadHandler";
 
 export default {
@@ -131,11 +132,10 @@ export default {
 
     // 加入購物車.
     clickHandler({ id, category, categoryName, name, price, count = 1 }) {
+      loadHandler.isLoading();
+
       // 商品售完.
       if (this.remaining < 1) return false;
-
-      // 讀取中.
-      loadHandler.isLoading();
 
       this.$store.commit("ADD_SHOPPING_CART", {
         id,

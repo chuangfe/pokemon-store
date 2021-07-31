@@ -86,8 +86,6 @@
 </template>
 
 <script>
-import loadHandler from "../modules/loadHandler";
-
 export default {
   name: "Header",
 
@@ -101,8 +99,6 @@ export default {
 
   methods: {
     singOutHandler() {
-      // 讀取中.
-      loadHandler.isLoading();
       this.$store.commit("SIGN_OUT");
     },
   },

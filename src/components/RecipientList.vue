@@ -42,7 +42,7 @@
 <script>
 // 訂單收件人列表, 訂單頁面使用.
 
-// 讀取.
+// 假的讀取進度.
 import loadHandler from "../modules/loadHandler";
 
 export default {
@@ -58,8 +58,9 @@ export default {
 
   methods: {
     clickHandler(id) {
-      // 讀取中.
+      // 假的讀取進度.
       loadHandler.isLoading();
+
       // 付款完成.
       this.$store.commit("SET_PAYMENT", id);
     },

@@ -5,7 +5,7 @@
         <p class="title">產品列表</p>
       </div>
       <div class="between-container">
-        <button class="create" @click="isEditing = true">新增產品</button>
+        <button class="create" @click="createHandler">新增產品</button>
       </div>
     </div>
 
@@ -69,6 +69,11 @@ export default {
     setEditingHandler({ onOff, id }) {
       this.isEditing = onOff;
       this.editingId = id;
+    },
+
+    createHandler() {
+      this.isEditing = true;
+      this.editingId = String(new Date().getTime());
     },
   },
 

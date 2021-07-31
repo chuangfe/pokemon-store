@@ -82,8 +82,6 @@ import Footer from "../components/Footer.vue";
 import Breadcrumb from "../components/Breadcrumb.vue";
 // 判斷路徑.
 import checkRoute from "../modules/checkRoute";
-// loading.
-import loadHandler from "../modules/loadHandler";
 
 export default {
   name: "Merchandise",
@@ -133,7 +131,6 @@ export default {
 
       const item = this.merchandiseData;
 
-      loadHandler.isLoading();
       this.$store.commit("ADD_SHOPPING_CART", {
         id: item.id,
         category: item.category,

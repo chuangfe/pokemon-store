@@ -20,6 +20,10 @@ const // 新增商品至購物車.
   SIGN_IN = "SIGN_IN",
   // 登出.
   SIGN_OUT = "SIGN_OUT",
+  // 讀取中.
+  LOADING = "LOADING",
+  // 讀取完成.
+  LOADED = "LOADED",
   // 新增商品.
   CREATE_MERCHANDISE_MUTATIONS = "CREATE_MERCHANDISE_MUTATIONS",
   // 刪除商品.
@@ -28,7 +32,9 @@ const // 新增商品至購物車.
   UPDATE_MERCHANDISE_MUTATIONS = "UPDATE_MERCHANDISE_MUTATIONS";
 
 // actions
-const // 新增商品.
+const // 搜尋商品.
+  SEARCH_MERCHANDISE_ACTIONS = "SEARCH_MERCHANDISE_ACTIONS",
+  // 新增商品.
   CREATE_MERCHANDISE_ACTIONS = "CREATE_MERCHANDISE_ACTIONS",
   // 刪除商品.
   REMOVE_MERCHANDISE_ACTIONS = "REMOVE_MERCHANDISE_ACTIONS",
@@ -41,6 +47,8 @@ export default new Vuex.Store({
   state: {
     // 讀取中.
     isLoading: false,
+    // 讀取時間.
+    loadingTime: 500,
 
     // 原始資料.
     data,
@@ -266,6 +274,16 @@ export default new Vuex.Store({
       state.isSignIn = false;
     },
 
+    // 讀取中.
+    [LOADING](state) {
+      state.isLoading = true;
+    },
+
+    // 讀取完成.
+    [LOADED](state) {
+      state.isLoading = false;
+    },
+
     // 新增商品, 只能在 actions 內使用.
     [CREATE_MERCHANDISE_MUTATIONS](state, payload) {
       state.data[payload.category].merchandises.push(payload);
@@ -277,79 +295,104 @@ export default new Vuex.Store({
       {
         // 商品的 index
         index,
-        // 商品分類英文.
-        category,
         // 商品的新資料.
-        data,
+        merchandiseData,
       }
     ) {
       // 修改商品資料.
-      state.data[category].merchandises.splice(index, 1, data);
+      state.data[merchandiseData.category].merchandises.splice(
+        index,
+        1,
+        merchandiseData
+      );
     },
 
     // 刪除商品.
-    [REMOVE_MERCHANDISE_MUTATIONS](state, { category, index }) {
+    [REMOVE_MERCHANDISE_MUTATIONS](state, { index, merchandiseData }) {
       // 刪除商品.
-      state.data[category].merchandises.splice(index, 1);
+      state.data[merchandiseData.category].merchandises.splice(index, 1);
     },
   },
 
   // 邏輯運算, API 異步模式, 在必要的地方調用 mutations 修改 state.
   actions: {
+    // 因為更新商品可能會改變商品分類, 所以只使用 id 搜尋商品.
+    [SEARCH_MERCHANDISE_ACTIONS]({ state, getters, commit }, { id }) {
+      // 讀取中.
+      commit("LOADING");
+
+      // 只是單純想加入讀取的畫面, 只能自己寫 Promise,
+      /**
+       * 只是單純想加入讀取的畫面, 只能自己寫 Promise 因為要在需要的地方使用 resolve 方法, 不然 actions 本身就是 Promise, 在 component 補上 async await 就能拿到 actions return 的值.
+       */
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // 找舊的商品資料, 找不到會返回 undefined.
+          const oldItem = getters.calcData.all.merchandises.find((item) => {
+            return item.id === id;
+          });
+
+          // 找舊商品的索引.
+          const index = oldItem
+            ? state.data[oldItem.category].merchandises.findIndex(
+                (item) => item.id === oldItem.id
+              )
+            : -1;
+
+          resolve({ oldItem, index });
+        }, state.loadingTime);
+      });
+    },
+
     // 新增商品, 商品 id 屬性不能重複.
-    [CREATE_MERCHANDISE_ACTIONS]({ getters, commit, dispatch }, payload) {
-      // 返回重覆的商品物件, 或是 undefined.
-      const repeat = getters.calcData.merchandises.find((item) => {
-        return item.id === payload.id;
+    async [CREATE_MERCHANDISE_ACTIONS]({ commit, dispatch }, payload) {
+      const result = await dispatch("SEARCH_MERCHANDISE_ACTIONS", {
+        id: payload.id,
       });
 
-      // 商品重覆返回的物件有 message 屬性.
-      return repeat
-        ? // Object, 商品重複.
-          { message: "商品 Id 重複", merchandise: repeat }
-        : // undefined, 商品沒有重複, 可以新增.
-          commit("CREATE_MERCHANDISE_MUTATIONS", payload);
+      if (!result.oldItem) commit("CREATE_MERCHANDISE_MUTATIONS", payload);
+
+      // 讀取完成.
+      commit("LOADED");
+
+      return !result.oldItem
+        ? // 商品 id 沒有重複, 返回新增的商品.
+          payload
+        : // 商品 id 重複, 返回錯誤的物件, merchandise 是重複的商品.
+          { message: "商品 Id 重複", merchandise: result.oldItem };
     },
 
     // 刪除商品.
-    [REMOVE_MERCHANDISE_ACTIONS]({ state, getters, commit }, { category, id }) {
-      // 找舊商品的資料, 用 id 在 getters.calcData.all 裡面找舊的商品.
-      const oldItem = getters.calcData.all.merchandises.find((item) => {
-        return item.id === id;
+    async [REMOVE_MERCHANDISE_ACTIONS]({ commit, dispatch }, { id }) {
+      // 找舊商品的資料與索引.
+      const result = await dispatch("SEARCH_MERCHANDISE_ACTIONS", {
+        id,
       });
 
-      // 找舊商品的索引, 用舊的商品的資料針對分類找索引.
-      const index = state.data[oldItem.category].merchandises.findIndex(
-        (item) => {
-          return item.id === id;
-        }
-      );
-
       // 刪除商品.
-      commit("REMOVE_MERCHANDISE_MUTATIONS", { category, index });
+      commit("REMOVE_MERCHANDISE_MUTATIONS", {
+        index: result.index,
+        merchandiseData: result.oldItem,
+      });
 
-      return oldItem;
+      // 讀取完成.
+      commit("LOADED");
+
+      return result.oldItem;
     },
 
     // 更新商品, 依靠 id 找商品, 所以商品 id 不可更新.
-    [UPDATE_MERCHANDISE_ACTIONS]({ state, getters, commit }, payload) {
-      // 找舊商品的資料, 用 id 在 getters.calcData.all 裡面找舊的商品.
-      const oldItem = getters.calcData.all.merchandises.find((item) => {
-        return item.id === payload.id;
+    async [UPDATE_MERCHANDISE_ACTIONS]({ commit, dispatch }, payload) {
+      // 找舊商品的資料與索引.
+      const result = await dispatch("SEARCH_MERCHANDISE_ACTIONS", {
+        id: payload.id,
       });
-      // 找舊商品的索引, 用舊的商品的資料針對分類找索引.
-      const oldIndex = state.data[oldItem.category].merchandises.findIndex(
-        (item) => {
-          return item.id === payload.id;
-        }
-      );
 
       // 商品的分類沒有改變.
-      if (payload.category === oldItem.category) {
+      if (result.oldItem.category === payload.category) {
         commit("UPDATE_MERCHANDISE_MUTATIONS", {
-          oldIndex,
-          category: payload.category,
-          data: payload,
+          index: result.index,
+          merchandiseData: result.oldItem,
         });
       }
       // 商品分類改變.
@@ -358,30 +401,42 @@ export default new Vuex.Store({
         commit("CREATE_MERCHANDISE_MUTATIONS", payload);
         // 刪除舊的商品.
         commit("REMOVE_MERCHANDISE_MUTATIONS", {
-          category: oldItem.category,
-          index: oldIndex,
+          index: result.index,
+          merchandiseData: result.oldItem,
         });
       }
 
+      // 讀取完成.
+      commit("LOADED");
+
       // 返回商品的舊資料.
-      return oldItem;
+      return result.oldItem;
     },
 
     // 用戶檢查
     [CHECK_USER_ACTIONS]({ state, commit }, { email, password }) {
-      // 判斷 email 是否已經註冊, 找不到會返回 undefined.
-      const user = state.users.find((user) => {
-        return user.email === email;
+      // 讀取中.
+      commit("LOADING");
+
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // 判斷 email 是否已經註冊, 找不到會返回 undefined.
+          const user = state.users.find((user) => {
+            return user.email === email;
+          });
+          // 判斷 password 是否正確.
+          const check = user ? user.password === password : false;
+
+          // 正確登入, 否則登出.
+          check ? commit("SIGN_IN", { email, password }) : commit("SIGN_OUT");
+
+          // 讀取完成.
+          commit("LOADED");
+
+          // 返回登入狀態.
+          resolve(state.isSignIn);
+        }, state.loadingTime);
       });
-
-      // 判斷 password 是否正確.
-      const check = user ? user.password === password : false;
-
-      // 都正確就登入.
-      if (check) commit("SIGN_IN", { email, password });
-
-      // 返回登入狀態.
-      return state.isSignIn;
     },
   },
 });
