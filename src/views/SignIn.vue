@@ -153,7 +153,7 @@ export default {
       margin-top: 1rem;
       padding: 0.3125rem 0;
       color: $white;
-      background-color: rgba($green, 0.4);
+      background-color: $green-alpha;
       text-align: center;
       border-radius: 10px;
     }

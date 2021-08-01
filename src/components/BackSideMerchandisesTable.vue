@@ -93,7 +93,7 @@ export default {
     }
 
     thead {
-      background-color: #dee2e6;
+      background-color: $table-color;
 
       td {
         padding: 0.625rem 0;
@@ -103,11 +103,11 @@ export default {
     tbody {
       tr {
         &.close {
-          background-color: rgba(#dee2e6, 0.2);
+          background-color: $table-color-alpha;
         }
 
         td {
-          border-bottom: 1px solid #dee2e6;
+          border-bottom: 1px solid $table-color;
 
           button {
             margin: 0.3125rem 0;
@@ -117,12 +117,12 @@ export default {
             display: block;
 
             &.update {
-              background-color: rgba($green, 0.6);
+              background-color: $green-alpha;
               color: $white;
             }
 
             &.remove {
-              background-color: rgba($red, 0.6);
+              background-color: $red-alpha;
               color: $white;
             }
           }

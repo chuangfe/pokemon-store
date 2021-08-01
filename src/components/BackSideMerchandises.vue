@@ -103,7 +103,7 @@ export default {
     .create {
       padding: 0.3125rem 1rem;
       color: $white;
-      background-color: rgba($green, 0.6);
+      background-color: $green-alpha;
       border-radius: 10px;
     }
   }
@@ -117,7 +117,7 @@ export default {
     padding: 0.625rem;
     width: 100%;
     min-height: 100%;
-    background-color: rgba($gray, 0.6);
+    background-color: $black-alpha;
     box-sizing: border-box;
     position: absolute;
     left: 0px;

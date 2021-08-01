@@ -164,7 +164,7 @@ export default {
 
         &.active {
           color: $white;
-          background-color: rgba($green, 0.4);
+          background-color: $green-alpha;
         }
       }
     }

@@ -157,7 +157,7 @@ export default {
 
 .merchandise-item {
   padding: 1rem;
-  border: 1px solid rgba($black, 0.3);
+  border: 1px solid $black-alpha;
   position: relative;
 
   .image-container {
@@ -189,7 +189,6 @@ export default {
   .text {
     padding: 0.625rem 0;
     @include font-style($font-size: 1rem, $color: $gray);
-    // color: #666;
     border-bottom: 1px solid $black-alpha;
 
     overflow: hidden;

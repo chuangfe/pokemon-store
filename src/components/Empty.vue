@@ -21,7 +21,7 @@ export default {
 
 .empty {
   padding: 3rem 0;
-  background-color: rgba($black, 0.1);
+  background-color: $title-color-alpha;
   border-radius: 10px;
 
   p {

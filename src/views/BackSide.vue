@@ -43,7 +43,7 @@ export default {
 
   .header {
     width: 100%;
-    background-color: rgba($blue, 0.8);
+    background-color: $blue-alpha;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;

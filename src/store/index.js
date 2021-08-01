@@ -14,6 +14,8 @@ const // 新增商品至購物車.
   REMOVE_SHOPPING_CART = "REMOVE_SHOPPING_CART",
   // 新增訂單.
   CREATE_ORDER = "CREATE_ORDER",
+  // 刪除訂單.
+  REMOVE_ORDER = "REMOVE_ORDER",
   // 訂單確認付款.
   SET_PAYMENT = "SET_PAYMENT",
   // 登入.
@@ -31,7 +33,7 @@ const // 新增商品至購物車.
   // 修改商品資料.
   UPDATE_MERCHANDISE_MUTATIONS = "UPDATE_MERCHANDISE_MUTATIONS";
 
-// actions
+// actions.
 const // 搜尋商品.
   SEARCH_MERCHANDISE_ACTIONS = "SEARCH_MERCHANDISE_ACTIONS",
   // 新增商品.
@@ -127,7 +129,122 @@ export default new Vuex.Store({
     ],
 
     // 訂單.
-    orders: [],
+    orders: [
+      {
+        id: 0,
+        email: "aaa@aaa.aa",
+        name: "Tired",
+        phone: "0912345678",
+        address: "不可以輸入英文",
+        text: "沒有備註",
+        merchandises: [
+          {
+            id: "poke-ball-00",
+            category: "ball",
+            categoryName: "精靈球",
+            name: "精靈球",
+            price: 200,
+            count: 8,
+            total: 1600,
+          },
+          {
+            id: "potion",
+            category: "drug",
+            categoryName: "藥品",
+            name: "傷藥",
+            price: 50,
+            count: 2,
+            total: 100,
+          },
+          {
+            id: "backpack",
+            category: "props",
+            categoryName: "道具",
+            name: "背包",
+            price: 140,
+            count: 1,
+            total: 140,
+          },
+        ],
+        payment: true,
+      },
+      {
+        id: 1,
+        email: "aaa@aaa.aa",
+        name: "Tired",
+        phone: "0912345678",
+        address: "不可以輸入英文",
+        text: "沒有備註",
+        merchandises: [
+          {
+            id: "poke-ball-00",
+            category: "ball",
+            categoryName: "精靈球",
+            name: "精靈球",
+            price: 200,
+            count: 6,
+            total: 1200,
+          },
+          {
+            id: "potion",
+            category: "drug",
+            categoryName: "藥品",
+            name: "傷藥",
+            price: 50,
+            count: 10,
+            total: 500,
+          },
+          {
+            id: "backpack",
+            category: "props",
+            categoryName: "道具",
+            name: "背包",
+            price: 140,
+            count: 2,
+            total: 280,
+          },
+        ],
+        payment: false,
+      },
+      {
+        id: 2,
+        email: "aaa@aaa.aa",
+        name: "Tired",
+        phone: "0912345678",
+        address: "不可以輸入英文",
+        text: "沒有備註",
+        merchandises: [
+          {
+            id: "poke-ball-00",
+            category: "ball",
+            categoryName: "精靈球",
+            name: "精靈球",
+            price: 200,
+            count: 1,
+            total: 200,
+          },
+          {
+            id: "potion",
+            category: "drug",
+            categoryName: "藥品",
+            name: "傷藥",
+            price: 50,
+            count: 1,
+            total: 50,
+          },
+          {
+            id: "backpack",
+            category: "props",
+            categoryName: "道具",
+            name: "背包",
+            price: 140,
+            count: 10,
+            total: 1400,
+          },
+        ],
+        payment: false,
+      },
+    ],
   },
   // 相當於 vm 的 computed.
   getters: {
@@ -246,9 +363,13 @@ export default new Vuex.Store({
 
       // 清空購物車.
       state.shoppingCart = [];
+    },
 
-      // 返回訂單.
-      return order;
+    // 刪除訂單.
+    [REMOVE_ORDER](state, id) {
+      const index = state.orders.findIndex((order) => order.id === id);
+
+      state.orders.splice(index, 1);
     },
 
     // 確認付款.
@@ -321,7 +442,6 @@ export default new Vuex.Store({
       // 讀取中.
       commit("LOADING");
 
-      // 只是單純想加入讀取的畫面, 只能自己寫 Promise,
       /**
        * 只是單純想加入讀取的畫面, 只能自己寫 Promise 因為要在需要的地方使用 resolve 方法, 不然 actions 本身就是 Promise, 在 component 補上 async await 就能拿到 actions return 的值.
        */
@@ -339,6 +459,10 @@ export default new Vuex.Store({
               )
             : -1;
 
+          // 讀取完成.
+          commit("LOADED");
+
+          // 這裡是重點, 因為要使用 setTimeout, 才必需自己寫 return new Promise.
           resolve({ oldItem, index });
         }, state.loadingTime);
       });
@@ -351,9 +475,6 @@ export default new Vuex.Store({
       });
 
       if (!result.oldItem) commit("CREATE_MERCHANDISE_MUTATIONS", payload);
-
-      // 讀取完成.
-      commit("LOADED");
 
       return !result.oldItem
         ? // 商品 id 沒有重複, 返回新增的商品.
@@ -374,9 +495,6 @@ export default new Vuex.Store({
         index: result.index,
         merchandiseData: result.oldItem,
       });
-
-      // 讀取完成.
-      commit("LOADED");
 
       return result.oldItem;
     },
@@ -405,9 +523,6 @@ export default new Vuex.Store({
           merchandiseData: result.oldItem,
         });
       }
-
-      // 讀取完成.
-      commit("LOADED");
 
       // 返回商品的舊資料.
       return result.oldItem;

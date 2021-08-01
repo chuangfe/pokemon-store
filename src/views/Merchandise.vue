@@ -247,7 +247,7 @@ export default {
     width: 100%;
     @include font-style($font-size: 1rem, $font-weight: 900, $color: $white);
     text-align: center;
-    background-color: rgba($red, 0.5);
+    background-color: $red-alpha;
 
     &.close,
     &[disabled] {

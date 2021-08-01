@@ -20,7 +20,7 @@
 
           <h2>收件人資訊</h2>
 
-          <RecipientList :order="order" />
+          <RecipientList :order="order" :backSide="true" />
         </div>
       </div>
       <Empty :text="'目前沒有訂單!'" v-else />

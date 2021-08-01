@@ -267,7 +267,7 @@ export default {
 
   .title-container {
     padding: 1rem;
-    background-color: #343a40;
+    background-color: $title-color;
     @include font-style($font-size: 1.5rem, $font-weight: 900, $color: $white);
   }
 
@@ -342,15 +342,11 @@ export default {
 
         &.close {
           margin-right: 1rem;
-          background-color: rgba($red, 0.6);
+          background-color: $red-alpha;
         }
 
         &.save {
-          background-color: rgba($green, 0.6);
-        }
-
-        &:active {
-          box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1);
+          background-color: $green-alpha;
         }
       }
     }

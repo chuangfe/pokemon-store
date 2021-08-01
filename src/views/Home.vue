@@ -12,7 +12,7 @@
     <div class="news">
       <p>
         2018.09.21
-        <span class="class emergency">緊急</span>
+        <span class="emergency">緊急</span>
         因真新鎮受超夢大軍侵襲，暫時停止營業，不便之處，敬請見諒。
       </p>
     </div>
@@ -106,7 +106,7 @@ export default {
     margin: 0 0.625rem;
     padding: 0.625rem;
     // width: 94%;
-    @include font-style($font-size: 1rem, $font-weight: 900, $color: #666);
+    @include font-style($font-size: 1rem, $font-weight: 900, $color: $gray);
     letter-spacing: 1px;
     box-shadow: 1px 3px 5px $black-alpha;
 
@@ -116,6 +116,7 @@ export default {
       .emergency {
         padding: 2px 4px;
         border-radius: 4px;
+        display: inline-block;
       }
     }
   }
@@ -143,7 +144,7 @@ export default {
       .item-container {
         padding: 0 0.625rem 0.625rem 0;
         box-sizing: border-box;
-        // flex: 1 1 25%;
+        flex: 1 1 25%;
         flex-grow: 1;
         flex-shrink: 1;
 

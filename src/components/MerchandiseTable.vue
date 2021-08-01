@@ -71,7 +71,7 @@ export default {
 
   thead {
     @include font-style($font-size: 1.2rem);
-    background-color: rgba($gray, 0.2);
+    background-color: $black-alpha;
   }
 
   tr {

@@ -96,7 +96,7 @@ export default {
 
   &.active {
     border-color: transparent;
-    background-color: rgba($green, 0.4);
+    background-color: $green-alpha;
 
     .text {
       @include font-style(
