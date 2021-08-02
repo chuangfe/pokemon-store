@@ -15,16 +15,18 @@
       />
     </div>
 
+    <!-- RWD 專用容器. -->
     <div class="screen-container">
       <!-- 商品種類. -->
       <div class="categories-container">
         <div class="items">
-          <!-- 控制 rwd 的目標 -->
+          <!-- 分類容器, 可以做 RWD. -->
           <div
             class="item-container"
             v-for="(value, key) of calcData"
             :key="key"
           >
+            <!-- 分類. -->
             <CategoryItem
               :src="value.imageSrc"
               :alt="value.alt"
@@ -40,14 +42,14 @@
       <div class="merchandises-container">
         <p class="title">{{ categoryObject.name }}</p>
 
-        <!-- rwd 目標 -->
+        <!-- 商品容器, 可以做 RWD. -->
         <div class="items">
           <div
             class="item-container"
             v-for="(item, i) of showMerchandises"
             :key="i"
           >
-            <!-- 商品. -->
+            <!-- 單項商品展示. -->
             <MerchandiseItem
               :id="item.id"
               :category="item.category"
@@ -257,11 +259,12 @@ export default {
   .categories {
     .screen-container {
       width: 100%;
-      display: flex;
-      flex-wrap: nowrap;
+      // 清除浮動.
+      @include clearfix();
 
       .categories-container {
-        flex: 1 1 20%;
+        float: left;
+        width: 20%;
         box-sizing: border-box;
         padding: 0px 0.625rem 0 0;
 
@@ -280,18 +283,17 @@ export default {
       }
 
       .merchandises-container {
-        flex: 1 1 80%;
+        float: left;
+        width: 80%;
         padding: 0px;
         box-sizing: border-box;
 
         .title {
           padding: 0px 0px 0.625rem 0;
+          box-sizing: border-box;
         }
 
         .items {
-          display: flex;
-          flex-wrap: wrap;
-
           .item-container {
             padding-right: 0.625rem;
             width: calc((100% - 1.25rem) / 3);

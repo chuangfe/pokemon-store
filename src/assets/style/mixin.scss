@@ -13,3 +13,12 @@
   line-height: $line-height;
   color: $color;
 }
+
+// 清除浮動.
+@mixin clearfix() {
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}

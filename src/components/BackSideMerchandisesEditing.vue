@@ -181,7 +181,7 @@ export default {
 
     text: {
       type: String,
-      default: "",
+      default: "沒有內容",
     },
   },
 

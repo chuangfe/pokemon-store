@@ -510,7 +510,7 @@ export default new Vuex.Store({
       if (result.oldItem.category === payload.category) {
         commit("UPDATE_MERCHANDISE_MUTATIONS", {
           index: result.index,
-          merchandiseData: result.oldItem,
+          merchandiseData: payload,
         });
       }
       // 商品分類改變.
