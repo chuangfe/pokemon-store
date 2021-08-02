@@ -110,11 +110,15 @@ export default {
           border-bottom: 1px solid $table-color;
 
           button {
-            margin: 0.3125rem 0;
+            margin: 1rem 0;
             padding: 0.3125rem 0;
             width: 100%;
             border-radius: 10px;
             display: block;
+
+            &:last-child {
+              margin-top: 0px;
+            }
 
             &.update {
               background-color: $green-alpha;

@@ -1,0 +1,37 @@
+@import "./variable.scss";
+
+html,
+body {
+  min-height: 100%;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: Noto Sans TC, sans-serif;
+  font-size: 1rem;
+  line-height: 1.2rem;
+}
+
+// // screen width > 576px.
+// @media only screen and (max-width: $screen-width-sm - 1) {
+//   html {
+//     font-size: 12px;
+//   }
+// }
+
+// // screen width > 576px.
+// @media only screen and (min-width: $screen-width-sm) {
+//   html {
+//     font-size: 14px;
+//   }
+// }
+
+// // screen width > 768px.
+// @media only screen and (min-width: $screen-width-md) {
+//   html {
+//     font-size: 16px;
+//   }
+// }

@@ -68,7 +68,7 @@ export default {
     padding: 0 1rem;
 
     .order-container {
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
       border: 1px solid $black-alpha;
 
       &:last-child {

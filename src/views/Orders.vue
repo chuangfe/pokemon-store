@@ -20,7 +20,7 @@
 
           <h2>收件人資訊</h2>
 
-          <RecipientList :order="order" :backSide="true" />
+          <RecipientList :order="order" :backSide="false" />
         </div>
       </div>
       <Empty :text="'目前沒有訂單!'" v-else />
@@ -78,7 +78,7 @@ export default {
     }
 
     .order-container {
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
       border: 1px solid $black-alpha;
 
       &:last-child {

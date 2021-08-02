@@ -142,19 +142,13 @@ export default {
 
       // 控制 rwd 的目標.
       .item-container {
-        padding: 0 0.625rem 0.625rem 0;
+        // padding: 0 0.625rem 0.625rem 0;
         box-sizing: border-box;
-        flex: 1 1 25%;
-        flex-grow: 1;
-        flex-shrink: 1;
-
-        &:last-child,
-        &:nth-last-of-type(2) {
-          padding-right: 0px;
-        }
+        flex-basis: 23%;
 
         &:last-child {
-          padding-bottom: 0px;
+          padding-top: 0.625rem;
+          flex-basis: 100%;
         }
       }
     }
@@ -184,6 +178,24 @@ export default {
 @keyframes caret {
   50% {
     border-color: transparent;
+  }
+}
+
+@media only screen and (min-width: $screen-width-md) {
+  .home {
+    .categories-container {
+      .items {
+        .item-container {
+          box-sizing: border-box;
+          flex-basis: 18%;
+
+          &:last-child {
+            padding: 0px;
+            flex-basis: 20%;
+          }
+        }
+      }
+    }
   }
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="merchandise-item">
     <!-- 圖片 -->
     <div class="image-container">
-      <img :src="imageSrc" :alt="alt" />
+      <img :src="imageSrc" :alt="alt" draggable="false" />
     </div>
 
     <!-- 類別. -->
@@ -19,9 +19,15 @@
     </p>
 
     <!-- 價格 -->
-    <div class="price" :class="{ 'special-offer': specialPrice }">
-      <p class="special" v-if="specialPrice">NT${{ specialPrice }}元</p>
-      <p class="original">NT${{ originalPrice }}元</p>
+    <div class="price-container" :class="{ 'special-offer': specialPrice }">
+      <p class="special screen-hidden" v-if="specialPrice">
+        NT${{ specialPrice }}元
+      </p>
+      <p class="original screen-hidden">NT${{ originalPrice }}元</p>
+
+      <p class="screen-price" :class="{ special: specialPrice }">
+        NT${{ specialPrice || originalPrice }}
+      </p>
     </div>
 
     <!-- 按鈕 -->
@@ -182,12 +188,14 @@ export default {
 
   // 商品名稱.
   .name {
+    padding: 0.625rem 0;
     @include font-style($font-size: 1.2rem, $font-weight: 900);
   }
 
   // 商品說明.
   .text {
-    padding: 0.625rem 0;
+    padding-bottom: 0.625rem;
+    width: 100%;
     @include font-style($font-size: 1rem, $color: $gray);
     border-bottom: 1px solid $black-alpha;
 
@@ -197,9 +205,9 @@ export default {
   }
 
   // 價格.
-  .price {
+  .price-container {
     padding: 0.625rem 0;
-    @include font-style($font-size: 1.2rem, $font-weight: 900);
+    @include font-style($font-size: 1rem, $font-weight: 900);
     letter-spacing: 1px;
 
     display: flex;
@@ -211,14 +219,12 @@ export default {
       color: $green;
     }
 
-    .line-through {
-      @include font-style($font-size: 1rem, $font-weight: 400);
-      text-decoration-line: line-through;
+    .screen-price {
+      display: none;
     }
 
     &.special-offer {
       .original {
-        @include font-style($font-size: 1rem, $font-weight: 400);
         text-decoration-line: line-through;
       }
     }
@@ -234,7 +240,7 @@ export default {
       padding: 0.3125rem 0;
       display: block;
       border: 1px solid $black-alpha;
-      @include font-style($font-size: 1.2rem, $font-weight: 700);
+      @include font-style($font-size: 1rem, $font-weight: 700);
       text-align: center;
       flex-basis: 50%;
       user-select: none;
@@ -250,6 +256,7 @@ export default {
     }
   }
 
+  // 售完.
   .sold-out {
     width: 100%;
     height: 100%;
@@ -266,6 +273,20 @@ export default {
       @include font-style($font-size: 2rem, $font-weight: 900, $color: $white);
       letter-spacing: 1rem;
       text-align: center;
+    }
+  }
+}
+
+@media only screen and (min-width: $screen-width-md) {
+  .merchandise-item {
+    .price-container {
+      .screen-hidden {
+        display: none;
+      }
+
+      .screen-price {
+        display: block;
+      }
     }
   }
 }

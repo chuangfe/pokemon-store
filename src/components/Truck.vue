@@ -73,4 +73,13 @@ export default {
     left: calc(0% - 80px);
   }
 }
+
+@media only screen and (min-width: $screen-width-md) {
+  .truck {
+    .image-container-truck {
+      animation: shake 0.6s steps(1) 0s infinite normal running,
+        walk 20s linear 0s infinite normal running;
+    }
+  }
+}
 </style>

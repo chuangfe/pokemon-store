@@ -15,59 +15,67 @@
       />
     </div>
 
-    <!-- 商品種類. -->
-    <div class="categories-container">
-      <div class="items">
-        <!-- 控制 rwd 的目標 -->
-        <div class="item-container" v-for="(value, key) of calcData" :key="key">
-          <CategoryItem
-            :src="value.imageSrc"
-            :alt="value.alt"
-            :name="value.name"
-            :categoryLink="getCategoryLink(key)"
-            :isActive="$route.params.category === key"
+    <div class="screen-container">
+      <!-- 商品種類. -->
+      <div class="categories-container">
+        <div class="items">
+          <!-- 控制 rwd 的目標 -->
+          <div
+            class="item-container"
+            v-for="(value, key) of calcData"
+            :key="key"
+          >
+            <CategoryItem
+              :src="value.imageSrc"
+              :alt="value.alt"
+              :name="value.name"
+              :categoryLink="getCategoryLink(key)"
+              :isActive="$route.params.category === key"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 商品瀏覽 -->
+      <div class="merchandises-container">
+        <p class="title">{{ categoryObject.name }}</p>
+
+        <!-- rwd 目標 -->
+        <div class="items">
+          <div
+            class="item-container"
+            v-for="(item, i) of showMerchandises"
+            :key="i"
+          >
+            <!-- 商品. -->
+            <MerchandiseItem
+              :id="item.id"
+              :category="item.category"
+              :categoryName="item.categoryName"
+              :name="item.name"
+              :text="item.text"
+              :imageSrc="item.imageSrc"
+              :alt="item.alt"
+              :remaining="item.remaining"
+              :originalPrice="item.originalPrice"
+              :specialPrice="item.specialPrice"
+              :merchandiseLink="
+                getMerchandiseLink({ category: item.category, id: item.id })
+              "
+            />
+          </div>
+        </div>
+
+        <!-- 分頁. -->
+        <div class="pagination-container" v-show="pages">
+          <Pagination
+            :index="index"
+            :length="length"
+            :pages="pages"
+            @setIndex="setIndexHandler"
           />
         </div>
       </div>
-    </div>
-
-    <!-- 商品瀏覽 -->
-    <div class="merchandises-container">
-      <p class="title">{{ categoryObject.name }}</p>
-
-      <!-- rwd 目標 -->
-      <div
-        class="item-container"
-        v-for="(item, i) of showMerchandises"
-        :key="i"
-      >
-        <!-- 商品. -->
-        <MerchandiseItem
-          :id="item.id"
-          :category="item.category"
-          :categoryName="item.categoryName"
-          :name="item.name"
-          :text="item.text"
-          :imageSrc="item.imageSrc"
-          :alt="item.alt"
-          :remaining="item.remaining"
-          :originalPrice="item.originalPrice"
-          :specialPrice="item.specialPrice"
-          :merchandiseLink="
-            getMerchandiseLink({ category: item.category, id: item.id })
-          "
-        />
-      </div>
-    </div>
-
-    <!-- 分頁. -->
-    <div class="pagination-container" v-show="pages">
-      <Pagination
-        :index="index"
-        :length="length"
-        :pages="pages"
-        @setIndex="setIndexHandler"
-      />
     </div>
 
     <Footer />
@@ -241,7 +249,61 @@ export default {
 
   // 分頁.
   .pagination-container {
-    padding: 0.625rem 0 0 0.375rem;
+    padding: 0.625rem 0;
+  }
+}
+
+@media only screen and (min-width: $screen-width-md) {
+  .categories {
+    .screen-container {
+      width: 100%;
+      display: flex;
+      flex-wrap: nowrap;
+
+      .categories-container {
+        flex: 1 1 20%;
+        box-sizing: border-box;
+        padding: 0px 0.625rem 0 0;
+
+        .items {
+          flex-wrap: wrap;
+
+          .item-container {
+            flex-basis: 100%;
+            margin-bottom: 1rem;
+
+            &:last-child {
+              margin-bottom: 0px;
+            }
+          }
+        }
+      }
+
+      .merchandises-container {
+        flex: 1 1 80%;
+        padding: 0px;
+        box-sizing: border-box;
+
+        .title {
+          padding: 0px 0px 0.625rem 0;
+        }
+
+        .items {
+          display: flex;
+          flex-wrap: wrap;
+
+          .item-container {
+            padding-right: 0.625rem;
+            width: calc((100% - 1.25rem) / 3);
+            display: inline-block;
+
+            &:nth-of-type(3n) {
+              padding-right: 0px;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>

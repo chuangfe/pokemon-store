@@ -13,61 +13,67 @@
       />
     </div>
 
-    <section class="container introduce">
-      <div class="image-container">
-        <img :src="merchandiseData.imageSrc" :alt="merchandiseData.alt" />
-      </div>
+    <div class="screen-container">
+      <!-- 商品說明. -->
+      <section class="container introduce">
+        <div class="image-container">
+          <img :src="merchandiseData.imageSrc" :alt="merchandiseData.alt" />
+        </div>
 
-      <div class="content-container">
-        <p class="title">商品介紹</p>
-        <p class="text">{{ merchandiseData.text }}</p>
-      </div>
+        <div class="content-container">
+          <p class="title">商品介紹</p>
+          <p class="text">{{ merchandiseData.text }}</p>
+        </div>
 
-      <div class="content-container">
-        <p class="title">運費資訊</p>
-        <p class="text">無</p>
-      </div>
-    </section>
+        <div class="content-container">
+          <p class="title">運費資訊</p>
+          <p class="text">無</p>
+        </div>
+      </section>
 
-    <section
-      class="container expense"
-      :class="{ 'special-offer': merchandiseData.specialOffer }"
-    >
-      <p class="title">{{ merchandiseData.name }}</p>
-
-      <p class="price original">原價 NT${{ merchandiseData.originalPrice }}</p>
-
-      <p class="price special" v-if="merchandiseData.specialOffer">
-        特價 NT$
-        {{ merchandiseData.specialPrice }}
-      </p>
-
-      <!-- 選擇購買數量. -->
-      <select
-        class="count"
-        v-model="count"
-        v-if="merchandiseData.remaining !== 0"
+      <!-- 商品購買 -->
+      <section
+        class="container expense"
+        :class="{ 'special-offer': merchandiseData.specialOffer }"
       >
-        <option :value="0">請選擇數量</option>
-        <option
-          v-for="(num, i) in merchandiseData.remaining"
-          :key="i"
-          :value="num"
+        <p class="title">{{ merchandiseData.name }}</p>
+
+        <p class="price original">
+          原價 NT${{ merchandiseData.originalPrice }}
+        </p>
+
+        <p class="price special" v-if="merchandiseData.specialOffer">
+          特價 NT$
+          {{ merchandiseData.specialPrice }}
+        </p>
+
+        <!-- 選擇購買數量. -->
+        <select
+          class="count"
+          v-model="count"
+          v-if="merchandiseData.remaining !== 0"
         >
-          選購 {{ num }} 項
-        </option>
-      </select>
+          <option :value="0">請選擇數量</option>
+          <option
+            v-for="(num, i) in merchandiseData.remaining"
+            :key="i"
+            :value="num"
+          >
+            選購 {{ num }} 項
+          </option>
+        </select>
 
-      <button
-        class="buy"
-        :class="{ close: count === 0 }"
-        :disabled="merchandiseData.remaining === 0"
-        @click="clickHandler"
-      >
-        <span v-if="merchandiseData.remaining === 0">售完</span>
-        <span v-else>總計 $ {{ total }} 元 / 加入購物車</span>
-      </button>
-    </section>
+        <button
+          class="buy"
+          :class="{ close: count === 0 }"
+          :disabled="merchandiseData.remaining === 0"
+          @click="clickHandler"
+        >
+          <span v-if="merchandiseData.remaining === 0">售完</span>
+          <span v-else>總計 $ {{ total }} 元 / 加入購物車</span>
+        </button>
+      </section>
+    </div>
 
     <Footer />
   </div>
@@ -253,6 +259,23 @@ export default {
     &[disabled] {
       background-color: $black-alpha;
       color: $black;
+    }
+  }
+}
+
+@media only screen and (min-width: $screen-width-md) {
+  .merchandise {
+    .screen-container {
+      display: flex;
+      flex-wrap: nowrap;
+
+      .container {
+        flex: 1 1 50%;
+
+        &:first-child {
+          margin-bottom: 0px;
+        }
+      }
     }
   }
 }
