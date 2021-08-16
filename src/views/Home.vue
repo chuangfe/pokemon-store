@@ -1,28 +1,41 @@
 <template>
-  <div class="home">
-    <Header />
-
-    <!-- 輪播圖 -->
-    <Carousel :items="$store.state.slides" />
-
-    <div class="title-container">
-      <h1 class="main-title">＂冒險者！歡迎來到寶可夢購物中心＂</h1>
+  <div class="self-home">
+    <div class="px-2">
+      <Header />
     </div>
 
-    <div class="news">
-      <p>
+    <!-- 輪播圖. -->
+    <Carousel :items="$store.state.slides" />
+
+    <!-- 打字動畫. -->
+    <div class="font-size-delete py-4 text-center">
+      <h1 class="self-typeing m-0">＂冒險者！歡迎來到寶可夢購物中心＂</h1>
+    </div>
+
+    <!-- 新聞. -->
+    <div class="self-news p-2">
+      <p class="fs-6 fw-bold text-muted m-0 p-2">
         2018.09.21
-        <span class="emergency">緊急</span>
+        <span class="badge bg-danger fs-6 fw-bold text-white p-1">緊急</span>
         因真新鎮受超夢大軍侵襲，暫時停止營業，不便之處，敬請見諒。
       </p>
     </div>
 
-    <!-- 商品分類連結 -->
-    <div class="categories-container">
-      <p class="title">商品分類</p>
-      <div class="items">
-        <!-- 控制 rwd 的目標 -->
-        <div class="item-container" v-for="(value, key) of calcData" :key="key">
+    <!-- 商品分類連結. -->
+    <div class="self-categories overflow-hidden">
+      <h5 class="self-title h5 pt-4 ps-2 fw-bold">商品分類</h5>
+
+      <div class="row row-cols-4 row-cols-md-5 px-2">
+        <!-- 控制 rwd 的目標. -->
+        <div
+          class="py-2"
+          v-for="(value, key, i) of calcData"
+          :key="key"
+          :class="{
+            'col-12': i === calcDataKeys.length - 1,
+            'col-md': i === calcDataKeys.length - 1,
+          }"
+        >
           <CategoryItem
             :src="value.imageSrc"
             :alt="value.alt"
@@ -34,9 +47,10 @@
       </div>
     </div>
 
-    <!-- 商品瀏覽 -->
-    <div class="merchandises-container">
-      <p class="title">商品瀏覽</p>
+    <!-- 商品瀏覽. -->
+    <div class="self-merchandises">
+      <h5 class="self-title h5 pt-4 ps-2 fw-bold">商品瀏覽</h5>
+
       <!-- 可拖放輪播圖 -->
       <CarouselDrag />
     </div>
@@ -64,6 +78,10 @@ export default {
     calcData() {
       return this.$store.getters.calcData;
     },
+
+    calcDataKeys() {
+      return Object.keys(this.calcData);
+    },
   },
 
   methods: {
@@ -81,89 +99,45 @@ export default {
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
 
-.home {
-  .title-container {
-    padding: 1rem 0;
-    font-size: 0px;
-    text-align: center;
-    display: flex;
-  }
-
-  .main-title {
-    margin: 0 auto;
+.self-home {
+  .self-typeing {
     // 17個字.
     width: 1.25rem * 17;
+    // 隱藏還沒出現的文字.
     overflow: hidden;
     @include font-style($font-size: 1.25rem, $font-weight: 900, $color: $blue);
+    // 文字不換行.
     white-space: nowrap;
+    // 輸入直線.
     border-right: 1px solid $black;
+    // 讓寬度不要自動填滿.
     display: inline-block;
     // 17個字.
     animation: typing 4s steps(17) 1s both, caret 1s steps(1) infinite;
   }
 
-  .news {
-    margin: 0 0.625rem;
-    padding: 0.625rem;
-    // width: 94%;
-    @include font-style($font-size: 1rem, $font-weight: 900, $color: $gray);
-    letter-spacing: 1px;
-    box-shadow: 1px 3px 5px $black-alpha;
-
+  .self-news {
     p {
-      margin: 0px;
-
-      .emergency {
-        padding: 2px 4px;
-        border-radius: 4px;
-        display: inline-block;
-      }
+      letter-spacing: 1px;
+      box-shadow: 1px 3px 5px $black-alpha;
     }
   }
 
   // 商品分類.
-  .categories-container {
+  .self-categories {
+    box-sizing: border-box;
+
     // 標題.
-    .title {
-      padding: 1rem 0 0 0.625rem;
-      @include font-style(
-        $font-size: 1.25rem,
-        $font-weight: 900,
-        $color: $green
-      );
-    }
-
-    // 外層容器
-    .items {
-      padding: 0.375rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-
-      // 控制 rwd 的目標.
-      .item-container {
-        // padding: 0 0.625rem 0.625rem 0;
-        box-sizing: border-box;
-        flex-basis: 23%;
-
-        &:last-child {
-          padding-top: 0.625rem;
-          flex-basis: 100%;
-        }
-      }
+    .self-title {
+      color: $green;
     }
   }
 
   // 商品輪播
-  .merchandises-container {
+  .self-merchandises {
     // 標題.
-    .title {
-      padding: 0.625rem 0 0.625rem 0.625rem;
-      @include font-style(
-        $font-size: 1.25rem,
-        $font-weight: 900,
-        $color: $green
-      );
+    .self-title {
+      color: $green;
     }
   }
 }
@@ -178,24 +152,6 @@ export default {
 @keyframes caret {
   50% {
     border-color: transparent;
-  }
-}
-
-@media only screen and (min-width: $screen-width-md) {
-  .home {
-    .categories-container {
-      .items {
-        .item-container {
-          box-sizing: border-box;
-          flex-basis: 18%;
-
-          &:last-child {
-            padding: 0px;
-            flex-basis: 20%;
-          }
-        }
-      }
-    }
   }
 }
 </style>

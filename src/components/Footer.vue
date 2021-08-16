@@ -1,28 +1,49 @@
 <template>
-  <footer class="footer">
-    <div class="shop">
-      <img src="../../public/images/shop.png" alt="shop" />
+  <footer class="self-footer fs-6 pb-3 text-muted">
+    <!-- 寶可夢商店. -->
+    <div class="self-shop-container text-center border-bottom py-3">
+      <img
+        class="image-object-fit-width-contain"
+        src="../../public/images/shop.png"
+        alt="shop"
+      />
     </div>
 
-    <div class="container">
-      <div class="logo-container">
-        <img src="../../public/images/pokemon-store.png" alt="pokemon-store" />
+    <!-- logo. -->
+    <div class="ps-2">
+      <div class="self-logo-container my-3">
+        <img
+          class="image-object-fit-height-contain"
+          src="../../public/images/pokemon-store.png"
+          alt="pokemon-store"
+        />
       </div>
 
-      <p class="store-address">實體地址：真新鎮大木路一段6號</p>
+      <p class="ps-2">實體地址：真新鎮大木路一段6號</p>
 
-      <p>營業時間：24H</p>
+      <p class="ps-2">營業時間：24H</p>
 
-      <p>
+      <p class="ps-2">
         原創作者：icguanyu
-        <a href="https://github.com/icguanyu" target="_blank">Github</a>
+        <a class="text-reset" href="https://github.com/icguanyu" target="_blank"
+          >Github</a
+        >
         ｜
-        <a href="https://codepen.io/icguanyu/" target="_blank">Codepen</a>
+        <a
+          class="text-reset"
+          href="https://codepen.io/icguanyu/"
+          target="_blank"
+          >Codepen</a
+        >
       </p>
 
-      <p>
+      <p class="ps-2 m-0">
         練習作品｜
-        <a href="https://www.pokemon.com/us/" target="_blank">
+        <a
+          class="text-reset"
+          href="https://www.pokemon.com/us/"
+          target="_blank"
+        >
           圖片來源：https://www.pokemon.com/us/
         </a>
       </p>
@@ -39,42 +60,11 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
-.footer {
-  padding-bottom: 1rem;
-  @include font-style($font-size: 1rem, $color: $gray);
-
-  .shop {
-    padding: 1rem 0 0.625rem 0;
-    width: 100%;
-    border-bottom: 1px solid $black-alpha;
-
-    img {
-      width: 100%;
-    }
-  }
-
-  .logo-container {
-    padding: 1rem 0 0.625rem 1rem;
-    height: 2.5rem;
-
-    img {
-      height: 100%;
-      object-fit: contain;
-    }
-  }
-
-  p {
-    padding: 0 0 0.375rem 1rem;
-    letter-spacing: 1px;
-
-    &:last-child {
-      padding-bottom: 0px;
-    }
-
-    a {
-      @include font-style($font-size: 1rem, $font-weight: 900);
-    }
+.self-footer {
+  .self-logo-container {
+    height: 3rem;
   }
 }
 </style>

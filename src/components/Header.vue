@@ -1,81 +1,112 @@
 <template>
-  <header class="header" :class="{ menu: isMenu }">
-    <div class="between-container">
-      <router-link to="/home">
-        <img
-          src="../../public/images/pokemon-store.png"
-          alt="Pokemon Store"
-          class="logo"
-        />
-      </router-link>
-    </div>
+  <header class="self-header position-relative">
+    <div
+      class="self-header-container d-flex justify-content-between align-items-center position-relative bg-white pt-2"
+    >
+      <div class="self-between-container">
+        <router-link to="/home">
+          <img
+            src="../../public/images/pokemon-store.png"
+            alt="Pokemon Store"
+            class="self-logo"
+          />
+        </router-link>
+      </div>
 
-    <div class="between-container">
-      <router-link class="shopping-cart" to="/shopping-cart">
-        購物車(<span>{{ $store.state.shoppingCart.length }}</span
-        >)
-      </router-link>
-
-      <button
-        type="button"
-        id="menu-button"
-        class="menu"
-        @click="isMenu = !isMenu"
-        @blur="isMenu = false"
+      <div
+        class="self-between-container bg-white fs-6 d-flex justify-content-between align-items-center"
       >
-        <i
-          class="bi"
-          :class="{
-            'bi-menu-button-wide': !isMenu,
-            'bi-menu-button-wide-fill': isMenu,
-          }"
-        ></i>
-      </button>
+        <router-link
+          class="text-reset text-decoration-none me-2"
+          to="/shopping-cart"
+        >
+          購物車(<span>{{ $store.state.shoppingCart.length }}</span
+          >)
+        </router-link>
+
+        <button
+          type="button"
+          id="menu-button"
+          class="btn"
+          @click="isMenu = !isMenu"
+          @blur="isMenu = false"
+        >
+          <i
+            class="bi d-flex justify-content-between align-items-center"
+            :class="{
+              'bi-menu-button-wide': !isMenu,
+              'bi-menu-button-wide-fill': isMenu,
+            }"
+          ></i>
+        </button>
+      </div>
     </div>
 
-    <label for="menu-button" class="list">
-      <ul>
-        <li v-if="$store.state.isSignIn">
-          <a href="#/sign-out" @click="singOutHandler">登出</a>
+    <label
+      for="menu-button"
+      class="position-absolute top-100 end-0 self-label"
+      :class="{ show: isMenu }"
+    >
+      <ul class="navbar-nav bg-white border">
+        <li class="nav-item my-1" v-if="$store.state.isSignIn">
+          <a
+            class="nav-link px-4 self-nav-link"
+            href="#/sign-out"
+            @click="singOutHandler"
+            >登出</a
+          >
         </li>
 
-        <li v-else>
+        <li class="nav-item my-1" v-else>
           <router-link
             to="/sign-in"
+            class="nav-link px-4 self-nav-link"
             :class="{ active: $route.path === '/sign-in' }"
             >登入</router-link
           >
         </li>
 
-        <li v-if="$store.state.isSignIn">
-          <router-link to="/back-side">後台</router-link>
+        <li class="nav-item my-1" v-if="$store.state.isSignIn">
+          <router-link class="nav-link px-4 self-nav-link" to="/back-side"
+            >後台</router-link
+          >
         </li>
 
-        <li>
+        <li class="nav-item my-1">
           <router-link
             to="/shopping-cart"
+            class="nav-link px-4 self-nav-link"
             :class="{ active: $route.path === '/shopping-cart' }"
             >購物車</router-link
           >
         </li>
 
-        <li>
+        <li class="nav-item my-1">
           <router-link
             to="/orders"
+            class="nav-link px-4 self-nav-link"
             :class="{ active: $route.path === '/orders' }"
             >訂單</router-link
           >
         </li>
 
-        <li>
-          <router-link to="/home" :class="{ active: $route.path === '/home' }"
+        <li class="nav-item my-1">
+          <router-link
+            class="nav-link px-4 self-nav-link"
+            to="/home"
+            :class="{ active: $route.path === '/home' }"
             >首頁</router-link
           >
         </li>
 
-        <li v-for="(item, key) in $store.getters.calcData" :key="key">
+        <li
+          class="nav-item my-1"
+          v-for="(item, key) in $store.getters.calcData"
+          :key="key"
+        >
           <router-link
             :to="'/categories/' + key"
+            class="nav-link px-4 self-nav-link"
             :class="{ active: $route.params.category === key }"
             >{{ item.name }}</router-link
           >
@@ -109,71 +140,39 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
-.header {
-  padding: 10px 10px 20px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
+.self-header {
   z-index: 1;
 
-  .between-container {
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
+  .self-header-container {
+    z-index: 1;
 
-    .logo {
-      width: 180px;
-    }
-
-    .shopping-cart {
-      margin-right: 1rem;
-    }
-
-    .menu i {
-      margin-top: 4px;
-      font-size: 1.2rem;
-      display: block;
-      cursor: pointer;
+    .self-logo {
+      width: 12rem;
     }
   }
 
-  .list {
-    display: block;
-    width: 100%;
+  .self-label {
     box-sizing: border-box;
-    background-color: $white;
-    transform: translateX(-100%);
-    transition: transform 0.2s cubic-bezier(0, 0.8, 1, 1) 0.1s;
-    position: absolute;
-    left: 0px;
-    top: 100%;
+    transition: all 0.3s ease-out 0.1s;
+    transform: translateY(-100%);
+    opacity: 0;
 
-    li {
-      border-top: 1px solid $black-alpha;
-
-      &:last-child {
-        border-bottom: 1px solid $black-alpha;
-      }
-
-      a {
-        padding: 1rem 0;
-        @include font-style($font-size: 1.2rem);
-        text-align: center;
-        display: block;
-
-        &.active {
-          color: $white;
-          background-color: $green-alpha;
-        }
-      }
+    &.show {
+      transform: translateY(0.25rem);
+      opacity: 1;
     }
-  }
 
-  &.menu {
-    .list {
-      transition: transform 0.2s cubic-bezier(0, 0.8, 1, 1) 0s;
-      transform: translateX(0%);
+    .self-nav-link {
+      color: $black;
+
+      &:hover {
+        background-color: $header-nav-hover-color;
+      }
+
+      &.active {
+        color: $white;
+        background-color: $green-alpha;
+      }
     }
   }
 }

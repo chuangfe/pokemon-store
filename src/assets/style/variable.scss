@@ -2,21 +2,25 @@
 
 @charset "UTF-8";
 
-// 顏色.
+// 黑色.
 $black: #000;
+// 黑色透明.
 $black-alpha: rgba($black, 0.2);
-
+// 白色.
 $white: #fff;
-
+// 灰色.
 $gray: #666;
-
+// 紅色.
 $red: #ff0000;
+// 紅色透明.
 $red-alpha: rgba($red, 0.4);
-
+// 綠色.
 $green: #53acb4;
+// 綠色透明.
 $green-alpha: rgba($green, 0.4);
-
+// 藍色.
 $blue: #2b447d;
+// 藍色透明.
 $blue-alpha: rgba($blue, 0.8);
 
 // 表格顏色.
@@ -31,3 +35,7 @@ $title-color-alpha: rgba($title-color, 0.2);
 $screen-width-sm: 576px;
 $screen-width-md: 768px;
 $screen-width-lg: 992px;
+$screen-width-xl: 1200px;
+
+// header nav-link hover color.
+$header-nav-hover-color: #e9ecef;

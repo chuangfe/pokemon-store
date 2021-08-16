@@ -1,15 +1,19 @@
 <template>
-  <div class="carousel-drag">
-    <!-- 拖放目標. -->
+  <div class="self-carousel-drag position-relative overflow-hidden">
+    <!-- 拖放目標, position-relative 是為了保存高度. -->
     <div
-      class="items"
+      class="self-items font-size-delete w-100 position-relative row flex-nowrap m-0"
       :class="{ transition: isTransition }"
       :style="{ left: left }"
       @mousedown="itemsMousedownHandler($event)"
       @touchstart="itemsTouchstartHandler($event)"
     >
       <!-- item-container 使用 v-for, 並針對 RWD 修改寬度. -->
-      <div class="item-container" v-for="(item, i) of items" :key="i">
+      <div
+        class="self-item-container  d-inline-block px-2 col-12 col-md-6 col-lg-4 col-xl-3"
+        v-for="(item, i) of items"
+        :key="i"
+      >
         <!-- 商品. -->
         <MerchandiseItem
           :id="item.id"
@@ -30,12 +34,16 @@
     </div>
 
     <!-- 按鈕列 -->
-    <div class="list">
-      <ul>
-        <li v-for="(n, i) of circleLength" :key="i">
-          <button @click="listClickHandler(i)">
+    <div class="self-list pb-2">
+      <ul class="list-unstyled list-inline text-center mb-0">
+        <li
+          class="list-inline-item mt-2"
+          v-for="(n, i) of circleLength"
+          :key="i"
+        >
+          <button class="btn btn-sm" @click="listClickHandler(i)">
             <i
-              class="bi"
+              class="bi text-muted small"
               :class="{
                 'bi-circle': active !== i,
                 'bi-circle-fill': active === i,
@@ -54,7 +62,6 @@
 
 // 商品.
 import MerchandiseItem from "./MerchandiseItem.vue";
-
 // 節流 resize event.
 import debounce from "../modules/debounce";
 
@@ -62,13 +69,11 @@ let items, itemContainer, debounceResizeHandler;
 
 export default {
   name: "CarouselDrag",
+
   data() {
     return {
       // 當前索引.
       active: 0,
-
-      // 判斷裝置.
-      isMobile: false,
 
       // .items 寬度.
       itemsWidth: 0,
@@ -124,7 +129,6 @@ export default {
 
     // 電腦拖放.
     itemsMousedownHandler(e) {
-      if (this.isMobile) return false;
       // 按下的 X 座標.
       this.startX = e.clientX;
       // 紀錄 offsetLeft.
@@ -138,12 +142,11 @@ export default {
       window.addEventListener("mouseup", this.windowMouseupHandler);
     },
     windowMousemoveHandler(e) {
-      if (this.isMobile || e.clientX === this.startX) return false;
+      if (e.clientX === this.startX) return false;
       this.movex = e.clientX - this.startX;
       this.left = this.offsetLeft + this.movex + "px";
     },
     windowMouseupHandler() {
-      if (this.isMobile) return false;
       window.removeEventListener("mousemove", this.windowMousemoveHandler);
       window.removeEventListener("mouseup", this.windowMouseupHandler);
 
@@ -183,7 +186,6 @@ export default {
 
     // 手機拖放.
     itemsTouchstartHandler(e) {
-      if (!this.isMobile) return false;
       // 按下的 X 座標.
       this.startX = e.changedTouches[0].clientX;
       // 紀錄 offsetLeft.
@@ -197,12 +199,10 @@ export default {
       window.addEventListener("touchend", this.windowTouchendHandler);
     },
     windowTouchmoveHandler(e) {
-      if (!this.isMobile) return false;
       this.movex = e.changedTouches[0].clientX - this.startX;
       this.left = this.offsetLeft + this.movex + "px";
     },
     windowTouchendHandler() {
-      if (!this.isMobile) return false;
       window.removeEventListener("touchmove", this.windowTouchmoveHandler);
       window.removeEventListener("touchend", this.windowTouchendHandler);
 
@@ -244,10 +244,9 @@ export default {
 
     // 視窗縮放事件.
     resizeHandler() {
-      items = this.$el.querySelector(".items");
-      itemContainer = items.querySelector(".item-container");
+      items = this.$el.querySelector(".self-items");
+      itemContainer = items.querySelector(".self-item-container");
 
-      this.isMobile = window.innerWidth > 768 ? false : true;
       this.active = 0;
       this.left = "0%";
 
@@ -286,57 +285,22 @@ export default {
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
 
-.carousel-drag {
-  position: relative;
-
+.self-carousel-drag {
   // 拖放目標.
-  .items {
-    width: 100%;
-    // 配合 inline-block;
-    font-size: 0px;
+  .self-items {
+    // 不換行.
     white-space: nowrap;
-    // 為了高度, 使用 relative 定位來拖放.
-    position: relative;
+    // 預設值.
     left: 0px;
 
+    // 需要動畫時才有的樣式.
     &.transition {
       transition: left 0.4s ease-out 0s;
     }
 
     // rwd 目標.
-    .item-container {
-      padding: 0 0.375rem;
-      width: 100%;
+    .self-item-container {
       box-sizing: border-box;
-      display: inline-block;
-    }
-  }
-
-  .list {
-    padding-top: 0.5rem;
-
-    ul {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      li {
-        margin-right: 0.5rem;
-
-        i {
-          @include font-style($font-size: 0.75rem, $color: $black-alpha);
-        }
-      }
-    }
-  }
-}
-
-@media only screen and (min-width: $screen-width-md) {
-  .carousel-drag {
-    .items {
-      .item-container {
-        width: 25%;
-      }
     }
   }
 }

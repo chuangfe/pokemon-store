@@ -2,6 +2,8 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+// 使用 bootstrap 5.
+import "bootstrap/dist/css/bootstrap.css";
 // 使用 vee-validate 框架, 專門為 vue 準備的表單驗證.
 import "./modules/veeValidate";
 

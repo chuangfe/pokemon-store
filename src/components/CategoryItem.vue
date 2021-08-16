@@ -2,20 +2,22 @@
   <router-link
     :to="categoryLink"
     tag="a"
-    class="category-item"
+    class="self-category-item text-reset text-decoration-none border rounded-3
+    d-flex flex-column py-2"
     :class="{
       active: isActive,
     }"
   >
-    <div class="image-container">
-      <img :src="src" :alt="alt" />
+    <div class="self-image-container mx-auto">
+      <img class="image-object-fit-contain" :src="src" :alt="alt" />
     </div>
-    <p class="text">{{ name }}</p>
+
+    <p class="self-text fw-bold small text-center m-0 pt-2">{{ name }}</p>
   </router-link>
 </template>
 
 <script>
-// 單項商品組件.
+// 商品分類組件.
 
 export default {
   name: "CategoryItem",
@@ -64,46 +66,20 @@ export default {
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
 
-.category-item {
-  padding: 0.625rem 0;
-  border: 1px solid $black-alpha;
-  border-radius: 8px;
+.self-category-item {
   box-sizing: border-box;
 
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-  .image-container {
-    margin: 0 auto;
-    width: 50px;
-    height: 50px;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-  }
-
-  .text {
-    padding-top: 0.625rem;
-    width: 100%;
-    text-align: center;
-    @include font-style($font-size: 0.75rem);
-    overflow-wrap: break-word;
+  .self-image-container {
+    width: 3rem;
+    height: 3rem;
   }
 
   &.active {
     border-color: transparent;
     background-color: $green-alpha;
 
-    .text {
-      @include font-style(
-        $font-size: 0.75rem,
-        $font-weight: 900,
-        $color: $white
-      );
+    .self-text {
+      color: $white;
     }
   }
 }

@@ -1,57 +1,78 @@
 <template>
-  <div class="merchandise-item">
+  <div class="self-merchandise-item border position-relative p-3">
     <!-- 圖片 -->
-    <div class="image-container">
-      <img :src="imageSrc" :alt="alt" draggable="false" />
+    <div class="self-image-container">
+      <img
+        class="image-object-fit-contain"
+        :src="imageSrc"
+        :alt="alt"
+        draggable="false"
+      />
     </div>
 
     <!-- 類別. -->
-    <div class="category emergency">
+    <div
+      class="badge bg-danger fs-6 fw-bold text-white p-1 rounded-3 position-absolute top-0 end-0 m-1"
+    >
       {{ categoryName }}
     </div>
 
     <!-- 商品名稱 -->
-    <p class="name">{{ name }}</p>
+    <p class="fs-5 fw-bold text-black m-0 py-2">{{ name }}</p>
 
     <!-- 商品敘述 -->
-    <p class="text">
+    <p class="self-text fs-6 w-100 text-secondary m-0 border-bottom py-2">
       {{ text }}
     </p>
 
-    <!-- 價格 -->
-    <div class="price-container" :class="{ 'special-offer': specialPrice }">
-      <p class="special screen-hidden" v-if="specialPrice">
+    <!-- 售價容器. -->
+    <div
+      class="self-price py-2 fs-5 fw-bold d-flex justify-content-between align-items-center"
+      :class="{ 'special-offer': specialPrice }"
+    >
+      <!-- 特價. -->
+      <p class="self-special screen-hidden m-0" v-if="specialPrice">
         NT${{ specialPrice }}元
       </p>
-      <p class="original screen-hidden">NT${{ originalPrice }}元</p>
 
-      <p class="screen-price" :class="{ special: specialPrice }">
-        NT${{ specialPrice || originalPrice }}
-      </p>
+      <!-- 原價. -->
+      <p class="self-original screen-hidden m-0">NT${{ originalPrice }}元</p>
     </div>
 
     <!-- 按鈕 -->
-    <div class="link-container">
-      <router-link :to="merchandiseLink">詳細介紹</router-link>
-      <a
-        href="javascript:;"
-        @click="
-          clickHandler({
-            id,
-            category,
-            categoryName,
-            name,
-            price: getCartprice(originalPrice, specialPrice),
-          })
-        "
-      >
-        加入購物車
-      </a>
+    <div class="self-link-container row">
+      <div class="col-6">
+        <router-link
+          class="d-block border fs-6 px-2 py-1 rounded-3 text-reset text-decoration-none text-center"
+          :to="merchandiseLink"
+          >詳細介紹</router-link
+        >
+      </div>
+
+      <div class="col-6">
+        <button
+          class="btn border fs-6 w-100 px-2 py-1 rounded-3"
+          @click="
+            clickHandler({
+              id,
+              category,
+              categoryName,
+              name,
+              price: getCartprice(originalPrice, specialPrice),
+            })
+          "
+        >
+          加入購物車
+        </button>
+      </div>
     </div>
 
     <!-- 售完 -->
-    <div class="sold-out" v-if="remaining < 1">
-      <p>售完</p>
+    <div
+      class="self-sold-out w-100 h-100 position-absolute top-0 start-0 d-flex justify-content-center align-items-center"
+      v-if="remaining < 1"
+    >
+      <p class="m-0 fs-1 fw-bold text-white">售完</p>
     </div>
   </div>
 </template>
@@ -161,131 +182,65 @@ export default {
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
 
-.merchandise-item {
-  padding: 1rem;
-  border: 1px solid $black-alpha;
-  position: relative;
+.self-merchandise-item {
+  box-sizing: border-box;
 
-  .image-container {
+  // 商品圖片容器.
+  .self-image-container {
     height: 10rem;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-  }
-
-  // 商品類別.
-  .category {
-    padding: 4px;
-    @include font-style($font-size: 1rem, $font-weight: 900);
-    border-radius: 6px;
-    position: absolute;
-    right: 0.625rem;
-    top: 0.625rem;
-  }
-
-  // 商品名稱.
-  .name {
-    padding: 0.625rem 0;
-    @include font-style($font-size: 1.2rem, $font-weight: 900);
   }
 
   // 商品說明.
-  .text {
-    padding-bottom: 0.625rem;
-    width: 100%;
-    @include font-style($font-size: 1rem, $color: $gray);
-    border-bottom: 1px solid $black-alpha;
-
+  .self-text {
+    // 將超過容器的文字壓縮為 ... 符號.
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
 
   // 價格.
-  .price-container {
-    padding: 0.625rem 0;
-    @include font-style($font-size: 1rem, $font-weight: 900);
+  .self-price {
     letter-spacing: 1px;
 
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-
-    .special {
+    // 特價.
+    .self-special {
       color: $green;
     }
 
-    .screen-price {
-      display: none;
-    }
-
+    // 原價.
     &.special-offer {
-      .original {
+      // 有特價的時候, 原價加上刪除線.
+      .self-original {
         text-decoration-line: line-through;
       }
     }
   }
 
   // 按鈕
-  .link-container {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-
-    a {
-      padding: 0.3125rem 0;
-      display: block;
-      border: 1px solid $black-alpha;
-      @include font-style($font-size: 1rem, $font-weight: 700);
-      text-align: center;
-      flex-basis: 50%;
-      user-select: none;
-
-      &:first-child {
-        margin-right: 0.625rem;
-      }
-    }
-
-    a:active {
+  .self-link-container {
+    a:active,
+    button:active {
       color: $white !important;
       background-color: $green !important;
     }
   }
 
   // 售完.
-  .sold-out {
-    width: 100%;
-    height: 100%;
+  .self-sold-out {
     background-color: $black-alpha;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
     p {
-      @include font-style($font-size: 2rem, $font-weight: 900, $color: $white);
       letter-spacing: 1rem;
       text-align: center;
     }
   }
 }
 
-@media only screen and (min-width: $screen-width-md) {
-  .merchandise-item {
-    .price-container {
-      .screen-hidden {
+@media only screen and (min-width: $screen-width-xl) {
+  .self-merchandise-item {
+    .self-price.special-offer {
+      .self-original {
         display: none;
-      }
-
-      .screen-price {
-        display: block;
       }
     }
   }

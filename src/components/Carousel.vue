@@ -1,40 +1,55 @@
 <template>
-  <div class="carousel">
-    <transition-group class="container" tag="div" :name="direction">
+  <div class="self-carousel position-relative overflow-hidden">
+    <transition-group
+      class="w-100 h-100 position-relative"
+      tag="div"
+      :name="direction"
+    >
       <div
-        class="carousel-item"
+        class="w-100 h-100 position-absolute"
         v-for="(item, i) of items"
         :key="i"
         v-show="i === active"
       >
-        <img :src="item.src" :alt="item.alt" />
+        <img class="image-object-fit-contain" :src="item.src" :alt="item.alt" />
       </div>
     </transition-group>
 
-    <div class="button-container" v-if="directionButton">
+    <div
+      class="self-arrow w-100 position-absolute top-50 translate-middle-y"
+      v-if="directionButton"
+    >
       <button
-        class="prev"
+        class="btn position-absolute start-0 ms-2"
         v-show="active !== 0"
         @click="clickHandler(active - 1)"
       >
-        <i class="bi bi-arrow-left-square"></i>
+        <i class="bi bi-arrow-left-square fs-2 text-muted"></i>
       </button>
 
       <button
-        class="next"
+        class="btn position-absolute end-0 me-2"
         v-show="active !== items.length - 1"
         @click="clickHandler(active + 1)"
       >
-        <i class="bi bi-arrow-right-square"></i>
+        <i class="bi bi-arrow-right-square fs-2 text-muted"></i>
       </button>
     </div>
 
-    <div class="list-container" v-if="listButton">
-      <ul>
-        <li v-for="(item, i) of items" :key="i">
-          <button @click="clickHandler(i)">
-            <i class="bi bi-circle" v-show="active !== i"></i>
-            <i class="bi bi-circle-fill" v-show="active === i"></i>
+    <div
+      class="self-list w-100 position-absolute bottom-0 mb-2"
+      v-if="listButton"
+    >
+      <ul class="list-unstyled list-inline text-center mb-0 p-0">
+        <li class="list-inline-item" v-for="(item, i) of items" :key="i">
+          <button class="btn btn-sm" @click="clickHandler(i)">
+            <i
+              class="bi small text-muted"
+              :class="{
+                'bi-circle': active !== i,
+                'bi-circle-fill': active === i,
+              }"
+            ></i>
           </button>
         </li>
       </ul>
@@ -96,83 +111,11 @@ export default {
 <style scoped lang="scss">
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
-// 可以設置 RWD.
-.carousel {
+.self-carousel {
+  // 可以設置 RWD.
   height: 17.5rem;
-  position: relative;
-  z-index: 0;
-
-  // transition-group 轉出來的 element.
-  .container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
-  .carousel-item {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-  }
-
-  .button-container {
-    width: 100%;
-    transform: translateY(-1rem);
-    position: absolute;
-    top: 50%;
-
-    button {
-      position: absolute;
-      top: 50%;
-
-      &.prev {
-        left: 0.625rem;
-      }
-
-      &.next {
-        right: 0.625rem;
-      }
-    }
-
-    i {
-      @include font-style($font-size: 2rem, $color: $black-alpha);
-    }
-  }
-
-  .list-container {
-    width: 100%;
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-
-    ul {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: center;
-
-      li {
-        margin-right: 0.625rem;
-
-        &:last-child {
-          margin-right: 0px;
-        }
-
-        button {
-          i {
-            @include font-style($font-size: 0.75rem, $color: $black-alpha);
-          }
-        }
-      }
-    }
-  }
 }
 
 // 進場和退場過程中的動畫.
@@ -180,7 +123,7 @@ export default {
 .next-leave-active,
 .prev-enter-active,
 .prev-leave-active {
-  transition: left 0.4s cubic-bezier(0, 0.8, 0.9, 1) 0s;
+  transition: left 0.4s ease-out 0s;
 }
 
 // 進場前的樣式.

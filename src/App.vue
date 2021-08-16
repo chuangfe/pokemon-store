@@ -21,7 +21,7 @@ export default {};
   margin: 0 auto;
   max-width: 1080px;
   min-height: 100%;
-  overflow-x: hidden;
+  // overflow-x: hidden;
 
   .loading {
     width: 100vw;
