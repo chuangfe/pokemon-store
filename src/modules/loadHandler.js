@@ -4,9 +4,7 @@ import Store from "../store/index";
 // 假的讀取進度
 // 使用在:
 // /router/index.js
-// /components/MerchandiseItem.vue
 // /components/RecipientList.vue
-// /views/ShoppingCart.vue
 
 // 保存排程.
 let timer = null;

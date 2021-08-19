@@ -1,28 +1,41 @@
 <template>
   <!-- 分頁. -->
-  <div class="pagination">
-    <ul>
+  <div class="self-pagination">
+    <ul class="list-unstyled list-inline m-0">
       <!-- 上一頁. -->
-      <li>
-        <button @click="$emit('setIndex', index - 1)" :disabled="index === 0">
-          <span> <i class="bi bi-chevron-double-left"></i></span>
+      <li class="list-inline-item">
+        <button
+          class="btn btn-sm"
+          @click="$emit('setIndex', index - 1)"
+          :disabled="index === 0"
+        >
+          <span class="self-span border d-block py-2 px-3 rounded-3 fs-5">
+            <i class="bi bi-chevron-double-left"></i
+          ></span>
         </button>
       </li>
 
       <!-- 依照索引跳轉頁數. -->
-      <li v-for="(num, i) of pages" :key="i">
-        <button @click="$emit('setIndex', i)">
-          <span :class="{ active: index === i }">{{ num }}</span>
+      <li class="list-inline-item" v-for="(num, i) of pages" :key="i">
+        <button class="btn btn-sm" @click="$emit('setIndex', i)">
+          <span
+            class="self-span border d-block py-2 px-3 rounded-3 fs-5"
+            :class="{ active: index === i }"
+            >{{ num }}</span
+          >
         </button>
       </li>
 
       <!-- 下一頁 -->
-      <li>
+      <li class="list-inline-item">
         <button
+          class="btn btn-sm"
           @click="$emit('setIndex', index + 1)"
           :disabled="index === pages - 1"
         >
-          <span> <i class="bi bi-chevron-double-right"></i></span>
+          <span class="self-span border d-block py-2 px-3 rounded-3 fs-5">
+            <i class="bi bi-chevron-double-right"></i
+          ></span>
         </button>
       </li>
     </ul>
@@ -58,23 +71,12 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
-.pagination {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-
-  ul {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-  }
-
-  li {
-    margin-right: 0.625rem;
-
-    &:last-child {
-      margin-right: 0px;
-    }
+.self-pagination {
+  // 當前頁數時的樣式.
+  .self-span.active {
+    color: $white;
+    background-color: $green;
+    border-color: $green;
   }
 
   // 按鈕不可點擊時的樣式.
@@ -85,27 +87,6 @@ export default {
       i::before {
         color: $black-alpha;
       }
-    }
-  }
-
-  span {
-    padding: 0.25rem 0.625rem;
-    height: 100%;
-    @include font-style($font-size: 1.2rem);
-    text-align: center;
-    border: 1px solid $gray;
-    border-radius: 6px;
-    display: block;
-
-    &.active {
-      color: $white;
-      background-color: $green;
-      border-color: $green;
-    }
-
-    &,
-    i::before {
-      @include font-style($font-size: 1.2rem);
     }
   }
 }

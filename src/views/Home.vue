@@ -1,20 +1,24 @@
 <template>
-  <div class="self-home">
-    <div class="px-2">
+  <div class="self-home py-3">
+    <div class="container-xl">
       <Header />
     </div>
 
     <!-- 輪播圖. -->
-    <Carousel :items="$store.state.slides" />
+    <div class="container-xl">
+      <Carousel :items="$store.state.slides" />
+    </div>
 
-    <!-- 打字動畫. -->
-    <div class="font-size-delete py-4 text-center">
-      <h1 class="self-typeing m-0">＂冒險者！歡迎來到寶可夢購物中心＂</h1>
+    <!-- 打字動畫標題. -->
+    <div class="container-xl">
+      <div class="font-size-delete py-4 text-center">
+        <h1 class="self-typeing m-0">＂冒險者！歡迎來到寶可夢購物中心＂</h1>
+      </div>
     </div>
 
     <!-- 新聞. -->
-    <div class="self-news p-2">
-      <p class="fs-6 fw-bold text-muted m-0 p-2">
+    <div class="self-news container-xl">
+      <p class="fs-6 fw-bold text-muted m-0 mx-2 p-2">
         2018.09.21
         <span class="badge bg-danger fs-6 fw-bold text-white p-1">緊急</span>
         因真新鎮受超夢大軍侵襲，暫時停止營業，不便之處，敬請見諒。
@@ -22,7 +26,7 @@
     </div>
 
     <!-- 商品分類連結. -->
-    <div class="self-categories overflow-hidden">
+    <div class="self-categories container-xl">
       <h5 class="self-title h5 pt-4 ps-2 fw-bold">商品分類</h5>
 
       <div class="row row-cols-4 row-cols-md-5 px-2">
@@ -48,14 +52,16 @@
     </div>
 
     <!-- 商品瀏覽. -->
-    <div class="self-merchandises">
+    <div class="self-merchandises container-xl">
       <h5 class="self-title h5 pt-4 ps-2 fw-bold">商品瀏覽</h5>
 
       <!-- 可拖放輪播圖 -->
       <CarouselDrag />
     </div>
 
-    <Footer />
+    <div class="container-xl">
+      <Footer />
+    </div>
   </div>
 </template>
 
@@ -100,6 +106,7 @@ export default {
 @import "../assets/style/class.scss";
 
 .self-home {
+  // 打字動畫標題.
   .self-typeing {
     // 17個字.
     width: 1.25rem * 17;
@@ -116,29 +123,17 @@ export default {
     animation: typing 4s steps(17) 1s both, caret 1s steps(1) infinite;
   }
 
-  .self-news {
-    p {
-      letter-spacing: 1px;
-      box-shadow: 1px 3px 5px $black-alpha;
-    }
+  // 新聞
+  .self-news p {
+    letter-spacing: 1px;
+    box-shadow: 1px 3px 5px $black-alpha;
   }
 
-  // 商品分類.
-  .self-categories {
-    box-sizing: border-box;
-
-    // 標題.
-    .self-title {
-      color: $green;
-    }
-  }
-
-  // 商品輪播
-  .self-merchandises {
-    // 標題.
-    .self-title {
-      color: $green;
-    }
+  // 商品分類的標題.
+  .self-categories .self-title, 
+  // 商品輪播的標題.
+  .self-merchandises .self-title {
+    color: $green;
   }
 }
 

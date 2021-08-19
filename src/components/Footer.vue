@@ -1,7 +1,7 @@
 <template>
-  <footer class="self-footer fs-6 pb-3 text-muted">
+  <footer class="self-footer fs-6 text-muted">
     <!-- 寶可夢商店. -->
-    <div class="self-shop-container text-center border-bottom py-3">
+    <div class="self-shop-container text-center border-bottom">
       <img
         class="image-object-fit-width-contain"
         src="../../public/images/shop.png"

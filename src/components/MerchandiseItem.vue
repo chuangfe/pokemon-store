@@ -41,17 +41,19 @@
 
     <!-- 按鈕 -->
     <div class="self-link-container row">
-      <div class="col-6">
+      <!-- 詳細介紹 link 跳轉. -->
+      <div class="col-6 pe-1">
         <router-link
-          class="d-block border fs-6 px-2 py-1 rounded-3 text-reset text-decoration-none text-center"
+          class="d-block border fs-6 fw-bold px-2 py-1 rounded-3 text-reset text-decoration-none text-center"
           :to="merchandiseLink"
           >詳細介紹</router-link
         >
       </div>
 
-      <div class="col-6">
+      <!-- 加入購物車, 固定新增 1 個商品. -->
+      <div class="col-6 ps-1">
         <button
-          class="btn border fs-6 w-100 px-2 py-1 rounded-3"
+          class="btn border fs-6 fw-bold w-100 px-2 py-1 rounded-3"
           @click="
             clickHandler({
               id,
@@ -72,16 +74,13 @@
       class="self-sold-out w-100 h-100 position-absolute top-0 start-0 d-flex justify-content-center align-items-center"
       v-if="remaining < 1"
     >
-      <p class="m-0 fs-1 fw-bold text-white">售完</p>
+      <p class="m-0 fs-1 fw-bold text-white text-center">售完</p>
     </div>
   </div>
 </template>
 
 <script>
 // 單項商品展示.
-
-// 讀取進度.
-import loadHandler from "../modules/loadHandler";
 
 export default {
   name: "Merchandise",
@@ -159,12 +158,10 @@ export default {
 
     // 加入購物車.
     clickHandler({ id, category, categoryName, name, price, count = 1 }) {
-      loadHandler.isLoading();
-
       // 商品售完.
       if (this.remaining < 1) return false;
 
-      this.$store.commit("ADD_SHOPPING_CART", {
+      this.$store.dispatch("ADD_SHOPPING_CART_ACTIONS", {
         id,
         category,
         categoryName,
@@ -183,8 +180,6 @@ export default {
 @import "../assets/style/class.scss";
 
 .self-merchandise-item {
-  box-sizing: border-box;
-
   // 商品圖片容器.
   .self-image-container {
     height: 10rem;
@@ -207,12 +202,9 @@ export default {
       color: $green;
     }
 
-    // 原價.
-    &.special-offer {
-      // 有特價的時候, 原價加上刪除線.
-      .self-original {
-        text-decoration-line: line-through;
-      }
+    // 有特價的時候, 原價加上刪除線.
+    &.special-offer .self-original {
+      text-decoration-line: line-through;
     }
   }
 
@@ -231,18 +223,13 @@ export default {
 
     p {
       letter-spacing: 1rem;
-      text-align: center;
     }
   }
 }
 
 @media only screen and (min-width: $screen-width-xl) {
-  .self-merchandise-item {
-    .self-price.special-offer {
-      .self-original {
-        display: none;
-      }
-    }
+  .self-merchandise-item .self-price.special-offer .self-original {
+    display: none;
   }
 }
 </style>

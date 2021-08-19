@@ -1,7 +1,7 @@
 <template>
   <header class="self-header position-relative">
     <div
-      class="self-header-container d-flex justify-content-between align-items-center position-relative bg-white pt-2"
+      class="self-header-container d-flex justify-content-between align-items-center position-relative bg-white"
     >
       <div class="self-between-container">
         <router-link to="/home">

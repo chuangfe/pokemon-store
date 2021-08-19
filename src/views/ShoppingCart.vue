@@ -1,5 +1,5 @@
 <template>
-  <div class="shopping-cart">
+  <div class="self-shopping-cart">
     <Header />
 
     <!-- 購物車區域. -->
@@ -124,8 +124,6 @@ import Footer from "../components/Footer.vue";
 import MerchandiseTable from "../components/MerchandiseTable.vue";
 // 空內容.
 import Empty from "../components/Empty.vue";
-// 假的讀取進度.
-import loadHandler from "../modules/loadHandler";
 
 export default {
   name: "ShoppingCart",
@@ -150,11 +148,13 @@ export default {
 
   methods: {
     // 購物車刪除商品.
-    removeHandler(id) {
-      // 假的讀取進度.
-      loadHandler.isLoading();
+    async removeHandler(id) {
+      const result = await this.$store.dispatch(
+        "REMOVE_SHOPPING_CART_ACTIONS",
+        id
+      );
 
-      this.$store.commit("REMOVE_SHOPPING_CART", id);
+      console.log(result);
     },
 
     // 購買商品.
@@ -196,7 +196,7 @@ export default {
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
 
-.shopping-cart {
+.self-shopping-cart {
   .container {
     margin: 0 1rem;
 

@@ -1,91 +1,108 @@
 <template>
-  <div class="categories">
-    <Header />
+  <div class="self-categories py-3">
+    <div class="container-xl">
+      <Header />
+    </div>
 
     <!-- 輪播圖 -->
-    <Carousel :items="$store.state.slides" />
+    <div class="container-xl">
+      <Carousel :items="$store.state.slides" />
+    </div>
 
     <!-- 路徑 -->
-    <div class="breadcrumb-container">
-      <Breadcrumb
-        :homeLink="'/home'"
-        :category="$route.params.category"
-        :categoryName="categoryObject.name"
-        :categoryLink="getCategoryLink(categoryTitle)"
-      />
+    <div class="container-xl">
+      <div class="py-4">
+        <Breadcrumb
+          :homeLink="'/home'"
+          :category="$route.params.category"
+          :categoryName="categoryObject.name"
+          :categoryLink="getCategoryLink(categoryTitle)"
+        />
+      </div>
     </div>
 
-    <!-- RWD 專用容器. -->
-    <div class="screen-container">
-      <!-- 商品種類. -->
-      <div class="categories-container">
-        <div class="items">
-          <!-- 分類容器, 可以做 RWD. -->
-          <div
-            class="item-container"
-            v-for="(value, key) of calcData"
-            :key="key"
-          >
-            <!-- 分類. -->
-            <CategoryItem
-              :src="value.imageSrc"
-              :alt="value.alt"
-              :name="value.name"
-              :categoryLink="getCategoryLink(key)"
-              :isActive="$route.params.category === key"
+    <!-- 商品分類與商品瀏覽. -->
+    <div class="container-xl">
+      <div class="row">
+        <!-- 商品分類. -->
+        <div class="col-12 col-md-2">
+          <div class="row row-cols-4 row-cols-sm-5 row-cols-md-1">
+            <!-- 分類容器, 可以做 RWD. -->
+            <div
+              class="pb-4 col"
+              :class="{
+                'col-12': i === calcDataKeys.length - 1,
+                'col-sm': i === calcDataKeys.length - 1,
+              }"
+              v-for="(val, i) of calcDataKeys"
+              :key="val"
+            >
+              <!-- 分類. -->
+              <CategoryItem
+                :src="calcData[val].imageSrc"
+                :alt="calcData[val].alt"
+                :name="calcData[val].name"
+                :categoryLink="getCategoryLink(val)"
+                :isActive="$route.params.category === val"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 商品瀏覽. -->
+        <div class="col-12 col-md-10">
+          <!-- 標題. -->
+          <h3 class="self-title-merchandises h3 fw-bold">
+            {{ categoryObject.name }}
+          </h3>
+
+          <!-- 商品容器, 可以做 RWD. -->
+          <div class="row">
+            <div
+              class="col-12 col-md-6 col-lg-4 pb-4"
+              v-for="(item, i) of showMerchandises"
+              :key="i"
+            >
+              <!-- 單項商品展示. -->
+              <MerchandiseItem
+                :id="item.id"
+                :category="item.category"
+                :categoryName="item.categoryName"
+                :name="item.name"
+                :text="item.text"
+                :imageSrc="item.imageSrc"
+                :alt="item.alt"
+                :remaining="item.remaining"
+                :originalPrice="item.originalPrice"
+                :specialPrice="item.specialPrice"
+                :merchandiseLink="
+                  getMerchandiseLink({ category: item.category, id: item.id })
+                "
+              />
+            </div>
+          </div>
+
+          <!-- 分頁. -->
+          <div v-show="pages">
+            <Pagination
+              :index="index"
+              :length="length"
+              :pages="pages"
+              @setIndex="setIndexHandler"
             />
           </div>
         </div>
       </div>
-
-      <!-- 商品瀏覽 -->
-      <div class="merchandises-container">
-        <p class="title">{{ categoryObject.name }}</p>
-
-        <!-- 商品容器, 可以做 RWD. -->
-        <div class="items">
-          <div
-            class="item-container"
-            v-for="(item, i) of showMerchandises"
-            :key="i"
-          >
-            <!-- 單項商品展示. -->
-            <MerchandiseItem
-              :id="item.id"
-              :category="item.category"
-              :categoryName="item.categoryName"
-              :name="item.name"
-              :text="item.text"
-              :imageSrc="item.imageSrc"
-              :alt="item.alt"
-              :remaining="item.remaining"
-              :originalPrice="item.originalPrice"
-              :specialPrice="item.specialPrice"
-              :merchandiseLink="
-                getMerchandiseLink({ category: item.category, id: item.id })
-              "
-            />
-          </div>
-        </div>
-
-        <!-- 分頁. -->
-        <div class="pagination-container" v-show="pages">
-          <Pagination
-            :index="index"
-            :length="length"
-            :pages="pages"
-            @setIndex="setIndexHandler"
-          />
-        </div>
-      </div>
     </div>
 
-    <Footer />
+    <div class="container-xl">
+      <Footer />
+    </div>
   </div>
 </template>
 
 <script>
-// 商品種類瀏覽頁面.
+// 商品分類頁面.
 
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -119,6 +136,9 @@ export default {
     // data, 縮短屬性.
     calcData() {
       return this.$store.getters.calcData;
+    },
+    calcDataKeys() {
+      return Object.keys(this.calcData);
     },
 
     // 商品分類的名稱, 縮短屬性.
@@ -205,107 +225,11 @@ export default {
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
 
-.categories {
-  // 路徑 path.
-  .breadcrumb-container {
-    padding: 0.375rem 0 0.375rem 0.625rem;
-  }
+.self-categories {
+  box-sizing: border-box;
 
-  // 商品種類.
-  .categories-container {
-    padding: 0.375rem;
-
-    .items {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: space-between;
-      align-items: center;
-
-      .item-container {
-        flex-basis: 18%;
-      }
-    }
-  }
-
-  // 展示商品.
-  .merchandises-container {
-    padding: 0 0.375rem;
-
-    .title {
-      padding: 0.375rem 0;
-      @include font-style(
-        $font-size: 1.5rem,
-        $font-weight: 900,
-        $color: $green
-      );
-    }
-
-    .item-container {
-      padding-bottom: 0.625rem;
-
-      &:last-child {
-        padding-bottom: 0px;
-      }
-    }
-  }
-
-  // 分頁.
-  .pagination-container {
-    padding: 0.625rem 0;
-  }
-}
-
-@media only screen and (min-width: $screen-width-md) {
-  .categories {
-    .screen-container {
-      width: 100%;
-      // 清除浮動.
-      @include clearfix();
-
-      .categories-container {
-        float: left;
-        width: 20%;
-        box-sizing: border-box;
-        padding: 0px 0.625rem 0 0;
-
-        .items {
-          flex-wrap: wrap;
-
-          .item-container {
-            flex-basis: 100%;
-            margin-bottom: 1rem;
-
-            &:last-child {
-              margin-bottom: 0px;
-            }
-          }
-        }
-      }
-
-      .merchandises-container {
-        float: left;
-        width: 80%;
-        padding: 0px;
-        box-sizing: border-box;
-
-        .title {
-          padding: 0px 0px 0.625rem 0;
-          box-sizing: border-box;
-        }
-
-        .items {
-          .item-container {
-            padding-right: 0.625rem;
-            width: calc((100% - 1.25rem) / 3);
-            display: inline-block;
-
-            &:nth-of-type(3n) {
-              padding-right: 0px;
-            }
-          }
-        }
-      }
-    }
+  .self-title-merchandises {
+    color: $green;
   }
 }
 </style>

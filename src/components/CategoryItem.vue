@@ -2,7 +2,7 @@
   <router-link
     :to="categoryLink"
     tag="a"
-    class="self-category-item text-reset text-decoration-none border rounded-3
+    class="self-category-item btn text-reset text-decoration-none border rounded-3
     d-flex flex-column py-2"
     :class="{
       active: isActive,
@@ -67,14 +67,13 @@ export default {
 @import "../assets/style/class.scss";
 
 .self-category-item {
-  box-sizing: border-box;
-
   .self-image-container {
     width: 3rem;
     height: 3rem;
   }
 
-  &.active {
+  &.active,
+  &:active {
     border-color: transparent;
     background-color: $green-alpha;
 

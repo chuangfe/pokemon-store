@@ -1,9 +1,11 @@
 <template>
-  <div class="merchandise">
-    <Header />
+  <div class="self-merchandise py-3">
+    <div class="container-xl">
+      <Header />
+    </div>
 
     <!-- path 路徑. -->
-    <div class="breadcrumb-container">
+    <div class="container-xl py-3">
       <Breadcrumb
         :homeLink="homeLink"
         :category="$route.params.category"
@@ -13,69 +15,82 @@
       />
     </div>
 
-    <div class="screen-container">
-      <!-- 商品說明. -->
-      <section class="container introduce">
-        <div class="image-container">
-          <img :src="merchandiseData.imageSrc" :alt="merchandiseData.alt" />
+    <div class="container-xl">
+      <div class="row">
+        <!-- 商品說明. -->
+        <div class="col-12 col-md-6">
+          <section class="border border-2 p-3 mb-4 mb-md-0">
+            <div class="self-image-container text-center">
+              <img
+                class="image-object-fit-height-contain mx-auto"
+                :src="merchandiseData.imageSrc"
+                :alt="merchandiseData.alt"
+              />
+            </div>
+
+            <h4 class="h4 fw-bold border-bottom border-2 py-2">商品介紹</h4>
+            <p>{{ merchandiseData.text }}</p>
+
+            <h4 class="h4 fw-bold border-bottom border-2 py-2">運費資訊</h4>
+            <p>無</p>
+          </section>
         </div>
 
-        <div class="content-container">
-          <p class="title">商品介紹</p>
-          <p class="text">{{ merchandiseData.text }}</p>
-        </div>
-
-        <div class="content-container">
-          <p class="title">運費資訊</p>
-          <p class="text">無</p>
-        </div>
-      </section>
-
-      <!-- 商品購買 -->
-      <section
-        class="container expense"
-        :class="{ 'special-offer': merchandiseData.specialOffer }"
-      >
-        <p class="title">{{ merchandiseData.name }}</p>
-
-        <p class="price original">
-          原價 NT${{ merchandiseData.originalPrice }}
-        </p>
-
-        <p class="price special" v-if="merchandiseData.specialOffer">
-          特價 NT$
-          {{ merchandiseData.specialPrice }}
-        </p>
-
-        <!-- 選擇購買數量. -->
-        <select
-          class="count"
-          v-model="count"
-          v-if="merchandiseData.remaining !== 0"
-        >
-          <option :value="0">請選擇數量</option>
-          <option
-            v-for="(num, i) in merchandiseData.remaining"
-            :key="i"
-            :value="num"
+        <!-- 商品購買 -->
+        <div class="col-12 col-md-6">
+          <section
+            class="border border-2 p-3 h-100"
+            :class="{ 'special-offer': merchandiseData.specialOffer }"
           >
-            選購 {{ num }} 項
-          </option>
-        </select>
+            <h4 class="h4 fw-bold border-bottom border-2 pb-2 m-0 mb-2">
+              {{ merchandiseData.name }}
+            </h4>
 
-        <button
-          class="buy"
-          :class="{ close: count === 0 }"
-          :disabled="merchandiseData.remaining === 0"
-          @click="clickHandler"
-        >
-          <span v-if="merchandiseData.remaining === 0">售完</span>
-          <span v-else>總計 $ {{ total }} 元 / 加入購物車</span>
-        </button>
-      </section>
+            <p
+              class="self-special fs-3 fw-bold m-0 mb-2"
+              v-if="merchandiseData.specialPrice"
+            >
+              特價 NT$
+              {{ merchandiseData.specialPrice }}
+            </p>
+
+            <p class="fs-3 fw-bold m-0 mb-2" v-else>
+              原價 NT${{ merchandiseData.originalPrice }}
+            </p>
+
+            <!-- 選擇購買數量. -->
+            <select
+              class="d-block w-100 fs-5 p-2 m-0 mb-3"
+              v-model="count"
+              v-if="merchandiseData.remaining !== 0"
+            >
+              <option :value="0">請選擇數量</option>
+              <option
+                v-for="(num, i) in merchandiseData.remaining"
+                :key="i"
+                :value="num"
+              >
+                選購 {{ num }} 項
+              </option>
+            </select>
+
+            <button
+              class="self-buy btn d-block fs-5 text-center w-100"
+              :class="{ 'self-close': count === 0 }"
+              :disabled="count === 0"
+              @click="clickHandler"
+            >
+              <span v-if="merchandiseData.remaining === 0">售完</span>
+              <span v-else>總計 $ {{ total }} 元 / 加入購物車</span>
+            </button>
+          </section>
+        </div>
+      </div>
     </div>
 
-    <Footer />
+    <div class="container-xl">
+      <Footer />
+    </div>
   </div>
 </template>
 
@@ -123,21 +138,22 @@ export default {
 
     // 商品總額.
     total() {
-      const price = this.merchandiseData.specialOffer
+      const price = this.merchandiseData.specialPrice
         ? this.merchandiseData.specialPrice
         : this.merchandiseData.originalPrice;
 
-      return price * this.count;
+      return Math.floor(price * this.count);
     },
   },
 
   methods: {
-    clickHandler() {
+    async clickHandler() {
       if (this.count === 0) return false;
 
+      // 縮短屬性長度.
       const item = this.merchandiseData;
 
-      this.$store.commit("ADD_SHOPPING_CART", {
+      const result = await this.$store.dispatch("ADD_SHOPPING_CART_ACTIONS", {
         id: item.id,
         category: item.category,
         categoryName: item.categoryName,
@@ -145,6 +161,9 @@ export default {
         price: item.specialPrice ? item.specialPrice : item.originalPrice,
         count: this.count,
       });
+
+      // 購買的商品的索引與資料.
+      // console.log(result);
     },
   },
 
@@ -170,112 +189,22 @@ export default {
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
 
-.merchandise {
-  .breadcrumb-container {
-    padding: 0 0 0.625rem 0.625rem;
+.self-merchandise {
+  .self-image-container {
+    height: 12rem;
+    box-sizing: content-box;
   }
 
-  // 兩個有邊框的容器.
-  .container {
-    margin: 0 0.375rem;
-    padding: 1.25rem;
-    border: 1px solid $black-alpha;
+  .self-special {
+    color: $green;
   }
 
-  // 商品圖片與說明文字.
-  .introduce {
-    margin-bottom: 0.625rem;
-
-    .image-container {
-      padding-bottom: 0.625rem;
-      height: 12rem;
-
-      img {
-        margin: 0 auto;
-        height: 100%;
-        object-fit: contain;
-      }
-    }
-
-    .content-container {
-      &:last-child {
-        margin-top: 0.625rem;
-      }
-
-      .title {
-        padding: 0.625rem 0;
-        @include font-style($font-size: 1.2rem, $font-weight: 900);
-        border-bottom: 1px solid $black-alpha;
-      }
-
-      .text {
-        padding-top: 0.625rem;
-      }
-    }
-  }
-
-  // 商品運費相關.
-  .expense {
-    .title {
-      margin-bottom: 0.625rem;
-      padding-bottom: 0.625rem;
-      @include font-style($font-size: 1.5rem, $font-weight: 900);
-      border-bottom: 1px solid $black-alpha;
-    }
-
-    .price {
-      @include font-style($font-size: 1.2rem, $font-weight: 900);
-    }
-
-    .special {
-      color: $green;
-    }
-
-    &.special-offer {
-      .original {
-        @include font-style($font-size: 1rem);
-        text-decoration-line: line-through;
-      }
-    }
-
-    .count {
-      margin-top: 0.625rem;
-      padding: 0.625rem;
-      width: 100%;
-      @include font-style($font-size: 1rem);
-    }
-  }
-
-  // 購買按鈕.
-  .buy {
-    margin-top: 0.625rem;
-    padding: 0.625rem 0;
-    width: 100%;
-    @include font-style($font-size: 1rem, $font-weight: 900, $color: $white);
-    text-align: center;
+  .self-buy {
+    color: $white;
     background-color: $red-alpha;
 
-    &.close,
-    &[disabled] {
+    &.self-close {
       background-color: $black-alpha;
-      color: $black;
-    }
-  }
-}
-
-@media only screen and (min-width: $screen-width-md) {
-  .merchandise {
-    .screen-container {
-      display: flex;
-      flex-wrap: nowrap;
-
-      .container {
-        flex: 1 1 50%;
-
-        &:first-child {
-          margin-bottom: 0px;
-        }
-      }
     }
   }
 }

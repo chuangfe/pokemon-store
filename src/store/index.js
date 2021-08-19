@@ -7,11 +7,15 @@ import users from "../data/users";
 
 Vue.use(Vuex);
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+
 // mutations.
 const // 新增商品至購物車.
-  ADD_SHOPPING_CART = "ADD_SHOPPING_CART",
+  ADD_SHOPPING_CART_MUTATIONS = "ADD_SHOPPING_CART_MUTATIONS",
   // 刪除購物車的商品.
-  REMOVE_SHOPPING_CART = "REMOVE_SHOPPING_CART",
+  REMOVE_SHOPPING_CART_MUTATIONS = "REMOVE_SHOPPING_CART_MUTATIONS",
   // 新增訂單.
   CREATE_ORDER = "CREATE_ORDER",
   // 刪除訂單.
@@ -33,6 +37,10 @@ const // 新增商品至購物車.
   // 修改商品資料.
   UPDATE_MERCHANDISE_MUTATIONS = "UPDATE_MERCHANDISE_MUTATIONS";
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+
 // actions.
 const // 搜尋商品.
   SEARCH_MERCHANDISE_ACTIONS = "SEARCH_MERCHANDISE_ACTIONS",
@@ -43,7 +51,15 @@ const // 搜尋商品.
   // 更新商品.
   UPDATE_MERCHANDISE_ACTIONS = "UPDATE_MERCHANDISE_ACTIONS",
   // 檢查用戶.
-  CHECK_USER_ACTIONS = "CHECK_USER_ACTIONS";
+  CHECK_USER_ACTIONS = "CHECK_USER_ACTIONS",
+  // 新增商品至購物車.
+  ADD_SHOPPING_CART_ACTIONS = "ADD_SHOPPING_CART_ACTIONS",
+  // 刪除購物車的商品.
+  REMOVE_SHOPPING_CART_ACTIONS = "REMOVE_SHOPPING_CART_ACTIONS";
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 export default new Vuex.Store({
   state: {
@@ -246,6 +262,11 @@ export default new Vuex.Store({
       },
     ],
   },
+
+  //----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
+
   // 相當於 vm 的 computed.
   getters: {
     // 補充 all 選項的所有商品.
@@ -273,10 +294,15 @@ export default new Vuex.Store({
       return Object.keys(getters.calcData);
     },
   },
+
+  //----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
+
   // 只能在這裡設定修改 state 的 data, 這裡是同步模式.
   mutations: {
     // 新增商品至購物車, price 在外面傳入時, 就決定好是原價還是特價.
-    [ADD_SHOPPING_CART](
+    [ADD_SHOPPING_CART_MUTATIONS](
       state,
       { id, category, categoryName, name, price, count }
     ) {
@@ -322,12 +348,12 @@ export default new Vuex.Store({
     },
 
     // 刪除購物車的商品.
-    [REMOVE_SHOPPING_CART](state, id) {
+    [REMOVE_SHOPPING_CART_MUTATIONS](state, id) {
       const index = state.shoppingCart.findIndex((item) => {
         return item.id === id;
       });
 
-      return state.shoppingCart.splice(index, 1);
+      state.shoppingCart.splice(index, 1);
     },
 
     // 新增訂單.
@@ -434,6 +460,10 @@ export default new Vuex.Store({
       state.data[merchandiseData.category].merchandises.splice(index, 1);
     },
   },
+
+  //----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
 
   // 邏輯運算, API 異步模式, 在必要的地方調用 mutations 修改 state.
   actions: {
@@ -552,6 +582,30 @@ export default new Vuex.Store({
           resolve(state.isSignIn);
         }, state.loadingTime);
       });
+    },
+
+    // 新增商品至購物車.
+    async [ADD_SHOPPING_CART_ACTIONS]({ commit, dispatch }, payload) {
+      // 只是為了要 loading 才這樣寫.
+      const result = await dispatch("SEARCH_MERCHANDISE_ACTIONS", {
+        id: payload.id,
+      });
+
+      if (result) commit("ADD_SHOPPING_CART_MUTATIONS", payload);
+
+      return result;
+    },
+
+    // 刪除購物車的商品.
+    async [REMOVE_SHOPPING_CART_ACTIONS]({ commit, dispatch }, id) {
+      // 只是為了要 loading 才這樣寫.
+      const result = await dispatch("SEARCH_MERCHANDISE_ACTIONS", {
+        id,
+      });
+
+      if (result) commit("REMOVE_SHOPPING_CART_MUTATIONS", id);
+
+      return result;
     },
   },
 });

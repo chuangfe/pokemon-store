@@ -1,22 +1,26 @@
 <template>
-  <div class="breadcrumb">
-    <p>
+  <div class="self-breadcrumb">
+    <p class="m-0">
       <span>
-        <router-link :to="homeLink" class="path">首頁</router-link>
+        <router-link :to="homeLink" class="path text-decoration-none"
+          >首頁</router-link
+        >
       </span>
 
-      <span class="slash">/</span>
+      <span class="mx-3">/</span>
 
       <!-- 如果是進入商品頁面, 才有商品分類的 link. -->
       <span v-if="merchandiseName">
-        <router-link :to="categoryLink" class="path">
+        <router-link :to="categoryLink" class="path text-decoration-none">
           {{ categoryName }}
         </router-link>
 
-        <!-- 商品的 path. -->
-        <span class="slash">/</span>
+        <span class="mx-3">/</span>
+
+        <!-- 商品名稱. -->
         <span>{{ merchandiseName }}</span>
       </span>
+
       <!-- 如果是進入分類頁面, 則不需要 link, 分類頁面有按鈕可以切換分類. -->
       <span v-else>{{ categoryName }}</span>
     </p>
@@ -59,21 +63,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import "../assets/style/variable.scss";
-@import "../assets/style/mixin.scss";
-
-.breadcrumb {
-  span {
-    @include font-style($font-size: 1rem);
-  }
-
-  .path {
-    @include font-style($font-size: 1rem, $font-weight: 900, $color: $blue);
-  }
-
-  .slash {
-    padding: 0 0.625rem;
-  }
-}
-</style>
+<style lang="scss" scoped></style>
