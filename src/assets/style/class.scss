@@ -28,6 +28,15 @@
   object-fit: contain;
 }
 
+// 邊框模型.
 .box-sizing-border-box {
   box-sizing: border-box;
+}
+
+// 文字間距.
+.letter-spacing-rem {
+  letter-spacing: 1rem;
+}
+.letter-spacing-px {
+  letter-spacing: 1px;
 }

@@ -1,32 +1,43 @@
 <template>
-  <div class="confirm">
-    <Header />
+  <div class="slef-confirm py-3">
+    <div class="container-xl">
+      <Header />
+    </div>
 
-    <div class="container">
-      <div class="title-container">
-        <h1 class="title">訂單列表</h1>
+    <div class="container-xl mb-3">
+      <div class="text-center">
+        <h1 class="h1 fw-bold m-0 py-3">訂單列表</h1>
         <!-- 卡車. -->
         <Truck />
       </div>
+    </div>
 
-      <div class="if-container" v-if="orders.length">
-        <div class="order-container" v-for="order of orders" :key="order.id">
-          <h2>商品列表</h2>
-
+    <div class="container-xl">
+      <div v-if="orders.length">
+        <div
+          class="border border-dark text-center mb-5"
+          v-for="order of orders"
+          :key="order.id"
+        >
+          <h3 class="h3 fw-bold m-0 pt-3">商品列表</h3>
+          <!-- 商品表格. -->
           <MerchandiseTable
             :merchandises="order.merchandises"
             :isRemove="false"
           />
 
-          <h2>收件人資訊</h2>
-
+          <h3 class="h3 fw-bold m-0 pt-4 pb-3">收件人資訊</h3>
+          <!-- 收件人列表. -->
           <RecipientList :order="order" :backSide="false" />
         </div>
       </div>
+      <!-- 沒有訂單時的內容. -->
       <Empty :text="'目前沒有訂單!'" v-else />
     </div>
 
-    <Footer />
+    <div class="container-xl">
+      <Footer />
+    </div>
   </div>
 </template>
 
@@ -58,39 +69,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@import "../assets/style/variable.scss";
-@import "../assets/style/mixin.scss";
-
-.confirm {
-  .container {
-    padding: 0px 2rem;
-
-    .title-container {
-      position: relative;
-      overflow: hidden;
-
-      .title {
-        padding-bottom: 1rem;
-        @include font-style($font-size: 1.5rem, $font-weight: 900);
-        text-align: center;
-      }
-    }
-
-    .order-container {
-      margin-bottom: 2rem;
-      border: 1px solid $black-alpha;
-
-      &:last-child {
-        margin-bottom: 0px;
-      }
-
-      h2 {
-        padding: 1rem 0;
-        @include font-style($font-size: 1.2rem, $font-weight: 900);
-        text-align: center;
-      }
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

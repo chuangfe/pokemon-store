@@ -18,7 +18,7 @@
 
     <!-- 新聞. -->
     <div class="self-news container-xl">
-      <p class="fs-6 fw-bold text-muted m-0 mx-2 p-2">
+      <p class="letter-spacing-px fs-6 fw-bold text-muted m-0 mx-2 p-2">
         2018.09.21
         <span class="badge bg-danger fs-6 fw-bold text-white p-1">緊急</span>
         因真新鎮受超夢大軍侵襲，暫時停止營業，不便之處，敬請見諒。
@@ -125,7 +125,6 @@ export default {
 
   // 新聞
   .self-news p {
-    letter-spacing: 1px;
     box-shadow: 1px 3px 5px $black-alpha;
   }
 

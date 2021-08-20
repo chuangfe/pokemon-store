@@ -21,13 +21,13 @@
     <p class="fs-5 fw-bold text-black m-0 py-2">{{ name }}</p>
 
     <!-- 商品敘述 -->
-    <p class="self-text fs-6 w-100 text-secondary m-0 border-bottom py-2">
+    <p class="fs-6 w-100 text-secondary text-truncate m-0 border-bottom py-2">
       {{ text }}
     </p>
 
     <!-- 售價容器. -->
     <div
-      class="self-price py-2 fs-5 fw-bold d-flex justify-content-between align-items-center"
+      class="self-price letter-spacing-px py-2 fs-5 fw-bold d-flex justify-content-between align-items-center"
       :class="{ 'special-offer': specialPrice }"
     >
       <!-- 特價. -->
@@ -74,7 +74,9 @@
       class="self-sold-out w-100 h-100 position-absolute top-0 start-0 d-flex justify-content-center align-items-center"
       v-if="remaining < 1"
     >
-      <p class="m-0 fs-1 fw-bold text-white text-center">售完</p>
+      <p class="letter-spacing-rem m-0 fs-1 fw-bold text-white text-center">
+        售完
+      </p>
     </div>
   </div>
 </template>
@@ -185,18 +187,8 @@ export default {
     height: 10rem;
   }
 
-  // 商品說明.
-  .self-text {
-    // 將超過容器的文字壓縮為 ... 符號.
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
   // 價格.
   .self-price {
-    letter-spacing: 1px;
-
     // 特價.
     .self-special {
       color: $green;
@@ -220,10 +212,6 @@ export default {
   // 售完.
   .self-sold-out {
     background-color: $black-alpha;
-
-    p {
-      letter-spacing: 1rem;
-    }
   }
 }
 

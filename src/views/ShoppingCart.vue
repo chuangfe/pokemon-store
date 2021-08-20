@@ -1,15 +1,22 @@
 <template>
-  <div class="self-shopping-cart">
-    <Header />
+  <div class="self-shopping-cart py-3">
+    <div class="container-xl">
+      <Header />
+    </div>
 
     <!-- 購物車區域. -->
-    <div class="container table-container">
-      <div class="title-container">
-        <div class="image-container">
-          <img src="../../public/images/poke-ball-00.png" alt="poke-ball-00" />
+    <div class="container-xl">
+      <!-- 圖片與標題. -->
+      <div class="d-flex justify-content-center align-items-center py-3">
+        <div class="self-image-container me-4">
+          <img
+            class="image-object-fit-contain"
+            src="../../public/images/poke-ball-00.png"
+            alt="poke-ball-00"
+          />
         </div>
 
-        <p class="title">購物車</p>
+        <h2 class="letter-spacing-rem h2 m-0 fw-bold">購物車</h2>
       </div>
 
       <MerchandiseTable
@@ -23,13 +30,18 @@
     </div>
 
     <!-- 訂單購買者資料. -->
-    <div class="container order-container">
-      <div class="title-container">
-        <div class="image-container">
-          <img src="../../public/images/gold-00.png" alt="poke-ball-00" />
+    <div class="container-xl">
+      <!-- 圖片與標題. -->
+      <div class="d-flex justify-content-center align-items-center py-3">
+        <div class="self-image-container me-4">
+          <img
+            class="image-object-fit-contain"
+            src="../../public/images/gold-00.png"
+            alt="poke-ball-00"
+          />
         </div>
 
-        <p class="title">訂購人</p>
+        <h2 class="letter-spacing-rem h2 m-0 fw-bold">收件人</h2>
       </div>
 
       <ValidationObserver v-slot="{ handleSubmit, invalid }">
@@ -39,78 +51,124 @@
           <!-- required 必需有值. -->
           <!-- email email 格式. -->
           <ValidationProvider
+            class="d-block mb-3 input-group"
             mode="lazy"
             name="email"
             rules="required|email"
             v-slot="{ errors }"
           >
-            <label for="email">
-              <p>
-                Email<span class="message">{{ errors[0] }}</span>
+            <label class="d-block" for="email">
+              <p class="fs-5 m-0 pb-2">
+                Email<span class="ps-2 text-danger">{{ errors[0] }}</span>
               </p>
             </label>
-            <input v-model="fromData.email" type="text" id="email" />
+
+            <input
+              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              v-model="fromData.email"
+              type="text"
+              id="email"
+            />
           </ValidationProvider>
 
           <!-- 姓名. -->
           <ValidationProvider
+            class="d-block mb-3 input-group"
             mode="lazy"
             name="name"
             rules="required|notNumber"
             v-slot="{ errors }"
           >
-            <label for="name">
-              <p>
-                姓名<span class="message">{{ errors[0] }}</span>
+            <label class="d-block" for="name">
+              <p class="fs-5 m-0 pb-2">
+                姓名<span class="ps-2 text-danger">{{ errors[0] }}</span>
               </p>
             </label>
-            <input v-model="fromData.name" type="text" id="name" />
+
+            <input
+              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              v-model="fromData.name"
+              type="text"
+              id="name"
+            />
           </ValidationProvider>
 
           <!-- 手機. -->
           <ValidationProvider
+            class="d-block mb-3 input-group"
             mode="lazy"
             name="phone"
             rules="required|length:10|phone"
             v-slot="{ errors }"
           >
-            <label for="phone">
-              <p>
-                手機號碼<span class="message">{{ errors[0] }}</span>
+            <label class="d-block" for="phone">
+              <p class="fs-5 m-0 pb-2">
+                手機號碼<span class="ps-2 text-danger">{{ errors[0] }}</span>
               </p>
             </label>
-            <input v-model="fromData.phone" type="number" id="phone" />
+
+            <input
+              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              v-model="fromData.phone"
+              type="number"
+              id="phone"
+            />
           </ValidationProvider>
 
           <!-- 地址. -->
           <ValidationProvider
+            class="d-block mb-3 input-group"
             mode="lazy"
             name="address"
             rules="required|address"
             v-slot="{ errors }"
           >
-            <label for="address">
-              <p>
-                送件地址<span class="message">{{ errors[0] }}</span>
+            <label class="d-block" for="address">
+              <p class="fs-5 m-0 pb-2">
+                送件地址<span class="ps-2 text-danger">{{ errors[0] }}</span>
               </p>
             </label>
-            <input v-model="fromData.address" type="text" id="address" />
+
+            <input
+              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              v-model="fromData.address"
+              type="text"
+              id="address"
+            />
           </ValidationProvider>
 
-          <label for="explain">補充說明</label>
-          <textarea
-            name="explain"
-            rows="4"
-            id="explain"
-            v-model="fromData.text"
-          ></textarea>
+          <!-- 補充說明. -->
+          <div class="mb-3 input-group">
+            <label class="d-block" for="explain">
+              <p class="fs-5 m-0 pb-2">補充說明</p>
+            </label>
 
-          <button type="submit" :disabled="invalid">確認訂單</button>
+            <textarea
+              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              name="explain"
+              rows="4"
+              id="explain"
+              v-model="fromData.text"
+            ></textarea>
+          </div>
+
+          <!-- 按鈕. -->
+          <div class="mb-3" v-if="shoppingCart.length">
+            <button
+              class="self-buy btn w-100 text-white fs-5 fw-bold"
+              type="submit"
+              :disabled="invalid"
+            >
+              確認訂單
+            </button>
+          </div>
         </form>
       </ValidationObserver>
     </div>
 
-    <Footer />
+    <div class="container-xl">
+      <Footer />
+    </div>
   </div>
 </template>
 
@@ -161,27 +219,19 @@ export default {
     submitHandler() {
       // 購物車內沒有商品.
       if (!this.shoppingCart.length) {
-        alert("請先購買商品.");
-
         this.$router.push({
           path: "/home",
         });
       }
       // 訂單完成.
       else {
-        alert("訂單完成.");
-
-        this.$store.commit("CREATE_ORDER", {
+        this.$store.dispatch("CREATE_ORDER_ACTIONS", {
           email: this.fromData.email,
           name: this.fromData.name,
           phone: this.fromData.phone,
           address: this.fromData.address,
           text: this.fromData.text,
           total: this.getTotal,
-        });
-
-        this.$router.push({
-          path: "/orders",
         });
       }
     },
@@ -197,83 +247,21 @@ export default {
 @import "../assets/style/class.scss";
 
 .self-shopping-cart {
-  .container {
-    margin: 0 1rem;
-
-    .title-container {
-      padding-bottom: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .image-container {
-        width: 3.75rem;
-        height: 3.75rem;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-      }
-
-      .title {
-        padding-left: 1rem;
-        @include font-style($font-size: 2rem, $font-weight: 900);
-        letter-spacing: 0.625rem;
-      }
-    }
+  .self-image-container {
+    width: 4rem;
+    height: 4rem;
   }
 
-  .table-container {
-    padding-bottom: 2rem;
+  .self-buy {
+    background-color: $green-alpha;
   }
 
-  .order-container {
-    label,
-    input,
-    textarea {
-      width: 100%;
-      display: block;
-      box-sizing: border-box;
-    }
+  .self-focus {
+    padding: 0.4rem 0.3rem;
+    transition: padding 0.1s ease-out 0s;
 
-    .message {
-      padding-left: 1rem;
-      color: $red;
-    }
-
-    input {
-      margin: 0.375rem 0 1rem 0;
-      padding: 0.375rem;
-      letter-spacing: 2px;
-      transition: padding 0.2s ease-out;
-
-      &:focus {
-        padding: 0.625rem;
-        transform: scaley(120%);
-      }
-    }
-
-    textarea {
-      margin: 0.375rem 0 1rem 0;
-      padding: 0.375rem;
-      line-height: 1.5em;
-    }
-
-    button {
-      padding: 0.625rem 0;
-      width: 100%;
-      @include font-style($font-size: 1.2rem);
-      color: $white;
-      border: 1px solid $black-alpha;
-      background-color: $green;
-      box-sizing: border-box;
-
-      &[disabled] {
-        color: $black;
-        background-color: $black-alpha;
-      }
+    &:focus {
+      padding: 0.8rem 0.6rem;
     }
   }
 }

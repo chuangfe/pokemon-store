@@ -1,13 +1,22 @@
 <template>
-  <div class="sign-in">
-    <div class="log-container">
-      <img src="../../public/images/pokemon-store.png" alt="pokemon-store" />
+  <div class="self-sign-in position-absolute top-50 start-50 translate-middle">
+    <!-- logo. -->
+    <div class="self-container">
+      <div class="self-image-container mx-auto">
+        <img
+          class="image-object-fit-width-contain"
+          src="../../public/images/pokemon-store.png"
+          alt="pokemon-store"
+        />
+      </div>
     </div>
 
     <!-- 卡車. -->
-    <Truck />
+    <div class="self-container">
+      <Truck />
+    </div>
 
-    <div class="form-container">
+    <div class="self-container">
       <ValidationObserver v-slot="{ handleSubmit, invalid }">
         <form @submit.prevent="handleSubmit(submitHandler)">
           <!-- Email 驗證. -->
@@ -15,17 +24,20 @@
           <!-- required 必需有值. -->
           <!-- email email 格式. -->
           <ValidationProvider
+            class="d-block mb-3 input-group"
             name="email"
             rules="required|email"
             v-slot="{ errors }"
           >
-            <label for="email">
-              <p>
-                <span class="title">Email</span>
-                <span class="message">{{ message || errors[0] }}</span>
+            <label class="d-block" for="email">
+              <p class="fs-5 m-0 pb-2">
+                Email
+                <span class="ps-2 text-danger">{{ message || errors[0] }}</span>
               </p>
             </label>
+
             <input
+              class="letter-spacing-px fs-5 w-100 self-focus form-control"
               v-model="email"
               type="text"
               id="email"
@@ -35,17 +47,20 @@
           </ValidationProvider>
 
           <ValidationProvider
+            class="d-block mb-3 input-group"
             name="password"
             rules="required|alpha_num"
             v-slot="{ errors }"
           >
             <label for="password">
-              <p>
-                <span class="title">Password</span>
-                <span class="message">{{ message || errors[0] }}</span>
+              <p class="fs-5 m-0 pb-2">
+                Password
+                <span class="ps-2 text-danger">{{ message || errors[0] }}</span>
               </p>
             </label>
+
             <input
+              class="letter-spacing-px fs-5 w-100 self-focus form-control"
               v-model="password"
               type="password"
               id="password"
@@ -54,8 +69,25 @@
             />
           </ValidationProvider>
 
-          <button type="submit" :disabled="invalid">登入</button>
-          <router-link to="/home">首頁</router-link>
+          <div class="row">
+            <div class="col-12 pb-3">
+              <button
+                class="self-button btn text-white fs-5 fw-bold w-100"
+                type="submit"
+                :disabled="invalid"
+              >
+                登入
+              </button>
+            </div>
+
+            <div class="col-12">
+              <router-link
+                class="self-button btn text-white fs-5 fw-bold w-100"
+                to="/home"
+                >首頁</router-link
+              >
+            </div>
+          </div>
         </form>
       </ValidationObserver>
     </div>
@@ -86,10 +118,10 @@ export default {
       });
 
       if (check) {
+        this.message = "";
         this.$router.push({ path: "/back-side/back-side-merchandises" });
-        console.log("SignIn", check);
       } else {
-        console.log("帳號或密碼錯誤.");
+        this.message = "帳號或密碼錯誤";
       }
     },
   },
@@ -101,61 +133,18 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
-.sign-in {
-  margin: 0 auto;
-  width: 18.75rem;
-  height: 100vh;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: center;
+.self-sign-in {
+  .self-container {
+    max-width: 30rem;
 
-  .log-container {
-    padding-bottom: 1.25rem;
-    width: 100%;
-
-    img {
-      width: 100%;
-      object-fit: contain;
-    }
-  }
-
-  .form-container {
-    @include font-style($font-size: 1rem);
-
-    p {
-      padding: 0.625rem 0 0.3125rem 0;
-      display: flex;
-
-      span {
-        flex-grow: 1;
-        flex-shrink: 1;
-      }
-
-      .message {
-        color: $red;
-        text-align: right;
-      }
+    .self-image-container {
+      max-width: 20rem;
     }
 
-    input,
-    button,
-    a {
-      width: 100%;
-      box-sizing: border-box;
-      @include font-style($font-size: 1.2rem);
-      display: block;
-    }
-
-    button,
-    a {
-      margin-top: 1rem;
-      padding: 0.3125rem 0;
-      color: $white;
+    .self-button {
       background-color: $green-alpha;
-      text-align: center;
-      border-radius: 10px;
     }
   }
 }

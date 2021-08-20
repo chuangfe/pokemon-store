@@ -1,28 +1,58 @@
 <template>
-  <ul class="recipient">
-    <li>
-      <p class="title">Email</p>
-      <p class="content">{{ order.email }}</p>
+  <ul class="self-recipient list-unstyled m-0 p-0">
+    <li class="border-bottom pb-2">
+      <div class="row">
+        <div class="col-6">
+          <p class="text-center fs-5 m-0 fw-bold">Email</p>
+        </div>
+        <div class="col-6">
+          <p class="text-center fs-5 m-0">{{ order.email }}</p>
+        </div>
+      </div>
     </li>
 
-    <li>
-      <p class="title">姓名</p>
-      <p class="content">{{ order.name }}</p>
+    <li class="border-bottom pb-2 pt-3">
+      <div class="row">
+        <div class="col-6">
+          <p class="text-center fs-5 m-0 fw-bold">姓名</p>
+        </div>
+        <div class="col-6">
+          <p class="text-center fs-5 m-0">{{ order.name }}</p>
+        </div>
+      </div>
     </li>
 
-    <li>
-      <p class="title">電話</p>
-      <p class="content">{{ order.phone }}</p>
+    <li class="border-bottom pb-2 pt-3">
+      <div class="row">
+        <div class="col-6">
+          <p class="text-center fs-5 m-0 fw-bold">電話</p>
+        </div>
+        <div class="col-6">
+          <p class="text-center fs-5 m-0">{{ order.phone }}</p>
+        </div>
+      </div>
     </li>
 
-    <li>
-      <p class="title">地址</p>
-      <p class="content">{{ order.address }}</p>
+    <li class="border-bottom pb-2 pt-3">
+      <div class="row">
+        <div class="col-6">
+          <p class="text-center fs-5 m-0 fw-bold">地址</p>
+        </div>
+        <div class="col-6">
+          <p class="text-center fs-5 m-0">{{ order.address }}</p>
+        </div>
+      </div>
     </li>
 
-    <li>
-      <p class="title">補充</p>
-      <p class="content">{{ order.text }}</p>
+    <li class="border-bottom pb-2 pt-3">
+      <div class="row">
+        <div class="col-6">
+          <p class="text-center fs-5 m-0 fw-bold">補充</p>
+        </div>
+        <div class="col-6">
+          <p class="text-center fs-5 m-0">{{ order.text }}</p>
+        </div>
+      </div>
     </li>
 
     <li class="back-side" v-if="backSide">
@@ -31,18 +61,18 @@
         <span class="status" v-else>尚未付款</span>
       </div>
       <div class="around-container">
-        <button class="remove-order" @click="removeOrder(order.id)">
+        <button class="remove-order" @click="removeOrderHandler(order)">
           <span>刪除訂單</span>
         </button>
       </div>
     </li>
 
-    <li v-if="!backSide">
+    <li class="py-2" v-else>
       <button
-        class="payment"
-        :class="{ confirm: order.payment }"
+        class="self-payment btn text-white fs-5 fw-bold"
+        :class="{ 'self-confirm': order.payment }"
         :disabled="order.payment"
-        @click="clickHandler(order.id)"
+        @click="paymentHandler(order.id)"
       >
         <span v-if="order.payment">已付款</span>
         <span v-else>確認付款</span>
@@ -75,7 +105,8 @@ export default {
   },
 
   methods: {
-    clickHandler(id) {
+    // 訂單付款.
+    paymentHandler(id) {
       // 假的讀取進度.
       loadHandler.isLoading();
 
@@ -83,12 +114,9 @@ export default {
       this.$store.commit("SET_PAYMENT", id);
     },
 
-    removeOrder(id) {
-      // 假的讀取進度.
-      loadHandler.isLoading();
-
+    removeOrderHandler(order) {
       // 刪除訂單.
-      this.$store.commit("REMOVE_ORDER", id);
+      this.$store.dispatch("REMOVE_ORDER_ACTIONS", order);
     },
   },
 };
@@ -98,76 +126,14 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
-.recipient {
-  li {
-    padding: 10px 0;
-    border-top: 1px solid $black-alpha;
-    display: flex;
-    justify-content: center;
+.self-recipient {
+  .self-payment {
+    width: 80%;
+    background-color: $green-alpha;
+    border-radius: 10px;
 
-    .title,
-    .content {
-      @include font-style($font-size: 1.2rem);
-      text-align: center;
-    }
-
-    .title {
-      flex-basis: 30%;
-    }
-
-    .content {
-      flex-basis: 70%;
-    }
-
-    .payment {
-      padding: 0.625rem 0;
-      width: 80%;
+    &.self-confirm {
       background-color: $red-alpha;
-      border-radius: 10px;
-
-      span {
-        @include font-style($font-size: 1.2rem, $color: $white);
-        letter-spacing: 2px;
-      }
-
-      &.confirm {
-        background-color: $green-alpha;
-
-        span {
-          color: $white;
-        }
-      }
-    }
-
-    &.back-side {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: space-around;
-
-      .around-container {
-        flex-basis: 45%;
-        text-align: center;
-
-        .status,
-        .remove-order span {
-          padding: 0.625rem 0;
-          width: 100%;
-          box-sizing: border-box;
-          @include font-style($font-size: 1.2rem, $color: $white);
-          background-color: $red-alpha;
-          border-radius: 10px;
-          display: block;
-        }
-
-        .confirm {
-          background-color: $green-alpha;
-        }
-
-        .remove-order {
-          width: 100%;
-          display: block;
-        }
-      }
     }
   }
 }

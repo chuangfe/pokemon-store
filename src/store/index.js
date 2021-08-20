@@ -17,7 +17,7 @@ const // 新增商品至購物車.
   // 刪除購物車的商品.
   REMOVE_SHOPPING_CART_MUTATIONS = "REMOVE_SHOPPING_CART_MUTATIONS",
   // 新增訂單.
-  CREATE_ORDER = "CREATE_ORDER",
+  CREATE_ORDER_MUTATIONS = "CREATE_ORDER_MUTATIONS",
   // 刪除訂單.
   REMOVE_ORDER = "REMOVE_ORDER",
   // 訂單確認付款.
@@ -55,7 +55,13 @@ const // 搜尋商品.
   // 新增商品至購物車.
   ADD_SHOPPING_CART_ACTIONS = "ADD_SHOPPING_CART_ACTIONS",
   // 刪除購物車的商品.
-  REMOVE_SHOPPING_CART_ACTIONS = "REMOVE_SHOPPING_CART_ACTIONS";
+  REMOVE_SHOPPING_CART_ACTIONS = "REMOVE_SHOPPING_CART_ACTIONS",
+  // 新增訂單.
+  CREATE_ORDER_ACTIONS = "CREATE_ORDER_ACTIONS",
+  // 刪除訂單.
+  REMOVE_ORDER_ACTIONS = "REMOVE_ORDER_ACTIONS",
+  // 依照訂單查商品資料.
+  ORDER_SEARCH_MERCHANDISE_ACTIONS = "ORDER_SEARCH_MERCHANDISE_ACTIONS";
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -357,36 +363,9 @@ export default new Vuex.Store({
     },
 
     // 新增訂單.
-    [CREATE_ORDER](state, { email, name, phone, address, text, total }) {
-      const id = state.orders.length
-        ? state.orders[state.orders.length - 1].id + 1
-        : 0;
-
-      // 訂單補商品資料.
-      const order = {
-        // 訂單編號.
-        id,
-        // 信箱.
-        email,
-        // 姓名.
-        name,
-        // 電話.
-        phone,
-        // 地址.
-        address,
-        // 訂單補充說明.
-        text,
-        // 訂單價格.
-        total,
-        // 訂單商品.
-        merchandises: state.shoppingCart,
-        // 是否付款.
-        payment: false,
-      };
-
+    [CREATE_ORDER_MUTATIONS](state, payload) {
       // 新增訂單.
-      state.orders.push(order);
-
+      state.orders.push(payload);
       // 清空購物車.
       state.shoppingCart = [];
     },
@@ -476,22 +455,21 @@ export default new Vuex.Store({
        * 只是單純想加入讀取的畫面, 只能自己寫 Promise 因為要在需要的地方使用 resolve 方法, 不然 actions 本身就是 Promise, 在 component 補上 async await 就能拿到 actions return 的值.
        */
       return new Promise((resolve, reject) => {
+        // 找舊的商品資料, 找不到會返回 undefined.
+        const oldItem = getters.calcData.all.merchandises.find((item) => {
+          return item.id === id;
+        });
+
+        // 找舊商品的索引.
+        const index = oldItem
+          ? state.data[oldItem.category].merchandises.findIndex(
+              (item) => item.id === oldItem.id
+            )
+          : -1;
+
         setTimeout(() => {
-          // 找舊的商品資料, 找不到會返回 undefined.
-          const oldItem = getters.calcData.all.merchandises.find((item) => {
-            return item.id === id;
-          });
-
-          // 找舊商品的索引.
-          const index = oldItem
-            ? state.data[oldItem.category].merchandises.findIndex(
-                (item) => item.id === oldItem.id
-              )
-            : -1;
-
           // 讀取完成.
           commit("LOADED");
-
           // 這裡是重點, 因為要使用 setTimeout, 才必需自己寫 return new Promise.
           resolve({ oldItem, index });
         }, state.loadingTime);
@@ -606,6 +584,126 @@ export default new Vuex.Store({
       if (result) commit("REMOVE_SHOPPING_CART_MUTATIONS", id);
 
       return result;
+    },
+
+    // order 查尋商品資料, payload 應該相當於 shoppingCart.
+    [ORDER_SEARCH_MERCHANDISE_ACTIONS]({ state, commit }, payload) {
+      // 讀取中.
+      commit("LOADING");
+
+      return new Promise((resolve, reject) => {
+        const dataArr = [];
+
+        for (let i = 0; i < payload.length; i++) {
+          // 分類中的全部商品.
+          let merchandises = state.data[payload[i].category].merchandises;
+          // 舊的商品索引.
+          let index = merchandises.findIndex((item) => {
+            return item.id === payload[i].id;
+          });
+
+          dataArr.push({
+            index,
+            // 舊的商品資料.
+            oldItem: merchandises[index],
+          });
+        }
+
+        setTimeout(() => {
+          // 讀取完成.
+          commit("LOADED");
+
+          resolve(dataArr);
+        }, state.loadingTime);
+      });
+    },
+
+    // 新增訂單, 還需要刪除剩餘商品數量.
+    async [CREATE_ORDER_ACTIONS](
+      { state, commit, dispatch },
+      { email, name, phone, address, text, total }
+    ) {
+      // 找購物車內的商品, 應對的 data 資料.
+      const oldItemsArr = await dispatch(
+        "ORDER_SEARCH_MERCHANDISE_ACTIONS",
+        state.shoppingCart
+      );
+
+      // 依照購物車購買的數量, 去減少庫存.
+      oldItemsArr.forEach((el, i) => {
+        // 複製物件.
+        const data = Object.assign({}, el.oldItem);
+        // 減少商品庫存.
+        data.remaining -= state.shoppingCart[i].count;
+        // 更新商品資料.
+        commit("UPDATE_MERCHANDISE_MUTATIONS", {
+          // 商品的索引.
+          index: el.index,
+          // 商品的新資料.
+          merchandiseData: data,
+        });
+      });
+
+      // 訂單 id.
+      const id = state.orders.length
+        ? state.orders[state.orders.length - 1].id + 1
+        : 0;
+
+      // 訂單補商品資料.
+      const order = {
+        // 訂單編號.
+        id,
+        // 信箱.
+        email,
+        // 姓名.
+        name,
+        // 電話.
+        phone,
+        // 地址.
+        address,
+        // 訂單補充說明.
+        text,
+        // 訂單價格.
+        total,
+        // 訂單商品.
+        merchandises: state.shoppingCart,
+        // 是否付款.
+        payment: false,
+      };
+
+      // 新增訂單.
+      commit("CREATE_ORDER_MUTATIONS", order);
+
+      return order;
+    },
+
+    // 刪除訂單.
+    async [REMOVE_ORDER_ACTIONS]({ commit, dispatch }, payload) {
+      // 找購物車內的商品, 應對的 data 資料.
+      const oldItemsArr = await dispatch(
+        "ORDER_SEARCH_MERCHANDISE_ACTIONS",
+        payload.merchandises
+      );
+
+      // 依照刪除的訂單商品, 增加商品數存.
+      oldItemsArr.forEach((el, i) => {
+        // 複製物件.
+        const data = Object.assign({}, el.oldItem);
+        // 減少商品庫存.
+        data.remaining += payload.merchandises[i].count;
+        // 更新商品資料.
+        commit("UPDATE_MERCHANDISE_MUTATIONS", {
+          // 商品的索引.
+          index: el.index,
+          // 商品的新資料.
+          merchandiseData: data,
+        });
+      });
+
+      // 刪除訂單.
+      commit("REMOVE_ORDER", payload.id);
+
+      return payload;
     },
   },
 });

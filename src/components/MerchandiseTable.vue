@@ -1,11 +1,13 @@
 <template>
-  <table class="merchandise-table">
+  <table
+    class="self-merchandise-table w-100 table table-hover text-center m-0 align-middle"
+  >
     <thead>
-      <tr>
-        <td class="title">商品名稱</td>
-        <td class="count">數量</td>
-        <td class="price">單價</td>
-        <td class="delete" v-if="isRemove">刪除</td>
+      <tr class="fs-5">
+        <th>商品名稱</th>
+        <th>數量</th>
+        <th>單價</th>
+        <th v-if="isRemove">刪除</th>
       </tr>
     </thead>
 
@@ -15,7 +17,7 @@
         <td>{{ item.count }}</td>
         <td>NT $ {{ item.price }} 元</td>
         <td v-if="isRemove">
-          <button @click="$emit('remove', item.id)">
+          <button class="btn" @click="$emit('remove', item.id)">
             <i class="bi bi-archive"></i>
           </button>
         </td>
@@ -64,55 +66,9 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
-.merchandise-table {
-  width: 100%;
+.self-merchandise-table {
   box-sizing: border-box;
-
-  thead {
-    @include font-style($font-size: 1.2rem);
-    background-color: $black-alpha;
-  }
-
-  tr {
-    padding: 10px 0;
-    // height: 3rem;
-    border-top: 1px solid $black-alpha;
-    line-height: 3rem;
-
-    &:last-child {
-      border-bottom: 1px solid $black-alpha;
-    }
-  }
-
-  td {
-    // padding-left: 0.625rem;
-    text-align: center;
-    vertical-align: middle;
-    box-sizing: border-box;
-  }
-
-  i {
-    @include font-style($font-size: 1rem);
-  }
-
-  .title {
-    width: 30%;
-  }
-
-  .price {
-    width: 35%;
-  }
-
-  .empty {
-    padding: 3rem 0;
-    background-color: $black-alpha;
-    border-radius: 10px;
-
-    p {
-      @include font-style($font-size: 1.5rem, $font-weight: 900);
-      text-align: center;
-    }
-  }
 }
 </style>

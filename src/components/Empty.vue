@@ -1,11 +1,13 @@
 <template>
-  <div class="empty">
-    <p>{{ text }}</p>
+  <div class="self-empty bg-secondary py-5">
+    <p class="letter-spacing-rem fs-4 text-white text-center fw-bold m-0">
+      {{ text }}
+    </p>
   </div>
 </template>
 
 <script>
-// 沒有資料時代替的組件.
+// 沒有資料時代替的元件.
 
 export default {
   name: "Empty",
@@ -18,15 +20,9 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
-.empty {
-  padding: 3rem 0;
-  background-color: $title-color-alpha;
-  border-radius: 10px;
-
-  p {
-    @include font-style($font-size: 1.5rem, $font-weight: 900);
-    text-align: center;
-  }
+.self-empty {
+  border-radius: 1rem;
 }
 </style>

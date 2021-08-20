@@ -226,8 +226,6 @@ export default {
 @import "../assets/style/class.scss";
 
 .self-categories {
-  box-sizing: border-box;
-
   .self-title-merchandises {
     color: $green;
   }

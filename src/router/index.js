@@ -98,6 +98,11 @@ const routes = [
     path: "/sign-in",
     name: "SignIn",
     component: SignIn,
+
+    // 進入 SignIn 時檢查登入.
+    beforeEnter(to, from, next) {
+      Store.state.isSignIn ? next("/back-side") : next();
+    },
   },
 
   // 後台頁面.
@@ -120,6 +125,8 @@ const routes = [
         redirect: "/back-side/back-side-merchandises",
       },
     ],
+
+    // 進入 BackSide 時檢查登入.
     beforeEnter(to, from, next) {
       Store.state.isSignIn ? next() : next("/home");
     },

@@ -192,7 +192,6 @@ export default {
 .self-merchandise {
   .self-image-container {
     height: 12rem;
-    box-sizing: content-box;
   }
 
   .self-special {

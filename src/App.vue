@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="mx-auto">
     <router-view />
 
     <div class="loading" v-show="$store.state.isLoading">
@@ -18,11 +18,6 @@ export default {};
 @import "./assets/style/variable.scss";
 
 #app {
-  margin: 0 auto;
-  max-width: 1080px;
-  min-height: 100%;
-  // overflow-x: hidden;
-
   .loading {
     width: 100vw;
     height: 100vh;
