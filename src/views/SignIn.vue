@@ -1,8 +1,8 @@
 <template>
-  <div class="self-sign-in position-absolute top-50 start-50 translate-middle">
+  <div class="self-sign-in position-absolute top-50 start-50 translate-middle ">
     <!-- logo. -->
-    <div class="self-container">
-      <div class="self-image-container mx-auto">
+    <div class="self-container mx-auto">
+      <div class="self-image-container w-100">
         <img
           class="image-object-fit-width-contain"
           src="../../public/images/pokemon-store.png"
@@ -12,11 +12,11 @@
     </div>
 
     <!-- 卡車. -->
-    <div class="self-container">
+    <div class="self-container mx-auto">
       <Truck />
     </div>
 
-    <div class="self-container">
+    <div class="self-container mx-auto">
       <ValidationObserver v-slot="{ handleSubmit, invalid }">
         <form @submit.prevent="handleSubmit(submitHandler)">
           <!-- Email 驗證. -->
@@ -136,12 +136,10 @@ export default {
 @import "../assets/style/class.scss";
 
 .self-sign-in {
-  .self-container {
-    max-width: 30rem;
+  width: 80%;
 
-    .self-image-container {
-      max-width: 20rem;
-    }
+  .self-container {
+    max-width: 25rem;
 
     .self-button {
       background-color: $green-alpha;

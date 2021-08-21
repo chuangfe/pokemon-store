@@ -196,6 +196,9 @@ export default {
           : this.index > this.getPage
           ? this.getPage
           : this.index;
+
+      // 畫面回到最上方.
+      window.scrollTo(0, 0);
     },
   },
 

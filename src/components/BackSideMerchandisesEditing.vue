@@ -1,112 +1,167 @@
 <template>
-  <div class="editing">
-    <div class="title-container">
-      <p class="title">
+  <div class="self-editing">
+    <div class="self-title d-flex justify-content-between align-items-center">
+      <h4 class="h4 m-0 text-white fw-bold p-3">
         編輯商品
-      </p>
+      </h4>
+
+      <button
+        class="btn text-white fs-3 me-1"
+        @click="$emit('setEditing', { onOff: false, id: '' })"
+      >
+        <i class="bi bi-x-lg"></i>
+      </button>
     </div>
 
-    <div class="content-container">
-      <div class="container image-container" v-if="calcData.imageSrc">
-        <img :src="calcData.imageSrc" :alt="calcData.alt" @load="LoadHandler" />
+    <div class="bg-white py-3 px-2">
+      <div class="self-image-container text-center" v-if="calcData.imageSrc">
+        <img
+          class="image-object-fit-height-contain"
+          :src="calcData.imageSrc"
+          :alt="calcData.alt"
+          @load="LoadHandler"
+        />
       </div>
 
-      <div class="container src-container">
-        <label for="src">
-          <p class="between-container src">圖片網址</p>
-          <p class="between-container">
-            <span class="text download" v-show="imageSrcError"
+      <div class="mt-3 pb-3">
+        <label
+          class="d-flex flex-nowrap align-items-center justify-content-between pb-1"
+          for="src"
+        >
+          <p class="m-0 fw-bold">圖片網址</p>
+
+          <p class="m-0">
+            <span class="self-download fw-bold" v-show="imageSrcError"
               >圖片下載成功</span
             >
-            <span class="text error" v-show="!imageSrcError">圖片下載失敗</span>
+
+            <span class="self-error fw-bold" v-show="!imageSrcError"
+              >圖片下載失敗</span
+            >
           </p>
         </label>
+
         <input
           type="text"
           id="src"
+          class="form-control"
           v-model.trim="calcData.imageSrc"
           @input="imageSrcError = false"
         />
       </div>
 
-      <div class="container">
-        <label for="alt">
-          圖片 Alt
+      <div class="pb-3">
+        <label class="d-block pb-1" for="alt">
+          <p class="m-0 fw-bold">
+            圖片 Alt
+          </p>
         </label>
-        <input type="text" id="alt" v-model.trim="calcData.alt" />
+
+        <input
+          class="form-control"
+          type="text"
+          id="alt"
+          v-model.trim="calcData.alt"
+        />
       </div>
 
-      <div class="container">
-        <label for="name">
-          商品名稱
+      <div class="pb-3">
+        <label class="d-block" for="name">
+          <p class="m-0 fw-bold">商品名稱</p>
         </label>
-        <input type="text" id="name" v-model.trim="calcData.name" />
+
+        <input
+          class="form-control"
+          type="text"
+          id="name"
+          v-model.trim="calcData.name"
+        />
       </div>
 
-      <div class="container">
-        <label for="category">
-          商品分類
+      <div class="pb-3">
+        <label class="d-block" for="category">
+          <p class="m-0 fw-bold">商品分類</p>
         </label>
-        <select name="category" id="category" v-model="getCategory">
+
+        <select
+          name="category"
+          id="category"
+          class="form-control"
+          v-model="getCategory"
+        >
           <option v-for="(value, key) of data" :key="key" :value="key">{{
             value.name
           }}</option>
         </select>
       </div>
 
-      <div class="container">
-        <label for="remaining">
-          庫存
+      <div class="pb-3">
+        <label class="d-block" for="remaining">
+          <p class="m-0 fw-bold">商品庫存</p>
         </label>
+
         <input
           type="number"
           id="remaining"
+          class="form-control"
           v-model.number="calcData.remaining"
         />
       </div>
 
-      <div class="container">
-        <label for="original-price">
-          售價
+      <div class="pb-3">
+        <label class="d-block" for="original-price">
+          <p class="m-0 fw-bold">原價</p>
         </label>
+
         <input
           type="number"
           id="original-price"
+          class="form-control"
           v-model.number="calcData.originalPrice"
         />
       </div>
 
-      <div class="container">
-        <label for="special-price">
-          特價
+      <div class="pb-3">
+        <label class="d-block" for="special-price">
+          <p class="m-0 fw-bold">特價</p>
         </label>
+
         <input
           type="number"
           id="special-price"
+          class="form-control"
           v-model.number="calcData.specialPrice"
         />
       </div>
 
-      <div class="container">
-        <label for="text">
-          商品說明
+      <div class="pb-3">
+        <label class="d-block" for="text">
+          <p class="m-0 fw-bold">商品介紹</p>
         </label>
+
         <textarea
           name="text"
           id="text"
+          class="form-control"
           rows="10"
           v-model.trim="calcData.text"
         ></textarea>
       </div>
 
-      <div class="container button-container">
+      <div class="text-end">
         <button
-          class="close"
+          class="self-close btn text-white fw-bold me-3 px-3"
           @click="$emit('setEditing', { onOff: false, id: '' })"
         >
           取消
         </button>
-        <button class="save" @click="saveHandler">確認</button>
+
+        <button
+          class="self-save btn text-white fw-bold px-3"
+          @click="saveHandler"
+        >
+          確認
+        </button>
       </div>
     </div>
   </div>
@@ -215,33 +270,23 @@ export default {
     async saveHandler() {
       // 在這理判斷, 是要更新商品, 還是新增商品.
       // SEARCH_MERCHANDISE_ACTIONS 有返回 new Promise, 所以不用寫 then.
-      const result = await this.$store.dispatch("SEARCH_MERCHANDISE_ACTIONS", {
-        id: this.id,
-      });
-
-      // 保存 console.log 需要的變數.
-      let item;
+      const result = (
+        await this.$store.dispatch("SEARCH_MERCHANDISE_ACTIONS", [
+          this.calcData,
+        ])
+      )[0];
 
       // 更新商品資料.
       if (result.oldItem) {
-        item = await this.$store.dispatch(
-          "UPDATE_MERCHANDISE_ACTIONS",
-          this.calcData
-        );
+        await this.$store.dispatch("UPDATE_MERCHANDISE_ACTIONS", this.calcData);
       }
       // 新增商品.
       else {
-        item = await this.$store.dispatch(
-          "CREATE_MERCHANDISE_ACTIONS",
-          this.calcData
-        );
+        await this.$store.dispatch("CREATE_MERCHANDISE_ACTIONS", this.calcData);
       }
 
       // 關閉編輯.
       this.$emit("setEditing", { onOff: false });
-
-      // 返回商品.
-      console.log("update", item);
     },
 
     LoadHandler() {
@@ -261,95 +306,37 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
-.editing {
-  width: 100%;
-
-  .title-container {
-    padding: 1rem;
-    background-color: $title-color;
-    @include font-style($font-size: 1.5rem, $font-weight: 900, $color: $white);
+.self-editing {
+  // 標題.
+  .self-title {
+    background-color: $editing-color;
   }
 
-  .content-container {
-    background-color: $white;
+  // 圖片容器.
+  .self-image-container {
+    height: 10rem;
+  }
 
-    .container {
-      padding: 1rem;
-      @include font-style($font-size: 1.2rem);
+  // 圖片下載成功.
+  .self-download {
+    color: $green;
+  }
 
-      label {
-        margin-bottom: 0.625rem;
-        display: block;
-      }
+  // 圖片下載失敗.
+  .self-error {
+    color: $red;
+  }
 
-      input {
-        padding: 0.3125rem;
-        width: 100%;
-        letter-spacing: 1px;
-        box-sizing: border-box;
-      }
+  // 關閉編輯按鈕.
+  .self-close {
+    background-color: $red-alpha;
+  }
 
-      select {
-        padding: 0.3125rem;
-        @include font-style($font-size: 1.2rem);
-      }
-
-      textarea {
-        padding: 0.3125rem;
-        width: 100%;
-        letter-spacing: 1px;
-        box-sizing: border-box;
-      }
-    }
-
-    .image-container {
-      margin: 0 auto;
-      height: 200px;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-    }
-
-    .src-container {
-      label {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-
-        .download {
-          color: $green;
-        }
-
-        .error {
-          color: $red;
-        }
-      }
-    }
-
-    .button-container {
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: flex-end;
-
-      button {
-        padding: 0.3125rem 1rem;
-        border-radius: 10px;
-        @include font-style($font-size: 1.2rem, $color: $white);
-
-        &.close {
-          margin-right: 1rem;
-          background-color: $red-alpha;
-        }
-
-        &.save {
-          background-color: $green-alpha;
-        }
-      }
-    }
+  // 保存編輯按鈕.
+  .self-save {
+    background-color: $green-alpha;
   }
 }
 </style>

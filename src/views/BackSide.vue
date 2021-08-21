@@ -1,16 +1,32 @@
 <template>
-  <div class="back-side">
-    <header class="header">
-      <div class="between-container">
-        <div class="content-container">
-          <router-link to="/back-side/back-side-merchandises">產品</router-link>
-          <router-link to="/back-side/back-side-orders">訂單</router-link>
+  <div class="self-back-side position-relative">
+    <header class="self-header">
+      <div
+        class="container-xl d-flex align-items-center justify-content-between"
+      >
+        <div>
+          <router-link
+            class="btn text-white fs-5 fw-bold"
+            to="/back-side/back-side-merchandises"
+            >產品</router-link
+          >
+          <router-link
+            class="btn text-white fs-5 fw-bold"
+            to="/back-side/back-side-orders"
+            >訂單</router-link
+          >
         </div>
-      </div>
-      <div class="between-container">
-        <div class="content-container">
-          <router-link to="/home">首頁</router-link>
-          <a href="#/home" @click="signOutHandler">登出</a>
+
+        <div>
+          <router-link class="btn text-white fs-5 fw-bold" to="/home"
+            >首頁</router-link
+          >
+          <a
+            class="btn text-white fs-5 fw-bold"
+            href="#/home"
+            @click="signOutHandler"
+            >登出</a
+          >
         </div>
       </div>
     </header>
@@ -38,35 +54,9 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
-.back-side {
-  position: relative;
-
-  .header {
-    width: 100%;
+.self-back-side {
+  .self-header {
     background-color: $blue-alpha;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-
-    .between-container {
-      display: flex;
-      flex-wrap: nowrap;
-
-      .content-container {
-        display: flex;
-        flex-wrap: nowrap;
-
-        a {
-          padding: 1rem;
-          @include font-style($font-size: 1rem, $color: $white);
-          display: block;
-
-          &:first-child {
-            margin-right: 1rem;
-          }
-        }
-      }
-    }
   }
 }
 </style>

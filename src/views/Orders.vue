@@ -23,6 +23,7 @@
           <!-- 商品表格. -->
           <MerchandiseTable
             :merchandises="order.merchandises"
+            :total="order.total"
             :isRemove="false"
           />
 

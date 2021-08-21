@@ -1,24 +1,35 @@
 <template>
-  <div class="back-side-orders">
-    <div class="path-container">
-      <p class="title">訂單列表</p>
+  <div class="self-back-side-orders ">
+    <div class="container-xl p-3 ">
+      <h2 class="h2 m-0 fw-bold">訂單列表</h2>
     </div>
 
-    <div class="if-container" v-if="orders.length">
-      <div class="order-container" v-for="order of orders" :key="order.id">
-        <h2>商品列表</h2>
+    <div class="container-xl" v-if="orders.length">
+      <div class="row">
+        <div
+          class="col-12 col-sm-6 text-center mb-4"
+          v-for="order of orders"
+          :key="order.id"
+        >
+          <div class="border">
+            <h4 class="m-0 fw-bold py-3">商品列表</h4>
 
-        <MerchandiseTable
-          :merchandises="order.merchandises"
-          :isRemove="false"
-        />
+            <MerchandiseTable
+              :merchandises="order.merchandises"
+              :total="order.total"
+              :isRemove="false"
+            />
 
-        <h2>收件人資訊</h2>
+            <h4 class="m-0 fw-bold pb-3 pt-4">收件人資訊</h4>
 
-        <RecipientList :order="order" :backSide="true" />
+            <RecipientList :order="order" :backSide="true" />
+          </div>
+        </div>
       </div>
     </div>
-    <Empty :text="'目前沒有訂單!'" v-else />
+    <div class="container-xl" v-else>
+      <Empty :text="'目前沒有訂單!'" />
+    </div>
   </div>
 </template>
 
@@ -53,34 +64,6 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
-.back-side-orders {
-  padding-bottom: 1rem;
-
-  .path-container {
-    padding: 1rem;
-
-    p {
-      @include font-style($font-size: 1.2rem);
-    }
-  }
-
-  .if-container {
-    padding: 0 1rem;
-
-    .order-container {
-      margin-bottom: 2rem;
-      border: 1px solid $black-alpha;
-
-      &:last-child {
-        margin-bottom: 0px;
-      }
-
-      h2 {
-        padding: 1rem 0;
-        @include font-style($font-size: 1.2rem, $font-weight: 900);
-        text-align: center;
-      }
-    }
-  }
+.self-back-side-orders {
 }
 </style>

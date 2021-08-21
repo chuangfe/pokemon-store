@@ -1,34 +1,46 @@
 <template>
-  <div class="back-side-merchandises">
-    <div class="path-container">
-      <div class="between-container">
-        <p class="title">產品列表</p>
+  <div class="self-back-side-merchandises">
+    <div
+      class="container-xl p-3 d-flex justify-content-between align-items-center"
+    >
+      <div>
+        <h2 class="h2 m-0 fw-bold">產品列表</h2>
       </div>
-      <div class="between-container">
-        <button class="create" @click="createHandler">新增產品</button>
+      <div>
+        <button
+          class="slef-create btn fs-4 text-white fw-bold"
+          @click="createHandler"
+        >
+          新增產品
+        </button>
       </div>
     </div>
 
     <!-- 產品表格. -->
-    <div class="table-container">
+    <div class="container-xl">
       <BackSideMerchandisesTable @setEditing="setEditingHandler" />
     </div>
 
     <!-- 產品編輯. -->
-    <div class="editing-container" :class="{ 'is-editing': isEditing }">
-      <BackSideMerchandisesEditing
-        :id="editingId"
-        :imageSrc="editingItem.imageSrc"
-        :alt="editingItem.alt"
-        :name="editingItem.name"
-        :category="editingItem.category"
-        :categoryName="editingItem.categoryName"
-        :remaining="editingItem.remaining"
-        :originalPrice="editingItem.originalPrice"
-        :specialPrice="editingItem.specialPrice"
-        :text="editingItem.text"
-        @setEditing="setEditingHandler"
-      />
+    <div
+      class="self-editing-container w-100 position-absolute left-0 top-0 py-3"
+      :class="{ 'is-editing': isEditing }"
+    >
+      <div class="container-xl">
+        <BackSideMerchandisesEditing
+          :id="editingId"
+          :imageSrc="editingItem.imageSrc"
+          :alt="editingItem.alt"
+          :name="editingItem.name"
+          :category="editingItem.category"
+          :categoryName="editingItem.categoryName"
+          :remaining="editingItem.remaining"
+          :originalPrice="editingItem.originalPrice"
+          :specialPrice="editingItem.specialPrice"
+          :text="editingItem.text"
+          @setEditing="setEditingHandler"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -85,47 +97,18 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
-.back-side-merchandises {
-  padding-bottom: 1rem;
-
-  .path-container {
-    padding: 1rem 1rem 0 1rem;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-
-    p,
-    button {
-      @include font-style($font-size: 1.2rem);
-    }
-
-    .create {
-      padding: 0.3125rem 1rem;
-      color: $white;
-      background-color: $green-alpha;
-      border-radius: 10px;
-    }
+.self-back-side-merchandises {
+  .slef-create {
+    background-color: $green-alpha;
   }
 
-  .table-container {
-    margin-top: 1rem;
-    padding: 0 0.625rem;
-  }
-
-  .editing-container {
-    padding: 0.625rem;
-    width: 100%;
+  .self-editing-container {
     min-height: 100%;
     background-color: $black-alpha;
-    box-sizing: border-box;
-    position: absolute;
-    left: 0px;
-    top: 0px;
 
     opacity: 0;
     transform: translateY(-100%);
-    transition: transform 0.4s ease-out 0s, opacity 0.4s ease-out 0s;
+    transition: transform 0.3s ease-out 0s, opacity 0.4s ease-out 0s;
 
     &.is-editing {
       opacity: 1;

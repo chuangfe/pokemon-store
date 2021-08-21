@@ -1,50 +1,65 @@
 <template>
-  <div class="merchandises-table">
-    <table>
+  <div class="self-back-sid-merchandises-table">
+    <table class="table table-hover align-middle text-center">
       <thead>
-        <tr>
-          <td>分類</td>
-          <td>名稱</td>
-          <td>原價</td>
-          <td>特價</td>
-          <td>數量</td>
-          <td>編輯</td>
+        <tr class="fs-5 bg-light">
+          <th>分類</th>
+          <th>名稱</th>
+          <th>原價</th>
+          <th>特價</th>
+          <th>數量</th>
+          <th>編輯</th>
         </tr>
       </thead>
       <tbody>
         <tr
           v-for="(item, i) of merchandises"
           :key="i"
-          :class="{ close: !item.remaining }"
+          :class="{ 'bg-light': !item.remaining }"
         >
+          <!-- 商品分類. -->
           <td>{{ item.categoryName }}</td>
+
+          <!-- 商品名稱. -->
           <td class="name">{{ item.name }}</td>
+
+          <!-- 商品原價. -->
           <td>{{ item.originalPrice }}</td>
+
+          <!-- 商品特價. -->
           <td>
             <span v-if="item.specialPrice">{{ item.specialPrice }}</span>
             <span v-else>無特價</span>
           </td>
+
+          <!-- 商品庫存. -->
           <td>
             <span v-if="item.remaining">{{ item.remaining }}</span>
+
             <span v-else>售完</span>
           </td>
+
+          <!-- 功能按鈕. -->
           <td>
-            <button
-              class="update"
-              @click="$emit('setEditing', { onOff: true, id: item.id })"
-            >
-              編輯
-            </button>
-            <button
-              class="remove"
-              @click="
-                removeHandler({
-                  id: item.id,
-                })
-              "
-            >
-              刪除
-            </button>
+            <div class="row">
+              <div class="col-12 pb-3">
+                <button
+                  class="self-editing btn text-white fw-bold"
+                  @click="$emit('setEditing', { onOff: true, id: item.id })"
+                >
+                  編輯
+                </button>
+              </div>
+
+              <div class="col-12">
+                <button
+                  class="self-remove btn text-white fw-bold"
+                  @click="removeHandler(item)"
+                >
+                  刪除
+                </button>
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -65,12 +80,13 @@ export default {
   },
 
   methods: {
-    async removeHandler({ id }) {
-      const oldItem = await this.$store.dispatch("REMOVE_MERCHANDISE_ACTIONS", {
-        id,
-      });
+    async removeHandler(item) {
+      const oldItem = await this.$store.dispatch(
+        "REMOVE_MERCHANDISE_ACTIONS",
+        item
+      );
 
-      console.log("remove", oldItem);
+      // console.log(oldItem);
     },
   },
 };
@@ -80,59 +96,19 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 
-.merchandises-table {
-  table {
-    width: 100%;
-    @include font-style($font-size: 1rem);
-    table-layout: fixed;
+.self-back-sid-merchandises-table {
+  td {
+    padding: 1rem 0;
+  }
 
-    td {
-      word-wrap: break-word;
-      text-align: center;
-      vertical-align: middle;
-    }
+  .self-editing {
+    width: 80%;
+    background-color: $green-alpha;
+  }
 
-    thead {
-      background-color: $table-color;
-
-      td {
-        padding: 0.625rem 0;
-      }
-    }
-
-    tbody {
-      tr {
-        &.close {
-          background-color: $table-color-alpha;
-        }
-
-        td {
-          border-bottom: 1px solid $table-color;
-
-          button {
-            margin: 1rem 0;
-            padding: 0.3125rem 0;
-            width: 100%;
-            border-radius: 10px;
-            display: block;
-
-            &:last-child {
-              margin-top: 0px;
-            }
-
-            &.update {
-              background-color: $green-alpha;
-              color: $white;
-            }
-
-            &.remove {
-              background-color: $red-alpha;
-              color: $white;
-            }
-          }
-        }
-      }
-    }
+  .self-remove {
+    width: 80%;
+    background-color: $red-alpha;
   }
 }
 </style>

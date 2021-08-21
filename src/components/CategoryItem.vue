@@ -3,7 +3,7 @@
     :to="categoryLink"
     tag="a"
     class="self-category-item btn text-reset text-decoration-none border rounded-3
-    d-flex flex-column py-2"
+    d-flex flex-column py-2 px-0"
     :class="{
       active: isActive,
     }"

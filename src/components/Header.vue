@@ -153,7 +153,7 @@ export default {
 
   .self-label {
     box-sizing: border-box;
-    transition: all 0.3s ease-out 0.1s;
+    transition: all 0.2s ease-out 0.1s;
     transform: translateY(-100%);
     opacity: 0;
 

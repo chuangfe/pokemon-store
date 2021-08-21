@@ -55,13 +55,21 @@
       </div>
     </li>
 
-    <li class="back-side" v-if="backSide">
-      <div class="around-container">
-        <span class="status confirm" v-if="order.payment">已付款</span>
-        <span class="status" v-else>尚未付款</span>
+    <li class="row py-2" v-if="backSide">
+      <div class="col-6 text-center">
+        <span class="self-span self-payment text-white btn" v-if="order.payment"
+          >已付款</span
+        >
+        <span class="self-span self-outstanding-payment text-white btn" v-else
+          >尚未付款</span
+        >
       </div>
-      <div class="around-container">
-        <button class="remove-order" @click="removeOrderHandler(order)">
+
+      <div class="col-6">
+        <button
+          class="self-remove-order btn self-outstanding-payment text-white"
+          @click="removeOrderHandler(order)"
+        >
           <span>刪除訂單</span>
         </button>
       </div>
@@ -70,7 +78,7 @@
     <li class="py-2" v-else>
       <button
         class="self-payment btn text-white fs-5 fw-bold"
-        :class="{ 'self-confirm': order.payment }"
+        :class="{ 'self-outstanding-payment': order.payment }"
         :disabled="order.payment"
         @click="paymentHandler(order.id)"
       >
@@ -127,14 +135,24 @@ export default {
 @import "../assets/style/mixin.scss";
 
 .self-recipient {
-  .self-payment {
-    width: 80%;
-    background-color: $green-alpha;
-    border-radius: 10px;
+  .self-span {
+    cursor: auto;
+  }
 
-    &.self-confirm {
-      background-color: $red-alpha;
-    }
+  .self-payment,
+  .self-outstanding-payment {
+    width: 80%;
+    border-radius: 10px;
+  }
+
+  // 已付款.
+  .self-payment {
+    background-color: $green-alpha;
+  }
+
+  // 未付款.
+  .self-outstanding-payment {
+    background-color: $red-alpha;
   }
 }
 </style>

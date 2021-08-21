@@ -162,8 +162,8 @@ export default {
         count: this.count,
       });
 
-      // 購買的商品的索引與資料.
-      // console.log(result);
+      // 更新購買數量.
+      this.count = 0;
     },
   },
 

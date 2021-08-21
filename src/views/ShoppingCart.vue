@@ -21,6 +21,7 @@
 
       <MerchandiseTable
         :merchandises="shoppingCart"
+        :total="getTotal"
         :isRemove="true"
         @remove="removeHandler"
         v-if="shoppingCart.length !== 0"
@@ -182,6 +183,8 @@ import Footer from "../components/Footer.vue";
 import MerchandiseTable from "../components/MerchandiseTable.vue";
 // 空內容.
 import Empty from "../components/Empty.vue";
+// 假的讀取進度.
+import loadHandler from "../modules/loadHandler";
 
 export default {
   name: "ShoppingCart",
@@ -199,41 +202,41 @@ export default {
   },
 
   computed: {
+    // 縮短屬性.
     shoppingCart() {
       return this.$store.state.shoppingCart;
+    },
+
+    // 訂單金額.
+    getTotal() {
+      return this.shoppingCart.reduce((sum, item, index) => {
+        return Math.floor((sum = sum + item.total));
+      }, 0);
     },
   },
 
   methods: {
     // 購物車刪除商品.
-    async removeHandler(id) {
+    async removeHandler(item) {
       const result = await this.$store.dispatch(
         "REMOVE_SHOPPING_CART_ACTIONS",
-        id
+        item
       );
-
-      console.log(result);
     },
 
     // 購買商品.
     submitHandler() {
-      // 購物車內沒有商品.
-      if (!this.shoppingCart.length) {
-        this.$router.push({
-          path: "/home",
-        });
-      }
-      // 訂單完成.
-      else {
-        this.$store.dispatch("CREATE_ORDER_ACTIONS", {
-          email: this.fromData.email,
-          name: this.fromData.name,
-          phone: this.fromData.phone,
-          address: this.fromData.address,
-          text: this.fromData.text,
-          total: this.getTotal,
-        });
-      }
+      // 假的讀取進度.
+      loadHandler.isLoading();
+      // 畫面回到最上方.
+      window.scrollTo(0, 0);
+
+      // 複製收件人資料.
+      const data = Object.assign({}, this.fromData);
+      // 訂單金額.
+      data.total = this.getTotal;
+      // 新增訂單.
+      this.$store.dispatch("CREATE_ORDER_ACTIONS", data);
     },
   },
 

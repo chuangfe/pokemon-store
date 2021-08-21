@@ -1,10 +1,11 @@
 // 引入 vuex 的資料做為判斷條件.
 import Store from "../store/index";
 
-// 假的讀取進度
+// 假的讀取進度.
 // 使用在:
 // /router/index.js
 // /components/RecipientList.vue
+// /view/ShoppingCart.vue
 
 // 保存排程.
 let timer = null;

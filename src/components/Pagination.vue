@@ -75,8 +75,8 @@ export default {
   // 當前頁數時的樣式.
   .self-span.active {
     color: $white;
-    background-color: $green;
-    border-color: $green;
+    background-color: $green-alpha;
+    border-color: $green-alpha;
   }
 
   // 按鈕不可點擊時的樣式.
