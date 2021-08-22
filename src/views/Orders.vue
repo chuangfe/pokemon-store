@@ -1,5 +1,5 @@
 <template>
-  <div class="slef-confirm py-3">
+  <div class="slef-confirm">
     <div class="container-xl">
       <Header />
     </div>

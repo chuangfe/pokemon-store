@@ -1,5 +1,5 @@
 <template>
-  <div class="self-categories py-3">
+  <div class="self-categories">
     <div class="container-xl">
       <Header />
     </div>

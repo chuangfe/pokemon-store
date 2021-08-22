@@ -1,5 +1,5 @@
 <template>
-  <div class="self-shopping-cart py-3">
+  <div class="self-shopping-cart">
     <div class="container-xl">
       <Header />
     </div>

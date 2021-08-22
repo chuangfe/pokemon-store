@@ -1,6 +1,6 @@
 <template>
-  <div class="self-back-sid-merchandises-table">
-    <table class="table table-hover align-middle text-center">
+  <div class="self-back-sid-merchandises-table pb-3">
+    <table class="table table-hover align-middle text-center m-0">
       <thead>
         <tr class="fs-5 bg-light">
           <th>分類</th>

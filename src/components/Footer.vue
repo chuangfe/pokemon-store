@@ -37,7 +37,7 @@
         >
       </p>
 
-      <p class="ps-2 m-0">
+      <p class="ps-2">
         練習作品｜
         <a
           class="text-reset"

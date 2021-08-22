@@ -48,12 +48,14 @@ export default {
   }
 }
 
+// 卡車上下移動.
 @keyframes shake {
   50% {
     bottom: 1px;
   }
 }
 
+// 卡車從右到左.
 @keyframes walk {
   0% {
     left: calc(100% + 80px);
@@ -70,8 +72,8 @@ export default {
 }
 
 @media only screen and (min-width: $screen-width-md) {
-  .truck {
-    .image-container-truck {
+  .self-truck {
+    .self-image-container-truck {
       animation: shake 0.6s steps(1) 0s infinite normal running,
         walk 20s linear 0s infinite normal running;
     }
