@@ -43,8 +43,11 @@ export default {
   name: "BackSide",
 
   methods: {
-    signOutHandler() {
-      this.$store.commit("SIGN_OUT");
+    async signOutHandler() {
+      const b = await this.$store.dispatch("CHECK_USER_ACTIONS", {
+        email: "",
+        password: "",
+      });
     },
   },
 };

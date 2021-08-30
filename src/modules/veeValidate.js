@@ -65,3 +65,11 @@ extend("alpha_num", {
   ...alpha_num,
   message: "只能輸入英文與數字.",
 });
+
+// 禁止特殊符號, 目前只有阻止 xss 攻擊.
+extend("symbol", {
+  validate: (value) => {
+    return !value.match(/[\<\>]+/);
+  },
+  message: "請勿輸入特殊符號.",
+});

@@ -77,7 +77,7 @@
             class="d-block mb-3 input-group"
             mode="lazy"
             name="name"
-            rules="required|notNumber"
+            rules="required|notNumber|symbol"
             v-slot="{ errors }"
           >
             <label class="d-block" for="name">
@@ -121,7 +121,7 @@
             class="d-block mb-3 input-group"
             mode="lazy"
             name="address"
-            rules="required|address"
+            rules="required|address|symbol"
             v-slot="{ errors }"
           >
             <label class="d-block" for="address">
@@ -139,9 +139,17 @@
           </ValidationProvider>
 
           <!-- 補充說明. -->
-          <div class="mb-3 input-group">
+          <ValidationProvider
+            class="d-block mb-3 input-group"
+            mode="lazy"
+            name="address"
+            rules="symbol"
+            v-slot="{ errors }"
+          >
             <label class="d-block" for="explain">
-              <p class="fs-5 m-0 pb-2">補充說明</p>
+              <p class="fs-5 m-0 pb-2">
+                補充說明<span class="ps-2 text-danger">{{ errors[0] }}</span>
+              </p>
             </label>
 
             <textarea
@@ -151,7 +159,7 @@
               id="explain"
               v-model="fromData.text"
             ></textarea>
-          </div>
+          </ValidationProvider>
 
           <!-- 按鈕. -->
           <div class="mb-3" v-if="shoppingCart.length">

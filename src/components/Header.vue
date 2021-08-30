@@ -51,7 +51,7 @@
         <li class="nav-item my-1" v-if="$store.state.isSignIn">
           <a
             class="nav-link px-4 self-nav-link"
-            href="#/sign-out"
+            href="#/home"
             @click="singOutHandler"
             >登出</a
           >
@@ -129,8 +129,11 @@ export default {
   },
 
   methods: {
-    singOutHandler() {
-      this.$store.commit("SIGN_OUT");
+    async singOutHandler() {
+      const b = await this.$store.dispatch("CHECK_USER_ACTIONS", {
+        email: "",
+        password: "",
+      });
     },
   },
 };
