@@ -6,11 +6,15 @@ import store from "./store";
 import "bootstrap/dist/css/bootstrap.css";
 // 使用 vee-validate 框架, 專門為 vue 準備的表單驗證.
 import "./modules/veeValidate";
+// 自訂 plugin.
+import selfPlugin from "./plugin/selfPlugin";
 
 // 唯一個樣式.
 import "./assets/style/main.scss";
 
 Vue.config.productionTip = false;
+
+Vue.use(selfPlugin, { consoleLog: true });
 
 new Vue({
   router,

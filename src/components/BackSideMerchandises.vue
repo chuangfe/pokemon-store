@@ -22,26 +22,28 @@
     </div>
 
     <!-- 產品編輯. -->
-    <div
-      class="self-editing-container w-100 position-absolute left-0 top-0 py-3"
-      :class="{ 'is-editing': isEditing }"
-    >
-      <div class="container-xl">
-        <BackSideMerchandisesEditing
-          :id="editingId"
-          :imageSrc="editingItem.imageSrc"
-          :alt="editingItem.alt"
-          :name="editingItem.name"
-          :category="editingItem.category"
-          :categoryName="editingItem.categoryName"
-          :remaining="editingItem.remaining"
-          :originalPrice="editingItem.originalPrice"
-          :specialPrice="editingItem.specialPrice"
-          :text="editingItem.text"
-          @setEditing="setEditingHandler"
-        />
+    <transition name="editing">
+      <div
+        class="self-editing-container w-100 position-absolute left-0 top-0 py-3"
+        v-show="isEditing"
+      >
+        <div class="container-xl">
+          <BackSideMerchandisesEditing
+            :id="editingId"
+            :imageSrc="editingItem.imageSrc"
+            :alt="editingItem.alt"
+            :name="editingItem.name"
+            :category="editingItem.category"
+            :categoryName="editingItem.categoryName"
+            :remaining="editingItem.remaining"
+            :originalPrice="editingItem.originalPrice"
+            :specialPrice="editingItem.specialPrice"
+            :text="editingItem.text"
+            @setEditing="setEditingHandler"
+          />
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -105,15 +107,29 @@ export default {
   .self-editing-container {
     min-height: 100%;
     background-color: $black-alpha;
-
-    opacity: 0;
-    transform: translateY(-100%);
-    transition: transform 0.3s ease-out 0s, opacity 0.4s ease-out 0s;
-
-    &.is-editing {
-      opacity: 1;
-      transform: translateY(0%);
-    }
   }
+}
+
+// 進場前的樣式.
+.editing-enter,
+// 離場結束的樣式.
+.editing-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+// 進場結束的樣式.
+.editing-enter-to,
+// 離場前的樣式.
+.editing-leave {
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+// 進場動畫.
+.editing-enter-active,
+// 離場動畫.
+.editing-leave-active {
+  transition: transform 0.3s ease-out 0s, opacity 0.3s ease-out 0s;
 }
 </style>

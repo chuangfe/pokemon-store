@@ -32,6 +32,8 @@
 
 - bootstrap 5.0 icon
 
+- vue/cli-plugin-unit-jest
+
 ## Copyright©
 
 - 參考 [https://github.com/icguanyu/pokeStore](https://github.com/icguanyu/pokeStore)

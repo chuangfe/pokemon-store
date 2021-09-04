@@ -117,7 +117,7 @@ export default {
     // 1 / 1 * 100 = 100;
     // 1 / 4 * 100 = 25;
     calcLeft() {
-      return Math.floor((1 / this.itemCount) * 100);
+      return (1 / this.itemCount) * 100;
     },
   },
 
@@ -269,7 +269,7 @@ export default {
     window.removeEventListener("resize", debounceResizeHandler);
 
     // 重新保存變數.
-    debounceResizeHandler = debounce(this.resizeHandler, { wait: 1000 });
+    debounceResizeHandler = debounce(this.resizeHandler, { wait: 500 });
 
     // 綁定 resize 事件.
     window.addEventListener("resize", debounceResizeHandler);

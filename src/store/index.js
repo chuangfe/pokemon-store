@@ -486,12 +486,12 @@ export default new Vuex.Store({
       };
 
       // !undefined 才能發出 commit 事件.
-      if (!result.length) {
+      if (!result.oldItem) {
         // 新增商品.
         commit("CREATE_MERCHANDISE_MUTATIONS", payload);
       }
 
-      return !result.length
+      return !result.oldItem
         ? // 商品 id 沒有重複, 返回新增的商品.
           payload
         : errorData;
@@ -575,6 +575,7 @@ export default new Vuex.Store({
       const result = (
         await dispatch("SEARCH_MERCHANDISE_ACTIONS", [payload])
       )[0];
+
       // 商品物件複製.
       const data = Object.assign({}, result.oldItem);
 
@@ -593,7 +594,7 @@ export default new Vuex.Store({
       commit("ADD_SHOPPING_CART_MUTATIONS", payload);
 
       // 返回新增至購物車的商品資料.
-      return result;
+      return data;
     },
 
     // 刪除購物車的商品.

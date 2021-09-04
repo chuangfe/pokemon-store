@@ -15,7 +15,7 @@
       <tr v-for="(item, i) of merchandises" :key="i">
         <td>{{ item.name }}</td>
         <td>{{ item.count }}</td>
-        <td>NT $ {{ item.price }} 元</td>
+        <td>NT $ {{ getCurrency(item.price) }} 元</td>
         <td v-if="isRemove">
           <button class="btn" @click="$emit('remove', item)">
             <i class="bi bi-archive"></i>
@@ -28,7 +28,7 @@
       <tr>
         <!-- colspan 表格欄位橫跨的列數. -->
         <td :colspan="isRemove ? 2 : 1">總計</td>
-        <td colspan="2">NT$ {{ total }} 元</td>
+        <td colspan="2">NT$ {{ getCurrency(total) }} 元</td>
       </tr>
     </tfoot>
   </table>
@@ -36,6 +36,9 @@
 
 <script>
 // 商品表格組件, 在購物車頁面和訂單頁面使用.
+
+// 價格加上千分位符號.
+import toCurrency from "../modules/toCurrency";
 
 export default {
   name: "MerchandiseTable",
@@ -57,6 +60,12 @@ export default {
     isRemove: {
       type: Boolean,
       required: true,
+    },
+  },
+
+  methods: {
+    getCurrency(num) {
+      return toCurrency(num);
     },
   },
 };

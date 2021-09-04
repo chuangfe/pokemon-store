@@ -1,5 +1,8 @@
 <template>
-  <div class="self-merchandise-item border position-relative p-3">
+  <div
+    id="merchandise-item"
+    class="self-merchandise-item border position-relative p-3"
+  >
     <!-- 圖片 -->
     <div class="self-image-container">
       <img
@@ -31,12 +34,20 @@
       :class="{ 'special-offer': specialPrice }"
     >
       <!-- 特價. -->
+      <!-- <p class="self-special screen-hidden m-0" v-if="specialPrice">
+        NT${{ getCurrency(specialPrice) }}元
+      </p> -->
       <p class="self-special screen-hidden m-0" v-if="specialPrice">
-        NT${{ specialPrice }}元
+        NT$ <span v-to-currency-directive="specialPrice"></span> 元
       </p>
 
       <!-- 原價. -->
-      <p class="self-original screen-hidden m-0">NT${{ originalPrice }}元</p>
+      <!-- <p class="self-original screen-hidden m-0">
+        NT${{ getCurrency(originalPrice) }}元
+      </p> -->
+      <p class="self-original screen-hidden m-0">
+        NT$ <span v-to-currency-directive="originalPrice"></span> 元
+      </p>
     </div>
 
     <!-- 按鈕 -->
@@ -83,6 +94,9 @@
 
 <script>
 // 單項商品展示.
+
+// 價格加上千分位符號.
+import toCurrency from "../modules/toCurrency";
 
 export default {
   name: "Merchandise",
@@ -158,12 +172,16 @@ export default {
       return special ? special : original;
     },
 
+    getCurrency(num) {
+      return toCurrency(num);
+    },
+
     // 加入購物車.
-    clickHandler({ id, category, categoryName, name, price, count = 1 }) {
+    async clickHandler({ id, category, categoryName, name, price, count = 1 }) {
       // 商品售完.
       if (this.remaining < 1) return false;
 
-      this.$store.dispatch("ADD_SHOPPING_CART_ACTIONS", {
+      const result = await this.$store.dispatch("ADD_SHOPPING_CART_ACTIONS", {
         id,
         category,
         categoryName,
@@ -171,6 +189,9 @@ export default {
         price,
         count,
       });
+
+      // 加入購物車後, 更新的商品資料.
+      this.consoleLogMixin("加入購物車", result);
     },
   },
 };

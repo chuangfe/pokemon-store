@@ -24,11 +24,13 @@
           <td class="name">{{ item.name }}</td>
 
           <!-- 商品原價. -->
-          <td>{{ item.originalPrice }}</td>
+          <td>{{ getCurrency(item.originalPrice) }}</td>
 
           <!-- 商品特價. -->
           <td>
-            <span v-if="item.specialPrice">{{ item.specialPrice }}</span>
+            <span v-if="item.specialPrice">{{
+              getCurrency(item.specialPrice)
+            }}</span>
             <span v-else>無特價</span>
           </td>
 
@@ -70,6 +72,9 @@
 <script>
 // 後台商品表格組件, 後台商品頁面使用.
 
+// 價格加上千分位符號.
+import toCurrency from "../modules/toCurrency";
+
 export default {
   name: "BackSideMerchandisesTable",
 
@@ -80,13 +85,15 @@ export default {
   },
 
   methods: {
+    getCurrency(num) {
+      return toCurrency(num);
+    },
+
     async removeHandler(item) {
       const oldItem = await this.$store.dispatch(
         "REMOVE_MERCHANDISE_ACTIONS",
         item
       );
-
-      // console.log(oldItem);
     },
   },
 };

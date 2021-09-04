@@ -42,20 +42,40 @@
             class="border border-2 p-3 h-100"
             :class="{ 'special-offer': merchandiseData.specialOffer }"
           >
+            <!-- 商品名稱. -->
             <h4 class="h4 fw-bold border-bottom border-2 pb-2 m-0 mb-2">
               {{ merchandiseData.name }}
             </h4>
 
+            <!-- 商品售價. -->
+            <!-- <p
+              class="self-special fs-3 fw-bold m-0 mb-2"
+              v-if="merchandiseData.specialPrice"
+            >
+              特價 NT$
+              {{ getCurrency(merchandiseData.specialPrice) }}
+            </p>
+
+            <p class="fs-3 fw-bold m-0 mb-2" v-else>
+              原價 NT${{ getCurrency(merchandiseData.originalPrice) }}
+            </p> -->
+
+            <!-- 商品售價. -->
             <p
               class="self-special fs-3 fw-bold m-0 mb-2"
               v-if="merchandiseData.specialPrice"
             >
               特價 NT$
-              {{ merchandiseData.specialPrice }}
+              <span
+                v-to-currency-directive="merchandiseData.specialPrice"
+              ></span>
             </p>
 
             <p class="fs-3 fw-bold m-0 mb-2" v-else>
-              原價 NT${{ merchandiseData.originalPrice }}
+              原價 NT$
+              <span
+                v-to-currency-directive="merchandiseData.originalPrice"
+              ></span>
             </p>
 
             <!-- 選擇購買數量. -->
@@ -74,6 +94,18 @@
               </option>
             </select>
 
+            <!-- 購買按鈕. -->
+            <!-- <button
+              class="self-buy btn d-block fs-5 text-center w-100"
+              :class="{ 'self-close': count === 0 }"
+              :disabled="count === 0"
+              @click="clickHandler"
+            >
+              <span v-if="merchandiseData.remaining === 0">售完</span>
+              <span v-else
+                >總計 $ {{ getCurrency(total) }} 元 / 加入購物車</span
+              >
+            </button> -->
             <button
               class="self-buy btn d-block fs-5 text-center w-100"
               :class="{ 'self-close': count === 0 }"
@@ -81,7 +113,10 @@
               @click="clickHandler"
             >
               <span v-if="merchandiseData.remaining === 0">售完</span>
-              <span v-else>總計 $ {{ total }} 元 / 加入購物車</span>
+              <span v-else
+                >總計 $ <span v-to-currency-directive="total"></span> 元 /
+                加入購物車</span
+              >
             </button>
           </section>
         </div>
@@ -103,6 +138,8 @@ import Footer from "../components/Footer.vue";
 import Breadcrumb from "../components/Breadcrumb.vue";
 // 判斷路徑.
 import checkRoute from "../modules/checkRoute";
+// 價格加上千分位符號.
+import toCurrency from "../modules/toCurrency";
 
 export default {
   name: "Merchandise",
@@ -147,6 +184,10 @@ export default {
   },
 
   methods: {
+    getCurrency(num) {
+      return toCurrency(num);
+    },
+
     async clickHandler() {
       if (this.count === 0) return false;
 
@@ -164,6 +205,9 @@ export default {
 
       // 更新購買數量.
       this.count = 0;
+
+      // 加入購物車後, 更新的商品資料.
+      this.consoleLogMixin("加入購物車", result);
     },
   },
 
