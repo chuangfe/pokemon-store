@@ -11,29 +11,31 @@ import Store from "../store/index";
 let timer = null;
 
 function loaded() {
-  // 刪除排程.
+  // 刪除定時器.
   clearTimeout(timer);
+
   // 讀取結束.
-  Store.state.isLoading = false;
+  Store.commit("LOADED_MUTATIONS");
 }
 
 export default {
   // 讀取中.
   isLoading() {
-    // 讀取中.
-    Store.state.isLoading = true;
-
-    // 刪除排程.
+    // 刪除定時器.
     clearTimeout(timer);
     // 讀取 500 毫秒後成功.
     timer = setTimeout(loaded, Store.state.loadingTime);
+
+    // 讀取中.
+    Store.commit("LOADING_MUTATIONS");
   },
 
   // 讀取完成.
   isLoaded() {
-    // 刪除排程.
+    // 刪除定時器.
     clearTimeout(timer);
+
     // 讀取結束.
-    Store.state.isLoading = false;
+    Store.commit("LOADED_MUTATIONS");
   },
 };

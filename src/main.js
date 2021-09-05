@@ -14,6 +14,7 @@ import "./assets/style/main.scss";
 
 Vue.config.productionTip = false;
 
+// 可以參考 src/plugin/selfPlugin.
 Vue.use(selfPlugin, { consoleLog: true });
 
 new Vue({

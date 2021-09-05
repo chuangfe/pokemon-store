@@ -268,25 +268,16 @@ export default {
 
   methods: {
     async saveHandler() {
-      // 在這理判斷, 是要更新商品, 還是新增商品.
-      // SEARCH_MERCHANDISE_ACTIONS 有返回 new Promise, 所以不用寫 then.
-      const result = (
-        await this.$store.dispatch("SEARCH_MERCHANDISE_ACTIONS", [
-          this.calcData,
-        ])
-      )[0];
-
       // 更新商品資料.
-      if (result.oldItem) {
-        await this.$store.dispatch("UPDATE_MERCHANDISE_ACTIONS", this.calcData);
-      }
-      // 新增商品.
-      else {
-        await this.$store.dispatch("CREATE_MERCHANDISE_ACTIONS", this.calcData);
-      }
+      const result = await this.$store.dispatch(
+        "UPDATE_MERCHANDISE_ACTIONS",
+        this.calcData
+      );
 
       // 關閉編輯.
       this.$emit("setEditing", { onOff: false });
+
+      this.consoleLogMixin("商品資料更新", result);
     },
 
     LoadHandler() {

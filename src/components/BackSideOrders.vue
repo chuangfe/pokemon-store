@@ -15,8 +15,8 @@
             <h4 class="m-0 fw-bold py-3">商品列表</h4>
 
             <MerchandiseTable
-              :merchandises="order.merchandises"
-              :total="order.total"
+              :merchandises="order.shoppingCart.merchandises"
+              :total="order.shoppingCart.total"
               :isRemove="false"
             />
 

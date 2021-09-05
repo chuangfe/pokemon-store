@@ -181,14 +181,18 @@ export default {
       // 商品售完.
       if (this.remaining < 1) return false;
 
-      const result = await this.$store.dispatch("ADD_SHOPPING_CART_ACTIONS", {
-        id,
-        category,
-        categoryName,
-        name,
-        price,
-        count,
-      });
+      const result = await this.$store.dispatch(
+        "UPDATE_SHOPPING_CART_ACTIONS",
+        {
+          id,
+          category,
+          categoryName,
+          name,
+          price,
+          count,
+          total: price,
+        }
+      );
 
       // 加入購物車後, 更新的商品資料.
       this.consoleLogMixin("加入購物車", result);

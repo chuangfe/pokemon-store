@@ -2,9 +2,10 @@ import consoleLogMixin from "./consoleLogMixin";
 import toCurrencyDirective from "./toCurrencyDirective";
 
 /**
- * 目前的 selfPlugin 只有使用在.
+ * 目前的 selfPlugin 使用在.
  * views Merchandise.vue
  * component MerchandiseItem.vue
+ * component BackSideMerchandisesEditing.vue
  */
 export default {
   install(Vue, options) {

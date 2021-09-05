@@ -194,14 +194,18 @@ export default {
       // 縮短屬性長度.
       const item = this.merchandiseData;
 
-      const result = await this.$store.dispatch("ADD_SHOPPING_CART_ACTIONS", {
-        id: item.id,
-        category: item.category,
-        categoryName: item.categoryName,
-        name: item.name,
-        price: item.specialPrice ? item.specialPrice : item.originalPrice,
-        count: this.count,
-      });
+      const result = await this.$store.dispatch(
+        "UPDATE_SHOPPING_CART_ACTIONS",
+        {
+          id: item.id,
+          category: item.category,
+          categoryName: item.categoryName,
+          name: item.name,
+          price: item.specialPrice ? item.specialPrice : item.originalPrice,
+          count: this.count,
+          total: this.total,
+        }
+      );
 
       // 更新購買數量.
       this.count = 0;

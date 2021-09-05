@@ -22,8 +22,8 @@
           <h3 class="h3 fw-bold m-0 pt-3">商品列表</h3>
           <!-- 商品表格. -->
           <MerchandiseTable
-            :merchandises="order.merchandises"
-            :total="order.total"
+            :merchandises="order.shoppingCart.merchandises"
+            :total="order.shoppingCart.total"
             :isRemove="false"
           />
 

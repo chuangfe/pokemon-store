@@ -20,11 +20,11 @@
       </div>
 
       <MerchandiseTable
-        :merchandises="shoppingCart"
-        :total="getTotal"
+        :merchandises="shoppingCart.merchandises"
+        :total="shoppingCart.total"
         :isRemove="true"
         @remove="removeHandler"
-        v-if="shoppingCart.length !== 0"
+        v-if="shoppingCart.merchandises.length !== 0"
       />
       <!-- 沒有商品. -->
       <Empty :text="'購物車沒有東西喔!'" v-else />
@@ -162,7 +162,7 @@
           </ValidationProvider>
 
           <!-- 按鈕. -->
-          <div class="mb-3" v-if="shoppingCart.length">
+          <div class="mb-3" v-if="shoppingCart.merchandises.length">
             <button
               class="self-buy btn w-100 text-white fs-5 fw-bold"
               type="submit"
@@ -214,13 +214,6 @@ export default {
     shoppingCart() {
       return this.$store.state.shoppingCart;
     },
-
-    // 訂單金額.
-    getTotal() {
-      return this.shoppingCart.reduce((sum, item, index) => {
-        return Math.floor((sum = sum + item.total));
-      }, 0);
-    },
   },
 
   methods: {
@@ -241,8 +234,6 @@ export default {
 
       // 複製收件人資料.
       const data = Object.assign({}, this.fromData);
-      // 訂單金額.
-      data.total = this.getTotal;
       // 新增訂單.
       this.$store.dispatch("CREATE_ORDER_ACTIONS", data);
     },

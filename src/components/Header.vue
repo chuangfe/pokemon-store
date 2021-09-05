@@ -20,7 +20,7 @@
           class="text-reset text-decoration-none me-2"
           to="/shopping-cart"
         >
-          購物車(<span>{{ $store.state.shoppingCart.length }}</span
+          購物車(<span>{{ $store.state.shoppingCart.merchandises.length }}</span
           >)
         </router-link>
 
@@ -42,77 +42,79 @@
       </div>
     </div>
 
-    <label
-      for="menu-button"
-      class="position-absolute top-100 end-0 self-label"
-      :class="{ show: isMenu }"
-    >
-      <ul class="navbar-nav bg-white border">
-        <li class="nav-item my-1" v-if="$store.state.isSignIn">
-          <a
-            class="nav-link px-4 self-nav-link"
-            href="#/home"
-            @click="singOutHandler"
-            >登出</a
-          >
-        </li>
+    <transition name="label">
+      <label
+        for="menu-button"
+        class="position-absolute top-100 end-0 self-label"
+        v-show="isMenu"
+      >
+        <ul class="navbar-nav bg-white border">
+          <li class="nav-item my-1" v-if="$store.state.isSignIn">
+            <a
+              class="nav-link px-4 self-nav-link"
+              href="#/home"
+              @click="singOutHandler"
+              >登出</a
+            >
+          </li>
 
-        <li class="nav-item my-1" v-else>
-          <router-link
-            to="/sign-in"
-            class="nav-link px-4 self-nav-link"
-            :class="{ active: $route.path === '/sign-in' }"
-            >登入</router-link
-          >
-        </li>
+          <li class="nav-item my-1" v-else>
+            <router-link
+              to="/sign-in"
+              class="nav-link px-4 self-nav-link"
+              :class="{ active: $route.path === '/sign-in' }"
+              >登入</router-link
+            >
+          </li>
 
-        <li class="nav-item my-1" v-if="$store.state.isSignIn">
-          <router-link class="nav-link px-4 self-nav-link" to="/back-side"
-            >後台</router-link
-          >
-        </li>
+          <li class="nav-item my-1" v-if="$store.state.isSignIn">
+            <router-link class="nav-link px-4 self-nav-link" to="/back-side"
+              >後台</router-link
+            >
+          </li>
 
-        <li class="nav-item my-1">
-          <router-link
-            to="/shopping-cart"
-            class="nav-link px-4 self-nav-link"
-            :class="{ active: $route.path === '/shopping-cart' }"
-            >購物車</router-link
-          >
-        </li>
+          <li class="nav-item my-1">
+            <router-link
+              to="/shopping-cart"
+              class="nav-link px-4 self-nav-link"
+              :class="{ active: $route.path === '/shopping-cart' }"
+              >購物車</router-link
+            >
+          </li>
 
-        <li class="nav-item my-1">
-          <router-link
-            to="/orders"
-            class="nav-link px-4 self-nav-link"
-            :class="{ active: $route.path === '/orders' }"
-            >訂單</router-link
-          >
-        </li>
+          <li class="nav-item my-1">
+            <router-link
+              to="/orders"
+              class="nav-link px-4 self-nav-link"
+              :class="{ active: $route.path === '/orders' }"
+              >訂單</router-link
+            >
+          </li>
 
-        <li class="nav-item my-1">
-          <router-link
-            class="nav-link px-4 self-nav-link"
-            to="/home"
-            :class="{ active: $route.path === '/home' }"
-            >首頁</router-link
-          >
-        </li>
+          <li class="nav-item my-1">
+            <router-link
+              class="nav-link px-4 self-nav-link"
+              to="/home"
+              :class="{ active: $route.path === '/home' }"
+              >首頁</router-link
+            >
+          </li>
 
-        <li
-          class="nav-item my-1"
-          v-for="(item, key) in $store.getters.calcData"
-          :key="key"
-        >
-          <router-link
-            :to="'/categories/' + key"
-            class="nav-link px-4 self-nav-link"
-            :class="{ active: $route.params.category === key }"
-            >{{ item.name }}</router-link
+          <li
+            class="nav-item my-1"
+            v-for="(item, key) in $store.getters.calcData"
+            :key="key"
           >
-        </li>
-      </ul>
-    </label>
+            <router-link
+              :to="'/categories/' + key"
+              class="nav-link px-4 self-nav-link"
+              :class="{ active: $route.params.category === key }"
+              >{{ item.name }}</router-link
+            >
+          </li>
+        </ul>
+      </label>
+    </transition>
   </header>
 </template>
 
@@ -156,14 +158,6 @@ export default {
 
   .self-label {
     box-sizing: border-box;
-    transition: all 0.2s ease-out 0.1s;
-    transform: translateY(-100%);
-    opacity: 0;
-
-    &.show {
-      transform: translateY(0.25rem);
-      opacity: 1;
-    }
 
     .self-nav-link {
       color: $black;
@@ -178,5 +172,28 @@ export default {
       }
     }
   }
+}
+
+// 進場前的樣式.
+.label-enter,
+// 離場結束的樣式.
+.label-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+// 進場結束的樣式.
+.label-enter-to,
+// 離場前的樣式.
+.label-leave {
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+// 進場動畫.
+.label-enter-active,
+// 離場動畫.
+.label-leave-active {
+  transition: transform 0.3s ease-out 0.1s, opacity 0.3s ease-out 0s;
 }
 </style>
