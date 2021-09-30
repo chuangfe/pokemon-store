@@ -1,6 +1,6 @@
 <template>
   <table
-    class="self-merchandise-table w-100 table table-hover text-center m-0 align-middle"
+    class="self-merchandise-table self-border-box w-100 table table-hover text-center m-0 align-middle"
   >
     <thead>
       <tr class="fs-5">
@@ -75,8 +75,4 @@ export default {
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
-
-.self-merchandise-table {
-  box-sizing: border-box;
-}
 </style>

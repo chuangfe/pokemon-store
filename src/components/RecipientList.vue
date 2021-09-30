@@ -119,7 +119,7 @@ export default {
       loadHandler.isLoading();
 
       // 付款完成.
-      this.$store.commit("SET_PAYMENT", id);
+      this.$store.commit("SET_PAYMENT_MUTATIONS", id);
     },
 
     removeOrderHandler(order) {
@@ -133,6 +133,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
 .self-recipient {
   .self-span {

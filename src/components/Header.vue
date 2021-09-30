@@ -45,7 +45,7 @@
     <transition name="label">
       <label
         for="menu-button"
-        class="position-absolute top-100 end-0 self-label"
+        class="self-label self-border-box position-absolute top-100 end-0"
         v-show="isMenu"
       >
         <ul class="navbar-nav bg-white border">
@@ -144,6 +144,7 @@ export default {
 <style scoped lang="scss">
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
 .self-header {
   z-index: 1;
@@ -157,8 +158,6 @@ export default {
   }
 
   .self-label {
-    box-sizing: border-box;
-
     .self-nav-link {
       color: $black;
 
@@ -194,6 +193,6 @@ export default {
 .label-enter-active,
 // 離場動畫.
 .label-leave-active {
-  transition: transform 0.3s ease-out 0.1s, opacity 0.3s ease-out 0s;
+  transition: transform 0.3s ease-out 0.1s, opacity 0.3s ease-out 0.1s;
 }
 </style>

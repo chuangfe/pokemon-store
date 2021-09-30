@@ -4,7 +4,7 @@
     <div class="self-container mx-auto">
       <div class="self-image-container w-100">
         <img
-          class="image-object-fit-width-contain"
+          class="self-image-width-contain"
           src="../../public/images/pokemon-store.png"
           alt="pokemon-store"
         />
@@ -37,7 +37,7 @@
             </label>
 
             <input
-              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              class="self-letter-spacing-px fs-5 w-100 self-focus form-control"
               v-model="email"
               type="text"
               id="email"
@@ -60,7 +60,7 @@
             </label>
 
             <input
-              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              class="self-letter-spacing-px fs-5 w-100 self-focus form-control"
               v-model="password"
               type="password"
               id="password"

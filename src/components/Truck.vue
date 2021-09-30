@@ -2,7 +2,7 @@
   <div class="self-truck position-relative overflow-hidden">
     <div class="self-image-container-home mx-auto">
       <img
-        class="image-object-fit-width-contain"
+        class="self-image-width-contain"
         src="../../public/images/home.png"
         alt="home"
       />
@@ -10,7 +10,7 @@
 
     <div class="self-image-container-truck">
       <img
-        class="image-object-fit-width-contain"
+        class="self-image-width-contain"
         src="../../public/images/truck.png"
         alt="truck"
       />

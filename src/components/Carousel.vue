@@ -1,45 +1,48 @@
 <template>
-  <div class="self-carousel position-relative overflow-hidden">
-    <transition-group
-      class="w-100 h-100 position-relative"
-      tag="div"
-      :name="direction"
-    >
-      <div
+  <div class="self-carousel">
+    <div class="self-content-container position-relative overflow-hidden">
+      <transition-group
         class="w-100 h-100 position-absolute"
-        v-for="(item, i) of items"
-        :key="i"
-        v-show="i === active"
+        tag="div"
+        :name="direction"
       >
-        <img class="image-object-fit-contain" :src="item.src" :alt="item.alt" />
+        <div
+          class="w-100 h-100 position-absolute"
+          v-for="(item, i) of items"
+          :key="i"
+          v-show="i === active"
+        >
+          <img class="self-image-contain" :src="item.src" :alt="item.alt" />
+        </div>
+      </transition-group>
+
+      <div
+        class="self-arrow w-100 position-absolute top-50 translate-middle-y d-flex align-items-center justify-content-between"
+        v-if="directionButton"
+      >
+        <div>
+          <button
+            class="btn ms-2"
+            v-show="active !== 0"
+            @click="clickHandler(active - 1)"
+          >
+            <i class="bi bi-arrow-left-square fs-2 text-muted"></i>
+          </button>
+        </div>
+
+        <div>
+          <button
+            class="btn me-2"
+            v-show="active !== items.length - 1"
+            @click="clickHandler(active + 1)"
+          >
+            <i class="bi bi-arrow-right-square fs-2 text-muted"></i>
+          </button>
+        </div>
       </div>
-    </transition-group>
-
-    <div
-      class="self-arrow w-100 position-absolute top-50 translate-middle-y"
-      v-if="directionButton"
-    >
-      <button
-        class="btn position-absolute start-0 ms-2"
-        v-show="active !== 0"
-        @click="clickHandler(active - 1)"
-      >
-        <i class="bi bi-arrow-left-square fs-2 text-muted"></i>
-      </button>
-
-      <button
-        class="btn position-absolute end-0 me-2"
-        v-show="active !== items.length - 1"
-        @click="clickHandler(active + 1)"
-      >
-        <i class="bi bi-arrow-right-square fs-2 text-muted"></i>
-      </button>
     </div>
 
-    <div
-      class="self-list w-100 position-absolute bottom-0 mb-2"
-      v-if="listButton"
-    >
+    <div class="self-list w-100 bottom-0 my-2" v-if="listButton">
       <ul class="list-unstyled list-inline text-center mb-0 p-0">
         <li class="list-inline-item" v-for="(item, i) of items" :key="i">
           <button class="btn btn-sm" @click="clickHandler(i)">
@@ -113,7 +116,7 @@ export default {
 @import "../assets/style/mixin.scss";
 @import "../assets/style/class.scss";
 
-.self-carousel {
+.self-content-container {
   // 可以設置 RWD.
   height: 17.5rem;
 }
@@ -132,10 +135,7 @@ export default {
 }
 
 // 進場結束的樣式.
-.next-enter-to {
-  left: 0%;
-}
-
+.next-enter-to,
 // 離場前的樣式.
 .next-leave {
   left: 0%;
@@ -152,10 +152,7 @@ export default {
 }
 
 // 進場結束的樣式.
-.prev-enter-to {
-  left: 0%;
-}
-
+.prev-enter-to,
 // 離場前的樣式
 .prev-leave {
   left: 0%;

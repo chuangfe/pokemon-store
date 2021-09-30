@@ -1,5 +1,7 @@
 # Pokemon Store 寶可夢商店
 
+![image](./public/images/mark-down.png)
+
 - 簡易電商.
 
 - 將商品放入購物車時, 商品庫存會減少.

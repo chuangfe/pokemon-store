@@ -3,7 +3,7 @@
     <!-- 寶可夢商店. -->
     <div class="self-shop-container text-center border-bottom">
       <img
-        class="image-object-fit-width-contain"
+        class="self-image-width-contain"
         src="../../public/images/shop.png"
         alt="shop"
       />
@@ -13,7 +13,7 @@
     <div class="ps-2">
       <div class="self-logo-container my-3">
         <img
-          class="image-object-fit-height-contain"
+          class="self-image-height-contain"
           src="../../public/images/pokemon-store.png"
           alt="pokemon-store"
         />

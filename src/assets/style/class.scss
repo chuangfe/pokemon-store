@@ -1,42 +1,42 @@
 @import "./variable.scss";
 
 // font-size 清除.
-.font-size-delete {
+.self-font-size-delete {
   font-size: 0px;
 }
 
 // 圖片縮放的類型.
-.image-object-fit-cover {
+.self-image-cover {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 // 圖片縮放的類型.
-.image-object-fit-contain {
+.self-image-contain {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 // 圖片縮放的類型.
-.image-object-fit-width-contain {
+.self-image-width-contain {
   width: 100%;
   object-fit: contain;
 }
 // 圖片縮放的類型.
-.image-object-fit-height-contain {
+.self-image-height-contain {
   height: 100%;
   object-fit: contain;
 }
 
-// 邊框模型.
-.box-sizing-border-box {
+// 邊框容器模型.
+.self-border-box {
   box-sizing: border-box;
 }
 
 // 文字間距.
-.letter-spacing-rem {
+.self-letter-spacing-rem {
   letter-spacing: 1rem;
 }
-.letter-spacing-px {
+.self-letter-spacing-px {
   letter-spacing: 1px;
 }

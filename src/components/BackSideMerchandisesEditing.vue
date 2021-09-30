@@ -16,7 +16,7 @@
     <div class="bg-white py-3 px-2">
       <div class="self-image-container text-center" v-if="calcData.imageSrc">
         <img
-          class="image-object-fit-height-contain"
+          class="self-image-height-contain"
           :src="calcData.imageSrc"
           :alt="calcData.alt"
           @load="LoadHandler"

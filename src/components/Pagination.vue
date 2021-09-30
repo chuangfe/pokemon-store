@@ -70,6 +70,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
+@import "../assets/style/class.scss";
 
 .self-pagination {
   // 當前頁數時的樣式.

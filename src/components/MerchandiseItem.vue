@@ -6,7 +6,7 @@
     <!-- 圖片 -->
     <div class="self-image-container">
       <img
-        class="image-object-fit-contain"
+        class="self-image-contain"
         :src="imageSrc"
         :alt="alt"
         draggable="false"
@@ -30,7 +30,7 @@
 
     <!-- 售價容器. -->
     <div
-      class="self-price letter-spacing-px py-2 fs-5 fw-bold d-flex justify-content-between align-items-center"
+      class="self-price self-letter-spacing-px py-2 fs-5 fw-bold d-flex justify-content-between align-items-center"
       :class="{ 'special-offer': specialPrice }"
     >
       <!-- 特價. -->
@@ -85,7 +85,9 @@
       class="self-sold-out w-100 h-100 position-absolute top-0 start-0 d-flex justify-content-center align-items-center"
       v-if="remaining < 1"
     >
-      <p class="letter-spacing-rem m-0 fs-1 fw-bold text-white text-center">
+      <p
+        class="self-letter-spacing-rem m-0 fs-1 fw-bold text-white text-center"
+      >
         售完
       </p>
     </div>

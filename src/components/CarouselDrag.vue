@@ -2,15 +2,15 @@
   <div class="self-carousel-drag position-relative overflow-hidden">
     <!-- 拖放目標, position-relative 是為了保存高度. -->
     <div
-      class="self-items font-size-delete w-100 position-relative row flex-nowrap m-0"
-      :class="{ transition: isTransition }"
+      class="self-items self-font-size-delete w-100 position-relative row flex-nowrap m-0"
+      :class="{ 'is-transition': isTransition }"
       :style="{ left: left }"
       @mousedown="itemsMousedownHandler($event)"
       @touchstart="itemsTouchstartHandler($event)"
     >
       <!-- item-container 使用 v-for, 並針對 RWD 修改寬度. -->
       <div
-        class="self-item-container  d-inline-block px-2 col-12 col-md-6 col-lg-4 col-xl-3"
+        class="self-item-container self-border-box d-inline-block px-2 col-12 col-md-6 col-lg-4 col-xl-3"
         v-for="(item, i) of items"
         :key="i"
       >
@@ -294,13 +294,8 @@ export default {
     left: 0px;
 
     // 需要動畫時才有的樣式.
-    &.transition {
+    &.is-transition {
       transition: left 0.4s ease-out 0s;
-    }
-
-    // rwd 目標.
-    .self-item-container {
-      box-sizing: border-box;
     }
   }
 }

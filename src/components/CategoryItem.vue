@@ -9,7 +9,7 @@
     }"
   >
     <div class="self-image-container mx-auto">
-      <img class="image-object-fit-contain" :src="src" :alt="alt" />
+      <img class="self-image-contain" :src="src" :alt="alt" />
     </div>
 
     <p class="self-text fw-bold small text-center m-0 pt-2">{{ name }}</p>

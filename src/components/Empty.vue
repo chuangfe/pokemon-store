@@ -1,6 +1,6 @@
 <template>
   <div class="self-empty bg-secondary py-5">
-    <p class="letter-spacing-rem fs-4 text-white text-center fw-bold m-0">
+    <p class="self-letter-spacing-rem fs-4 text-white text-center fw-bold m-0">
       {{ text }}
     </p>
   </div>

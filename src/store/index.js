@@ -18,6 +18,8 @@ const // 新增商品至購物車.
   REMOVE_SHOPPING_CART_MUTATIONS = "REMOVE_SHOPPING_CART_MUTATIONS",
   // 更新購物車的商品.
   UPDATE_SHOPPING_CART_MUTATIONS = "UPDATE_SHOPPING_CART_MUTATIONS",
+  // 設置購物車的總價.
+  SET_SHOPPING_CART_TOTAL_MUTATIONS = "SET_SHOPPING_CART_TOTAL_MUTATIONS",
   // 新增訂單.
   CREATE_ORDER_MUTATIONS = "CREATE_ORDER_MUTATIONS",
   // 刪除訂單.
@@ -321,16 +323,6 @@ export default new Vuex.Store({
     [PUSH_SHOPPING_CART_MUTATIONS](state, payload) {
       // 將商品 push 至購物車.
       state.shoppingCart.merchandises.push(payload);
-
-      // 計算購物車總額.
-      const total = state.shoppingCart.merchandises.reduce(
-        (sum, item, index) => {
-          return Math.floor((sum = sum + item.total));
-        },
-        0
-      );
-
-      state.shoppingCart.total = total;
     },
 
     // 更新購物車內商品.
@@ -343,29 +335,18 @@ export default new Vuex.Store({
         1,
         shoppingCartData
       );
-
-      // 計算購物車總額.
-      const total = state.shoppingCart.merchandises.reduce(
-        (sum, item, index) => {
-          return Math.floor((sum = sum + item.total));
-        },
-        0
-      );
-
-      state.shoppingCart.total = total;
     },
 
     // 刪除購物車的商品.
-    [REMOVE_SHOPPING_CART_MUTATIONS](state, { shoppingCartIndex }) {
-      state.shoppingCart.merchandises.splice(shoppingCartIndex, 1);
+    [REMOVE_SHOPPING_CART_MUTATIONS](state, index) {
+      state.shoppingCart.merchandises.splice(index, 1);
+    },
 
-      // 計算購物車總額.
-      const total = state.shoppingCart.merchandises.reduce(
-        (sum, item, index) => {
-          return Math.floor((sum = sum + item.total));
-        },
-        0
-      );
+    // 計算購物車的總價.
+    [SET_SHOPPING_CART_TOTAL_MUTATIONS](state) {
+      const total = state.shoppingCart.merchandises.reduce((sum, item, i) => {
+        return Math.floor((sum = sum + item.total));
+      }, 0);
 
       state.shoppingCart.total = total;
     },
@@ -462,33 +443,47 @@ export default new Vuex.Store({
   // 邏輯運算, API 異步模式, 在必要的地方調用 mutations 修改 state.
   actions: {
     // 尋找商品在 data shoppingCart 內各自的資料與索引.
-    [SEARCH_DATA_ACTIONS]({ state, commit }, payload) {
+    [SEARCH_DATA_ACTIONS]({ state, getters, commit }, payload) {
       // 讀取中.
       commit("LOADING_MUTATIONS");
 
       // 回傳的陣列.
       const resultArr = [];
 
-      payload.forEach((item, i) => {
-        // 縮短 merchandises 屬性長度.
-        const merchandises = state.data[payload[i].category].merchandises;
-        // 找 data 商品的索引.
-        const merchandiseIndex = merchandises.findIndex(
-          (item) => item.id === payload[i].id
+      // searchItem 需要搜尋的商品.
+      payload.forEach((searchItem) => {
+        // 需要搜尋的商品, 使用 id 尋找舊的商品資料.
+        const oldItem = getters.calcData.all.merchandises.find(
+          (item) => item.id === searchItem.id
         );
 
-        // 縮短 shoppingCart 屬性長度.
-        const shoppingCart = state.shoppingCart.merchandises;
-        // 找 shoppingCart 商品的索引.
-        const shoppingCartIndex = shoppingCart.findIndex(
-          (item) => item.id === payload[i].id
+        /**
+         * 判斷是新增商品還是商品更新.
+         * 如果是更新商品, id category 會存在.
+         * 如果是新增商品, id category 不會存在.
+         */
+        const id = oldItem ? oldItem.id : searchItem.id;
+        const category = oldItem ? oldItem.category : searchItem.category;
+
+        // 找 searchItem 對應的舊的商品的索引.
+        const merchandiseIndex = state.data[category].merchandises.findIndex(
+          (item) => item.id === id
+        );
+
+        // 找 searchItem 對應的 shoppingCart 內的索引.
+        const shoppingCartIndex = state.shoppingCart.merchandises.findIndex(
+          (item) => item.id === id
         );
 
         resultArr.push({
+          // 舊的商品資料在該分類中的索引.
           merchandiseIndex,
-          merchandiseData: merchandises[merchandiseIndex],
+          // 舊的商品資.
+          merchandiseData: oldItem,
+          // 舊的商品在購物車的索引.
           shoppingCartIndex,
-          shoppingCartData: shoppingCart[shoppingCartIndex],
+          // 舊的商品在購物車的資料.
+          shoppingCartData: state.shoppingCart.merchandises[shoppingCartIndex],
         });
       });
 
@@ -545,12 +540,17 @@ export default new Vuex.Store({
           shoppingCartNewData.price * shoppingCartNewData.count
         );
 
+        console.log(shoppingCartNewData);
+
         // 修改購物車內商品, 已經在 component 調整過物件的資料格式.
         commit("UPDATE_SHOPPING_CART_MUTATIONS", {
           shoppingCartIndex: result.shoppingCartIndex,
           shoppingCartData: shoppingCartNewData,
         });
       }
+
+      // 計算購物車的總價.
+      commit("SET_SHOPPING_CART_TOTAL_MUTATIONS");
 
       // 返回新增至購物車的商品資料.
       return payload;
@@ -575,6 +575,9 @@ export default new Vuex.Store({
 
       // 刪除購物車內的商品.
       commit("REMOVE_SHOPPING_CART_MUTATIONS", result.shoppingCartIndex);
+
+      // 計算購物車的總價.
+      commit("SET_SHOPPING_CART_TOTAL_MUTATIONS");
 
       // 返回被刪除的商品.
       return payload;
@@ -632,45 +635,6 @@ export default new Vuex.Store({
       return payload;
     },
 
-    // 新增商品, 商品 id 屬性不能重複.
-    async [CREATE_MERCHANDISE_ACTIONS]({ commit, dispatch }, payload) {
-      // 找舊商品的資料與索引, 沒找到相同 id 的商品, 會拿到空陣列.
-      const result = (await dispatch("SEARCH_DATA_ACTIONS", [payload]))[0];
-
-      // 需要新增的商品的 id 與舊的商品的 id 重複.
-      const errorData = {
-        message: "商品 Id 重複",
-        merchandiseData: result.merchandiseData,
-      };
-
-      // undefined 才能發出 commit 事件.
-      if (result.merchandiseData === undefined) {
-        // 新增商品.
-        commit("CREATE_MERCHANDISE_MUTATIONS", payload);
-      }
-
-      return result.merchandiseData === undefined
-        ? // 商品 id 沒有重複, 返回新增的商品.
-          payload
-        : // 商品重覆, 返回重複的商品.
-          errorData;
-    },
-
-    // 刪除商品.
-    async [REMOVE_MERCHANDISE_ACTIONS]({ commit, dispatch }, payload) {
-      // 找舊商品的資料與索引.
-      const result = (await dispatch("SEARCH_DATA_ACTIONS", [payload]))[0];
-
-      // 刪除商品.
-      commit("REMOVE_MERCHANDISE_MUTATIONS", {
-        merchandiseIndex: result.merchandiseIndex,
-        merchandiseData: result.merchandiseData,
-      });
-
-      // 返回被刪除的商品.
-      return result.merchandiseData;
-    },
-
     // 更新商品, 依靠 id 找商品, 所以商品 id 不可更新.
     async [UPDATE_MERCHANDISE_ACTIONS]({ commit, dispatch }, payload) {
       // 找舊商品的資料與索引.
@@ -707,6 +671,21 @@ export default new Vuex.Store({
           payload
         : // 返回修改前的商品資料.
           result.merchandiseData;
+    },
+
+    // 刪除商品.
+    async [REMOVE_MERCHANDISE_ACTIONS]({ commit, dispatch }, payload) {
+      // 找舊商品的資料與索引.
+      const result = (await dispatch("SEARCH_DATA_ACTIONS", [payload]))[0];
+
+      // 刪除商品.
+      commit("REMOVE_MERCHANDISE_MUTATIONS", {
+        merchandiseIndex: result.merchandiseIndex,
+        merchandiseData: result.merchandiseData,
+      });
+
+      // 返回被刪除的商品.
+      return result.merchandiseData;
     },
 
     // 用戶檢查.

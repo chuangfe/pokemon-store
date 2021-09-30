@@ -10,13 +10,13 @@
       <div class="d-flex justify-content-center align-items-center py-3">
         <div class="self-image-container me-4">
           <img
-            class="image-object-fit-contain"
+            class="self-image-contain"
             src="../../public/images/poke-ball-00.png"
             alt="poke-ball-00"
           />
         </div>
 
-        <h2 class="letter-spacing-rem h2 m-0 fw-bold">購物車</h2>
+        <h2 class="self-letter-spacing-rem h2 m-0 fw-bold">購物車</h2>
       </div>
 
       <MerchandiseTable
@@ -36,13 +36,13 @@
       <div class="d-flex justify-content-center align-items-center py-3">
         <div class="self-image-container me-4">
           <img
-            class="image-object-fit-contain"
+            class="self-image-contain"
             src="../../public/images/gold-00.png"
             alt="poke-ball-00"
           />
         </div>
 
-        <h2 class="letter-spacing-rem h2 m-0 fw-bold">收件人</h2>
+        <h2 class="self-letter-spacing-rem h2 m-0 fw-bold">收件人</h2>
       </div>
 
       <ValidationObserver v-slot="{ handleSubmit, invalid }">
@@ -65,7 +65,7 @@
             </label>
 
             <input
-              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              class="self-letter-spacing-px fs-5 w-100 self-focus form-control"
               v-model="fromData.email"
               type="text"
               id="email"
@@ -87,7 +87,7 @@
             </label>
 
             <input
-              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              class="self-letter-spacing-px fs-5 w-100 self-focus form-control"
               v-model="fromData.name"
               type="text"
               id="name"
@@ -109,7 +109,7 @@
             </label>
 
             <input
-              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              class="self-letter-spacing-px fs-5 w-100 self-focus form-control"
               v-model="fromData.phone"
               type="number"
               id="phone"
@@ -131,7 +131,7 @@
             </label>
 
             <input
-              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              class="self-letter-spacing-px fs-5 w-100 self-focus form-control"
               v-model="fromData.address"
               type="text"
               id="address"
@@ -153,7 +153,7 @@
             </label>
 
             <textarea
-              class="letter-spacing-px fs-5 w-100 self-focus form-control"
+              class="self-letter-spacing-px fs-5 w-100 self-focus form-control"
               name="explain"
               rows="4"
               id="explain"

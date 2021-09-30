@@ -1,6 +1,6 @@
 <template>
-  <div class="self-back-side-orders ">
-    <div class="container-xl p-3 ">
+  <div class="self-back-side-orders">
+    <div class="container-xl p-3">
       <h2 class="h2 m-0 fw-bold">訂單列表</h2>
     </div>
 
@@ -63,7 +63,5 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/style/variable.scss";
 @import "../assets/style/mixin.scss";
-
-.self-back-side-orders {
-}
+@import "../assets/style/class.scss";
 </style>

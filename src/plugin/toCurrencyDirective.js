@@ -4,11 +4,11 @@ export default {
   name: "to-currency-directive",
   options: {
     inserted(el, binding) {
-      el.innerText = toCurrency(binding.value);
+      el.textContent = toCurrency(binding.value);
     },
 
     update(el, binding) {
-      el.innerText = toCurrency(binding.value);
+      el.textContent = toCurrency(binding.value);
     },
   },
 };

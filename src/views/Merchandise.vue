@@ -22,7 +22,7 @@
           <section class="border border-2 p-3 mb-4 mb-md-0">
             <div class="self-image-container text-center">
               <img
-                class="image-object-fit-height-contain mx-auto"
+                class="self-image-height-contain mx-auto"
                 :src="merchandiseData.imageSrc"
                 :alt="merchandiseData.alt"
               />
